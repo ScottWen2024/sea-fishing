@@ -1,0 +1,2777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>海钓通 - 找靠谱船长</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --primary: #0066CC;
+  --primary-light: #E8F4F8;
+  --ocean: #0A4D68;
+  --ocean-light: #E8F4F8;
+  --sand: #F5DEB3;
+  --sand-light: #FDF8F0;
+  --success: #10B981;
+  --success-light: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-light: #FFFBEB;
+  --danger: #EF4444;
+  --danger-light: #FEF2F2;
+  --text: #1F2937;
+  --text-secondary: #6B7280;
+  --text-light: #9CA3AF;
+  --border: #E5E7EB;
+  --bg: #F3F4F6;
+  --white: #FFF;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 72px;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 100%);
+  color: var(--white);
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.app-logo { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+
+/* Mode Toggle */
+.mode-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 3px;
+}
+.mode-btn {
+  padding: 8px 16px;
+  border-radius: 18px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mode-btn.active {
+  background: var(--white);
+  color: var(--primary);
+}
+
+/* Sub-mode Toggle */
+.sub-mode-row {
+  display: flex; justify-content: center; margin-top: 8px;
+}
+.sub-mode-toggle {
+  display: flex; background: rgba(255,255,255,0.12);
+  border-radius: 16px; padding: 2px;
+}
+.sub-mode-btn {
+  padding: 5px 14px; border-radius: 14px; border: none;
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.65);
+  background: transparent; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 4px;
+}
+.sub-mode-btn.active {
+  background: var(--white); color: var(--primary);
+}
+
+/* Guide highlight row */
+.guide-highlights {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.guide-highlight-item {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--text-secondary);
+  background: var(--bg); padding: 3px 8px; border-radius: 4px;
+}
+
+/* Date picker */
+.date-picker-row {
+  display: flex; gap: 6px; overflow-x: auto; padding: 4px 0;
+  scrollbar-width: none; -ms-overflow-style: none;
+  margin-bottom: 10px;
+}
+.date-picker-row::-webkit-scrollbar { display: none; }
+.date-chip {
+  flex-shrink: 0; width: 68px; padding: 8px 4px;
+  border-radius: var(--radius-sm); text-align: center;
+  border: 1.5px solid var(--border); background: var(--white);
+  cursor: pointer; transition: all 0.15s; font-size: 11px;
+  line-height: 1.4;
+}
+.date-chip.active {
+  border-color: var(--primary); background: var(--primary);
+  color: var(--white);
+}
+.date-chip .day { font-size: 12px; font-weight: 600; }
+.date-chip .weekday { font-size: 11px; }
+.date-chip .icon { font-size: 14px; display: block; }
+.date-chip .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+  display: inline-block;
+}
+.date-chip.active .dot { background: white; }
+.date-nav-btn {
+  flex-shrink: 0; width: 28px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--white);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--text-secondary);
+}
+
+/* Weather card */
+.weather-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+}
+.weather-card.advice-good {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 1px solid #A7F3D0;
+}
+.weather-card.advice-warn {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid #FCD34D;
+}
+.weather-card.advice-bad {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  border: 1px solid #FECACA;
+}
+.weather-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px; font-size: 13px; color: var(--text-secondary);
+}
+.weather-main {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 10px;
+}
+.weather-metric { text-align: center; }
+.weather-metric .w-icon { font-size: 20px; margin-bottom: 2px; }
+.weather-metric .w-value { font-size: 16px; font-weight: 700; color: var(--text); }
+.weather-metric .w-label { font-size: 11px; color: var(--text-light); }
+.weather-advice {
+  display: flex; align-items: center; gap: 6px; padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.06); font-size: 13px; font-weight: 500;
+}
+.weather-advice.good { color: #065F46; }
+.weather-advice.warn { color: #92400E; }
+.weather-advice.bad { color: #991B1B; }
+.weather-hint { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+/* Window timeline */
+.window-timeline {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.window-timeline-header {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 4px;
+}
+.window-timeline-bar {
+  height: 10px; background: #E5E7EB; border-radius: 5px;
+  position: relative; margin-bottom: 6px;
+}
+.window-timeline-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  border-radius: 5px; transition: width 0.3s;
+}
+.window-timeline-fill.good { background: linear-gradient(90deg, #10B981, #34D399); }
+.window-timeline-fill.warn { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+.window-timeline-fill.bad  { background: linear-gradient(90deg, #EF4444, #F87171); }
+.window-timeline-marks {
+  display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light);
+}
+.window-label {
+  font-size: 12px; color: var(--success); font-weight: 500; margin-bottom: 4px;
+}
+.window-label.warn { color: #92400E; }
+.window-label.bad  { color: #991B1B; }
+
+/* Recommendation index */
+.rec-index {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 10px; border-radius: 12px;
+  font-size: 12px; font-weight: 600; flex-shrink: 0;
+}
+.rec-index.high { background: #ECFDF5; color: #065F46; }
+.rec-index.mid  { background: #FFFBEB; color: #92400E; }
+.rec-index.low { background: #FEF2F2; color: #991B1B; }
+.rec-stars { font-size: 11px; letter-spacing: 1px; }
+
+/* Chain cards */
+.chain-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
+  cursor: pointer; transition: box-shadow 0.15s;
+}
+.chain-card:active { box-shadow: var(--shadow); }
+.chain-card.full { opacity: 0.7; }
+.chain-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 10px;
+}
+.chain-creator { font-size: 15px; font-weight: 600; }
+.chain-badge {
+  font-size: 11px; padding: 4px 8px; border-radius: 10px; font-weight: 500;
+  flex-shrink: 0;
+}
+.chain-badge.open { background: var(--success-light); color: #065F46; }
+.chain-badge.full { background: var(--warning-light); color: #92400E; }
+.chain-badge.closed { background: var(--bg); color: var(--text-light); }
+.chain-info { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.chain-info span { display: flex; align-items: center; gap: 3px; }
+.chain-participants {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 10px 12px; margin-bottom: 8px; font-size: 13px;
+}
+.chain-participant {
+  display: flex; justify-content: space-between; padding: 3px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+.chain-participant:last-child { border-bottom: none; }
+.chain-progress {
+  display: flex; align-items: center; gap: 8px;
+}
+.chain-progress-bar {
+  flex: 1; height: 6px; background: #E5E7EB; border-radius: 3px;
+  overflow: hidden;
+}
+.chain-progress-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--success), #34D399);
+  transition: width 0.3s;
+}
+.chain-progress-text { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+.chain-join-btn { margin-top: 8px; }
+.chain-join-btn .btn { width: 100%; }
+
+/* Fab button */
+.fab {
+  position: fixed; bottom: 80px; right: 16px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--primary); color: var(--white);
+  border: none; font-size: 24px; z-index: 90;
+  box-shadow: 0 4px 12px rgba(0,102,204,0.3);
+  cursor: pointer;
+}
+.fab:active { transform: scale(0.95); }
+
+/* Schedule available highlight */
+.captain-card.has-schedule { border-left: 3px solid var(--success); }
+.captain-card.no-schedule { opacity: 0.65; }
+.schedule-preview {
+  font-size: 12px; color: var(--success); margin-top: 6px;
+  padding: 4px 8px; background: var(--success-light); border-radius: 4px;
+  display: inline-block;
+}
+.no-schedule-badge {
+  font-size: 12px; color: var(--text-light); margin-top: 6px;
+}
+
+/* Content Area */
+.content { padding: 12px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: var(--white); width: 100%; }
+.btn-outline { background: var(--white); color: var(--primary); border: 1px solid var(--primary); }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-success { background: var(--success); color: var(--white); }
+.btn-danger { background: var(--danger); color: var(--white); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+
+/* Forms */
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 5px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  background: var(--white);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-hint { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+
+/* Captain List */
+.captain-list { display: flex; flex-direction: column; gap: 12px; }
+.captain-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+.captain-card:active { box-shadow: var(--shadow); }
+.captain-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.captain-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--ocean-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.captain-info { flex: 1; min-width: 0; }
+.captain-name { font-size: 16px; font-weight: 600; }
+.captain-boat { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.captain-meta { display: flex; gap: 12px; margin-top: 4px; }
+.captain-rating { color: var(--warning); font-size: 13px; }
+.captain-orders { font-size: 12px; color: var(--text-light); }
+.captain-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.tag-port { background: var(--ocean-light); color: var(--ocean); }
+.tag-cert { background: var(--success-light); color: var(--success); }
+.tag-fish { background: var(--warning-light); color: #92400E; }
+.tag-guide { background: #F3E8FF; color: #7C3AED; }
+.tag-beginner { background: #FCE7F3; color: #DB2777; }
+.tag-lang { background: #E0F2FE; color: #0369A1; }
+.tag-gear { background: #FEF3C7; color: #B45309; }
+
+/* Guide section in detail */
+.guide-card {
+  background: linear-gradient(135deg, #F5F3FF 0%, #FDF2F8 100%);
+  border: 1px solid #E9D5FF;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.guide-card .card-title { color: #7C3AED; }
+.guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.guide-grid-item { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+.guide-style-badge {
+  display: inline-block; padding: 4px 10px; border-radius: 12px;
+  font-size: 12px; background: #EDE9FE; color: #6D28D9; font-weight: 500;
+}
+.guide-check-list { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.guide-check-item { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+
+/* Checkbox chips */
+.checkbox-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-check {
+  padding: 6px 12px; border-radius: 14px; border: 1px solid var(--border);
+  font-size: 12px; color: var(--text-secondary); background: var(--white);
+  cursor: pointer; transition: all 0.15s; user-select: none;
+}
+.chip-check.checked {
+  background: #EDE9FE; border-color: #7C3AED; color: #7C3AED;
+}
+
+/* Divider */
+.section-divider {
+  border: none; border-top: 1px solid var(--border); margin: 16px 0;
+}
+
+/* Captain Detail */
+.detail-hero {
+  background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 100%);
+  color: var(--white);
+  padding: 24px 16px 60px;
+}
+.detail-back { color: var(--white); font-size: 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 4px; }
+.detail-avatar { text-align: center; }
+.detail-avatar-icon { font-size: 48px; margin-bottom: 8px; display: block; }
+.detail-name { font-size: 20px; font-weight: 600; }
+.detail-boat { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+.detail-stats {
+  display: flex; justify-content: center; gap: 24px;
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);
+}
+.detail-stat { text-align: center; }
+.detail-stat-val { font-size: 20px; font-weight: 600; }
+.detail-stat-lbl { font-size: 12px; opacity: 0.75; }
+
+.detail-content { margin: -30px 12px 0; position: relative; z-index: 10; }
+
+.cert-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--success-light); color: var(--success);
+  padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 500;
+}
+
+/* Schedule list */
+.schedule-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 8px;
+}
+.schedule-date { font-size: 14px; font-weight: 500; }
+.schedule-info { font-size: 13px; color: var(--text-secondary); }
+.schedule-price { font-size: 16px; font-weight: 600; color: var(--primary); }
+.schedule-remaining { font-size: 12px; color: var(--text-light); }
+
+/* Booking list */
+.booking-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.booking-item:last-child { border-bottom: none; }
+.booking-captain { font-size: 15px; font-weight: 500; }
+.booking-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.booking-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.badge {
+  display: inline-block; padding: 4px 10px; border-radius: 12px;
+  font-size: 12px; font-weight: 500;
+}
+.badge-pending { background: var(--warning-light); color: #92400E; }
+.badge-confirmed { background: var(--success-light); color: #065F46; }
+.badge-completed { background: var(--bg); color: var(--text-secondary); }
+
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat-card {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 14px 10px; text-align: center;
+}
+.stat-val { font-size: 22px; font-weight: 700; color: var(--ocean); }
+.stat-lbl { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+/* Empty state */
+.empty { text-align: center; padding: 40px 20px; }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; color: var(--text-secondary); }
+.empty-hint { font-size: 13px; color: var(--text-light); margin-top: 6px; }
+
+/* Search */
+.search-bar {
+  display: flex; gap: 8px; margin-bottom: 8px;
+}
+.search-input {
+  flex: 1; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 14px; outline: none;
+}
+.search-input:focus { border-color: var(--primary); }
+
+/* View toggle */
+.view-toggle-row {
+  display: flex; gap: 8px; margin-bottom: 14px; align-items: center;
+}
+.view-toggle {
+  display: flex; background: var(--white); border-radius: 16px;
+  padding: 2px; border: 1px solid var(--border);
+}
+.view-toggle-btn {
+  padding: 5px 12px; border-radius: 14px; border: none;
+  font-size: 12px; color: var(--text-secondary); background: transparent;
+  cursor: pointer; display: flex; align-items: center; gap: 3px;
+  transition: all 0.15s;
+}
+.view-toggle-btn.active { background: var(--primary); color: var(--white); }
+
+/* Ranking */
+.rank-list { display: flex; flex-direction: column; gap: 10px; }
+.rank-item {
+  background: var(--white); border-radius: var(--radius); padding: 14px 16px;
+  box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: box-shadow 0.15s;
+}
+.rank-item:active { box-shadow: var(--shadow); }
+.rank-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.rank-num.gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: white; }
+.rank-num.silver { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); color: white; }
+.rank-num.bronze { background: linear-gradient(135deg, #CD7F32, #B8860B); color: white; }
+.rank-num.default { background: var(--bg); color: var(--text-secondary); }
+.rank-avatar { font-size: 24px; flex-shrink: 0; }
+.rank-info { flex: 1; min-width: 0; }
+.rank-name { font-size: 15px; font-weight: 600; }
+.rank-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.rank-rating { text-align: right; flex-shrink: 0; }
+.rank-score { font-size: 20px; font-weight: 700; color: var(--ocean); }
+.rank-stars { font-size: 12px; color: var(--warning); }
+.rank-reviews { font-size: 11px; color: var(--text-light); }
+
+/* Pending review badge */
+.pending-badge {
+  background: var(--danger); color: white; font-size: 10px;
+  padding: 2px 6px; border-radius: 8px; margin-left: 4px;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  display: flex; align-items: flex-end;
+}
+.modal-overlay.hidden { display: none; }
+.modal {
+  background: var(--white); width: 100%;
+  border-radius: 16px 16px 0 0; padding: 20px;
+  max-height: 85vh; overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-size: 17px; font-weight: 600; text-align: center; margin-bottom: 18px; }
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--bg); border: none; width: 32px; height: 32px;
+  border-radius: 50%; font-size: 18px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
+  background: var(--white); display: flex; border-top: 1px solid var(--border);
+  z-index: 100; box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px; border: none; background: none;
+  color: var(--text-light); font-size: 10px; cursor: pointer;
+}
+.nav-item.active { color: var(--primary); }
+.nav-icon { font-size: 22px; }
+
+/* Review stars */
+.stars { color: var(--warning); font-size: 16px; letter-spacing: 2px; }
+.star-input { font-size: 28px; letter-spacing: 4px; cursor: pointer; }
+
+/* Filter chips */
+.filter-row { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+.filter-chip {
+  flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
+  border: 1px solid var(--border); background: var(--white);
+  font-size: 13px; color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-chip.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--text); color: var(--white); padding: 10px 20px;
+  border-radius: 20px; font-size: 14px; z-index: 300;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="app-header">
+  <div class="header-top">
+    <div class="app-logo">🐟 海钓通</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="switchMode('fisherman')" id="modeFisherman">我想钓鱼</button>
+      <button class="mode-btn" onclick="switchMode('captain')" id="modeCaptain">我是船长</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ==================== FISHERMAN PAGES ==================== -->
+<div id="fishermanPages" class="active">
+  <!-- ====== HOME ====== -->
+  <div class="page active content" id="fisherman-home">
+    <div class="date-picker-row" id="datePicker"></div>
+    <div class="weather-card" id="weatherCard" style="display:none;">
+      <div class="weather-header">
+        <span id="weatherDate">--</span>
+        <span id="weatherPort">📍 --</span>
+      </div>
+      <div class="weather-main">
+        <div class="weather-metric"><div class="w-icon">💨</div><div class="w-value" id="wWind">--</div><div class="w-label">风力风向</div></div>
+        <div class="weather-metric"><div class="w-icon">🌊</div><div class="w-value" id="wWave">--m</div><div class="w-label">浪高</div></div>
+        <div class="weather-metric"><div class="w-icon">🌡️</div><div class="w-value" id="wTemp">--°C</div><div class="w-label">温度</div></div>
+      </div>
+      <div class="weather-advice" id="weatherAdvice"></div>
+      <div class="weather-hint" id="weatherHint"></div>
+      <div class="window-timeline" id="windowTimeline">
+        <div class="window-timeline-header">⏰ 出海窗口推荐</div>
+        <div class="window-label" id="windowLabel"></div>
+        <div class="window-timeline-bar">
+          <div class="window-timeline-fill good" id="windowFill" style="width:0%;"></div>
+        </div>
+        <div class="window-timeline-marks" id="windowMarks"></div>
+      </div>
+    </div>
+
+    <div class="quick-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <button class="quick-btn" onclick="switchFishermanTab('record')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:var(--shadow-sm);cursor:pointer;">
+        <span style="font-size:26px;">📸</span><span>拍照识鱼</span>
+      </button>
+      <button class="quick-btn" onclick="switchFishermanTab('group'); setTimeout(()=>showCreateChainForm(),200);" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:var(--shadow-sm);cursor:pointer;">
+        <span style="font-size:26px;">✋</span><span>发起拼船</span>
+      </button>
+    </div>
+
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:15px;font-weight:600;">🎣 我的渔获</span>
+      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="switchFishermanTab('record')">全部 ›</span>
+    </div>
+    <div id="homeCatches" style="margin-bottom:14px;"></div>
+
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:15px;font-weight:600;">✋ 热门拼船</span>
+      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="switchFishermanTab('group')">全部 ›</span>
+    </div>
+    <div id="homeChains" style="margin-bottom:14px;"></div>
+
+    <div style="text-align:center;margin:12px 0;">
+      <button class="btn btn-outline" onclick="switchFishermanTab('group')" style="width:auto;padding:10px 24px;">🔍 找船长 / 导钓</button>
+    </div>
+  </div>
+
+  <!-- ====== RECORD ====== -->
+  <div class="page content" id="fisherman-record">
+    <div class="fish-id-card" style="background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);text-align:center;margin-bottom:14px;">
+      <button style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;color:white;font-size:32px;margin-bottom:10px;cursor:pointer;box-shadow:0 4px 12px rgba(0,102,204,0.3);" onclick="simulateFishID()">📷</button>
+      <div style="font-size:15px;font-weight:500;">拍照识鱼</div>
+      <div style="font-size:12px;color:var(--text-light);">拍一张鱼的照片，识别鱼种信息</div>
+      <div class="fish-result" id="fish-result" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+        <div style="font-size:20px;font-weight:600;color:var(--ocean);" id="fish-name">黑鲷（真鲷）</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">别名：海鲋、青鳞</div>
+        <div class="fish-info-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left;">
+          <div style="background:var(--bg);padding:8px 10px;border-radius:6px;"><span style="font-size:11px;color:var(--text-light);">适宜水温</span><br><span style="font-size:13px;">18-25°C</span></div>
+          <div style="background:var(--bg);padding:8px 10px;border-radius:6px;"><span style="font-size:11px;color:var(--text-light);">栖息水深</span><br><span style="font-size:13px;">3-50米</span></div>
+          <div style="background:var(--bg);padding:8px 10px;border-radius:6px;"><span style="font-size:11px;color:var(--text-light);">活跃时段</span><br><span style="font-size:13px;">涨潮前后</span></div>
+          <div style="background:var(--bg);padding:8px 10px;border-radius:6px;"><span style="font-size:11px;color:var(--text-light);">最佳季节</span><br><span style="font-size:13px;">春、秋</span></div>
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="saveCatchFromID()" style="margin-top:12px;width:auto;">✅ 记录这条渔获</button>
+      </div>
+    </div>
+
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:15px;font-weight:600;">📋 渔获记录</span>
+      <span style="font-size:12px;color:var(--text-light);" onclick="showAddCatchForm()">+ 手动添加</span>
+    </div>
+    <div id="catchTimeline"></div>
+  </div>
+
+  <!-- ====== GROUP ====== -->
+  <div class="page content" id="fisherman-group">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <button class="quick-btn" onclick="scrollToSection('chains')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:8px;font-size:13px;box-shadow:var(--shadow-sm);cursor:pointer;">
+        <span style="font-size:22px;">✋</span><span>拼船接龙</span>
+      </button>
+      <button class="quick-btn" onclick="scrollToSection('captains')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:8px;font-size:13px;box-shadow:var(--shadow-sm);cursor:pointer;">
+        <span style="font-size:22px;">🔍</span><span>找船长/导钓</span>
+      </button>
+    </div>
+
+    <div id="groupChains">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:15px;font-weight:600;" id="chains">✋ 拼船接龙</span>
+        <button class="btn btn-sm btn-primary" onclick="showCreateChainForm()" style="width:auto;padding:6px 12px;">+ 发起</button>
+      </div>
+      <div id="chainList"></div>
+    </div>
+
+    <div id="groupCaptains" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:15px;font-weight:600;" id="captains">🔍 找船长/导钓</span>
+        <div style="display:flex;gap:4px;">
+          <button class="view-toggle-btn btn-sm active" onclick="switchGroupView('list',this)" id="gvList" style="font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:10px;background:var(--primary);color:white;">列表</button>
+          <button class="view-toggle-btn btn-sm" onclick="switchGroupView('rank',this)" id="gvRank" style="font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);">排行</button>
+        </div>
+      </div>
+      <div class="sub-mode-row" style="display:flex;margin-bottom:8px;">
+        <div class="sub-mode-toggle" style="border:1px solid var(--border);background:var(--white);">
+          <button class="sub-mode-btn active" onclick="switchSubMode('boat')" id="subModeBoat" style="color:var(--text);">🚤 拼船</button>
+          <button class="sub-mode-btn" onclick="switchSubMode('guide')" id="subModeGuide" style="color:var(--text);">🎓 导钓</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="searchPort" placeholder="搜索船长/港口/鱼种..." oninput="renderCaptainList()">
+      </div>
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip active" onclick="filterCaptains('all', this)">全部港口</button>
+        <button class="filter-chip" onclick="filterCaptains('南澳岛', this)">南澳岛</button>
+        <button class="filter-chip" onclick="filterCaptains('澄海莱芜', this)">澄海莱芜</button>
+        <button class="filter-chip" onclick="filterCaptains('潮阳海门', this)">潮阳海门</button>
+      </div>
+      <div class="filter-row" id="guideFilterRow" style="display:none;">
+        <button class="filter-chip active" onclick="filterGuide('all', this)">全部导钓</button>
+        <button class="filter-chip" onclick="filterGuide('零基础', this)">🔰 零基础</button>
+        <button class="filter-chip" onclick="filterGuide('亲子', this)">👨‍👧 亲子</button>
+        <button class="filter-chip" onclick="filterGuide('团建', this)">🏢 团建</button>
+        <button class="filter-chip" onclick="filterGuide('进阶', this)">📈 进阶</button>
+      </div>
+      <div class="captain-list" id="captainList"></div>
+      <div class="rank-list" id="rankList" style="display:none;"></div>
+    </div>
+
+    <div id="groupBookings" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:15px;font-weight:600;">📋 我的预约</span>
+      </div>
+      <div id="myBookingsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CAPTAIN PAGES ==================== -->
+<div id="captainPages" style="display:none;">
+  <!-- Profile -->
+  <div class="page active content" id="captain-profile">
+    <div class="card">
+      <div class="card-title">👤 我的资料</div>
+      <div class="form-group">
+        <label class="form-label">头像（Emoji）</label>
+        <input class="form-input" id="capAvatar" placeholder="如：👨‍✈️" maxlength="4">
+      </div>
+      <div class="form-group">
+        <label class="form-label">姓名</label>
+        <input class="form-input" id="capName" placeholder="你的名字">
+      </div>
+      <div class="form-group">
+        <label class="form-label">手机号</label>
+        <input class="form-input" id="capPhone" type="tel" placeholder="手机号">
+      </div>
+      <div class="form-group">
+        <label class="form-label">船名</label>
+        <input class="form-input" id="capBoatName" placeholder="如：南澳号">
+      </div>
+      <div class="form-group">
+        <label class="form-label">船型</label>
+        <input class="form-input" id="capBoatType" placeholder="如：8米快艇 · 可载4人">
+      </div>
+      <div class="form-group">
+        <label class="form-label">服务港口</label>
+        <select class="form-select" id="capPort">
+          <option value="南澳岛">南澳岛</option>
+          <option value="澄海莱芜">澄海莱芜</option>
+          <option value="潮阳海门">潮阳海门</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">目标鱼种</label>
+        <input class="form-input" id="capFish" placeholder="如：真鲷、石斑、黑鲷">
+      </div>
+      <div class="form-group">
+        <label class="form-label">资质证书描述</label>
+        <input class="form-input" id="capCert" placeholder="如：持证船长 · 10年出海经验">
+      </div>
+      <div class="form-group">
+        <label class="form-label">个人介绍</label>
+        <textarea class="form-textarea" id="capDesc" placeholder="介绍一下你自己和你的船..."></textarea>
+      </div>
+
+      <hr class="section-divider">
+      <div class="card-title" style="color:#7C3AED;">🎓 导钓服务设置</div>
+
+      <div class="form-group">
+        <label class="form-label">提供导钓服务</label>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm btn-outline" id="guideToggleBtn" onclick="toggleGuideService()" style="width:auto;">🔘 暂不提供</button>
+        </div>
+        <div class="form-hint">开启后可被"新手导钓"模式的钓友找到</div>
+      </div>
+
+      <div id="guideFields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">导钓类型（可多选）</label>
+          <div class="checkbox-chips" id="guideTypes">
+            <span class="chip-check" onclick="toggleChip(this)" data-key="零基础">🔰 零基础教学</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="亲子">👨‍👧 亲子体验</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="团建">🏢 企业团建</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="进阶">📈 进阶技巧</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">擅长钓法（可多选）</label>
+          <div class="checkbox-chips" id="guideMethods">
+            <span class="chip-check" onclick="toggleChip(this)" data-key="底钓">底钓</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="路亚">路亚</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="慢摇铁板">慢摇铁板</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="拖钓">拖钓</span>
+            <span class="chip-check" onclick="toggleChip(this)" data-key="矶钓">矶钓</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">教学风格</label>
+          <select class="form-select" id="capTeachStyle">
+            <option value="手把手耐心教">🤝 手把手耐心教</option>
+            <option value="放手让你试">💪 放手让你试</option>
+            <option value="边钓边讲">📖 边钓边讲</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">是否提供装备</label>
+            <select class="form-select" id="capProvideGear">
+              <option value="1">✅ 提供装备租赁</option>
+              <option value="0">❌ 需自备装备</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">普通话沟通</label>
+            <select class="form-select" id="capMandarin">
+              <option value="1">✅ 会说普通话</option>
+              <option value="0">⚠️ 仅会方言</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">导钓费用说明</label>
+          <input class="form-input" id="capGuideFee" placeholder="如：导钓费¥200/人（含基础教学+装备使用）">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveCaptainProfile()">💾 保存资料</button>
+    </div>
+  </div>
+
+  <!-- Schedule -->
+  <div class="page content" id="captain-schedule">
+    <div class="card">
+      <div class="card-title">📅 发布排期</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">日期</label>
+          <input class="form-input" type="date" id="schedDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">时段</label>
+          <select class="form-select" id="schedSlot">
+            <option value="早班 05:00-12:00">早班 05:00-12:00</option>
+            <option value="全日 06:00-17:00">全日 06:00-17:00</option>
+            <option value="夜钓 17:00-24:00">夜钓 17:00-24:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">可接人数</label>
+          <input class="form-input" type="number" id="schedCapacity" min="1" max="20" value="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">费用（元/人）</label>
+          <input class="form-input" type="number" id="schedPrice" min="0" step="10" value="300" placeholder="元/人">
+        </div>
+      </div>
+      <div class="form-hint">💡 费用包含船费+基础饵料。不含装备租赁。</div>
+      <button class="btn btn-primary" onclick="publishSchedule()" style="margin-top:12px;">📢 发布排期</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 已发布的排期</div>
+      <div id="scheduleList"></div>
+    </div>
+  </div>
+
+  <!-- Bookings -->
+  <div class="page content" id="captain-bookings">
+    <div class="card">
+      <div class="card-title">📨 预约管理</div>
+      <div id="captainBookingsList"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="page content" id="captain-stats">
+    <div class="card">
+      <div class="card-title">📊 本月概览</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-val" id="statOrders">0</div>
+          <div class="stat-lbl">本月订单</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="statRevenue">¥0</div>
+          <div class="stat-lbl">本月收入</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="statRating">-</div>
+          <div class="stat-lbl">平均评分</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CAPTAIN DETAIL MODAL ==================== -->
+<div class="modal-overlay hidden" id="detailModal">
+  <div class="modal" id="detailContent"></div>
+</div>
+
+<!-- ==================== BOOKING MODAL ==================== -->
+<div class="modal-overlay hidden" id="bookingModal">
+  <div class="modal">
+    <div class="modal-title">📋 预约出海</div>
+    <div id="bookingForm"></div>
+  </div>
+</div>
+
+<!-- ==================== REVIEW MODAL ==================== -->
+<div class="modal-overlay hidden" id="reviewModal">
+  <div class="modal">
+    <div class="modal-title">⭐ 评价船长</div>
+    <div id="reviewForm"></div>
+  </div>
+</div>
+
+<!-- Chain Create Modal -->
+<div class="modal-overlay hidden" id="chainCreateModal">
+  <div class="modal">
+    <div class="modal-title">✋ 发起拼船接龙</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">出海日期</label>
+        <input type="date" class="form-input" id="chainDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">时段</label>
+        <select class="form-select" id="chainSlot">
+          <option>早班 05:00-12:00</option>
+          <option>全日 06:00-17:00</option>
+          <option>夜钓 17:00-24:00</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">港口</label>
+      <select class="form-select" id="chainPort">
+        <option>南澳岛</option>
+        <option>澄海莱芜</option>
+        <option>潮阳海门</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">目标鱼种</label>
+      <input class="form-input" id="chainFish" placeholder="如：真鲷、石斑">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">需要人数</label>
+        <input class="form-input" type="number" id="chainMax" min="2" max="20" value="4">
+      </div>
+      <div class="form-group">
+        <label class="form-label">你的称呼</label>
+        <input class="form-input" id="chainName" placeholder="怎么称呼你">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">联系方式</label>
+      <input class="form-input" id="chainContact" type="tel" placeholder="手机号或微信">
+    </div>
+    <button class="btn btn-primary" onclick="createChain()">✋ 发起接龙</button>
+  </div>
+</div>
+
+<!-- Chain Join Modal -->
+<div class="modal-overlay hidden" id="chainJoinModal">
+  <div class="modal">
+    <div class="modal-title">✋ 加入拼船</div>
+    <div id="chainJoinPreview"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">你的称呼</label>
+        <input class="form-input" id="joinName" placeholder="怎么称呼你">
+      </div>
+      <div class="form-group">
+        <label class="form-label">人数</label>
+        <input class="form-input" type="number" id="joinCount" min="1" max="10" value="1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">联系方式</label>
+      <input class="form-input" id="joinContact" type="tel" placeholder="手机号或微信">
+    </div>
+    <button class="btn btn-primary" onclick="joinChain()">✅ 确认加入</button>
+  </div>
+</div>
+
+<!-- ==================== BOTTOM NAV ==================== -->
+<div class="bottom-nav" id="fishermanNav">
+  <button class="nav-item active" onclick="switchFishermanTab('home')" id="navHome">
+    <span class="nav-icon">🏠</span>首页
+  </button>
+  <button class="nav-item" onclick="switchFishermanTab('record')" id="navRecord">
+    <span class="nav-icon">📸</span>记录
+  </button>
+  <button class="nav-item" onclick="switchFishermanTab('group')" id="navGroup">
+    <span class="nav-icon">✋</span>拼船
+  </button>
+</div>
+
+<div class="bottom-nav" id="captainNav" style="display:none;">
+  <button class="nav-item active" onclick="switchCaptainTab('profile')" id="navProfile">
+    <span class="nav-icon">👤</span>资料
+  </button>
+  <button class="nav-item" onclick="switchCaptainTab('schedule')" id="navSchedule">
+    <span class="nav-icon">📅</span>排期
+  </button>
+  <button class="nav-item" onclick="switchCaptainTab('bookings')" id="navCapBookings">
+    <span class="nav-icon">📨</span>预约
+  </button>
+  <button class="nav-item" onclick="switchCaptainTab('stats')" id="navStats">
+    <span class="nav-icon">📊</span>统计
+  </button>
+</div>
+
+<script>
+// ==================== WEATHER CONFIG ====================
+const WX_CONFIG = {
+  key: 'c3cb514f98e5491d81cbd4a685298151',
+  host: 'https://pa5egmtvfn.re.qweatherapi.com',
+  cacheTTL: 30 * 60 * 1000 // 30 min
+};
+
+// Port to city ID mapping
+const PORT_CITY = {
+  '南澳岛': '101280501',
+  '澄海莱芜': '101280501',
+  '潮阳海门': '101280501'
+};
+
+function getWindDir(degree) {
+  const dirs = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+  return dirs[Math.round(degree / 45) % 8] + '风';
+}
+
+function estimateWave(windSpeed) {
+  const s = parseFloat(windSpeed) || 0;
+  if (s <= 10) return '0.1-0.3';
+  if (s <= 20) return '0.3-0.6';
+  if (s <= 30) return '0.6-1.2';
+  if (s <= 40) return '1.2-2.0';
+  return '>2.0';
+}
+
+function getWeatherAdvice(windScale) {
+  const s = parseInt(windScale) || 0;
+  if (s >= 6) return { level: 'bad', icon: '❌', text: '不建议出海', hint: '风力过大，浪高危险' };
+  if (s >= 4) return { level: 'warn', icon: '⚠️', text: '谨慎出海', hint: '条件一般，注意安全' };
+  return { level: 'good', icon: '✅', text: '推荐出海', hint: '天气条件良好，适合出海' };
+}
+
+// ==================== DATA MODEL ====================
+const STORAGE_KEY = 'haiyutong_data';
+
+function getDefaultData() {
+  return {
+    captains: [
+      {
+        id: 'c1',
+        name: '阿强船长',
+        avatar: '👨‍✈️',
+        phone: '138****6789',
+        boatName: '南澳号',
+        boatType: '12米专业钓鱼艇 · 可载6人',
+        port: '南澳岛',
+        fishTarget: '真鲷、石斑、黑鲷、马鲛',
+        cert: '持证船长 · 15年出海经验',
+        desc: '土生土长南澳人，熟悉周边每一处暗礁和鱼窝。慢摇铁板、路亚拖钓都可以，新手包教会。',
+        schedules: [],
+        reviews: [
+          { userName: '深圳老张', rating: 5, comment: '阿强对南澳海域太熟了，半天爆箱！下次还来', date: '2026-05-20' },
+          { userName: '广州小李', rating: 5, comment: '第一次海钓，船长手把手教，太耐心了', date: '2026-05-10' },
+          { userName: '汕头阿明', rating: 4, comment: '船况不错，服务好，就是那天鱼情一般', date: '2026-04-28' }
+        ],
+        completedOrders: 86,
+        joinDate: '2026-01-01',
+        guideEnabled: true,
+        guideTypes: ['零基础', '进阶'],
+        guideMethods: ['底钓', '慢摇铁板', '路亚'],
+        teachStyle: '手把手耐心教',
+        provideGear: true,
+        mandarin: true,
+        guideFee: '导钓费¥200/人（含基础教学，装备另租¥50/套）',
+        guideNewbies: 45
+      },
+      {
+        id: 'c2',
+        name: '老陈船长',
+        avatar: '🧔',
+        phone: '139****1234',
+        boatName: '莱芜之星',
+        boatType: '10米快艇 · 可载4人',
+        port: '澄海莱芜',
+        fishTarget: '黄鳍鲷、沙钻、带鱼',
+        cert: '持证船长 · 8年出海经验',
+        desc: '莱芜老渔民出身，对潮汐鱼情判断精准。擅长底钓，带你体验真正的近海船钓。',
+        schedules: [],
+        reviews: [
+          { userName: '潮州钓友', rating: 5, comment: '老陈看潮汐太准了，窗口期卡得死死的', date: '2026-05-15' },
+          { userName: '揭阳小王', rating: 4, comment: '装备有点旧但船很稳，渔获不错', date: '2026-05-02' }
+        ],
+        completedOrders: 52,
+        joinDate: '2026-01-15',
+        guideEnabled: true,
+        guideTypes: ['零基础', '亲子'],
+        guideMethods: ['底钓', '矶钓'],
+        teachStyle: '手把手耐心教',
+        provideGear: true,
+        mandarin: false,
+        guideFee: '导钓费¥150/人（含基础装备）',
+        guideNewbies: 28
+      },
+      {
+        id: 'c3',
+        name: '海哥',
+        avatar: '🧑‍🔧',
+        phone: '137****5678',
+        boatName: '海门猎手',
+        boatType: '14米专业渔船 · 可载8人',
+        port: '潮阳海门',
+        fishTarget: '带鱼、马鲛、红衫鱼、巴浪',
+        cert: '持证船长 · 20年出海经验',
+        desc: '海门老船长，经验最丰富。船大稳，适合远一点的钓点。包船拼船都行，价格公道。',
+        schedules: [],
+        reviews: [
+          { userName: '普宁老刘', rating: 5, comment: '船长经验太丰富了，换了三个点终于找到鱼群', date: '2026-05-18' },
+          { userName: '汕头小陈', rating: 5, comment: '船大不晕，服务好，渔获处理也专业', date: '2026-05-08' },
+          { userName: '广州张哥', rating: 3, comment: '开得太远了，油费有点贵。但渔获确实不错', date: '2026-04-15' }
+        ],
+        completedOrders: 120,
+        joinDate: '2025-12-01',
+        guideEnabled: true,
+        guideTypes: ['零基础', '进阶', '团建'],
+        guideMethods: ['底钓', '拖钓', '慢摇铁板', '路亚'],
+        teachStyle: '边钓边讲',
+        provideGear: true,
+        mandarin: true,
+        guideFee: '导钓费¥300/人（含全套装备+教学，企业团建另议）',
+        guideNewbies: 72
+      },
+      {
+        id: 'c4',
+        name: '阿明船长',
+        avatar: '👲',
+        phone: '136****9012',
+        boatName: '南澳快鱼',
+        boatType: '9米快艇 · 可载3人',
+        port: '南澳岛',
+        fishTarget: '石斑、真鲷、红鱼',
+        cert: '持证船长 · 6年出海经验',
+        desc: '年轻船长，节奏快，主打效率。适合想快速上鱼的朋友。装备新，服务好。',
+        schedules: [],
+        reviews: [
+          { userName: '珠海钓友', rating: 5, comment: '节奏快效率高，半天就搞了十几条', date: '2026-05-02' }
+        ],
+        completedOrders: 35,
+        joinDate: '2026-03-01',
+        guideEnabled: false,
+        guideTypes: [],
+        guideMethods: ['路亚'],
+        teachStyle: '放手让你试',
+        provideGear: false,
+        mandarin: true,
+        guideFee: '',
+        guideNewbies: 0
+      },
+      {
+        id: 'c5',
+        name: '肥仔船长',
+        avatar: '🧔‍♂️',
+        phone: '135****3456',
+        boatName: '海岛风情',
+        boatType: '11米休闲艇 · 可载5人',
+        port: '南澳岛',
+        fishTarget: '黑鲷、黄鳍鲷、沙尖',
+        cert: '持证船长 · 12年出海经验',
+        desc: '性格豪爽，服务周到。船上备有冰镇饮料和新鲜水果。拼船氛围好，新手友好。',
+        schedules: [],
+        reviews: [
+          { userName: '惠州阿文', rating: 5, comment: '服务太周到了，船上还有水果饮料，体验感满分', date: '2026-05-12' },
+          { userName: '深圳小刘', rating: 4, comment: '肥仔人很好，新手耐心教。就是船速慢了点', date: '2026-04-20' }
+        ],
+        completedOrders: 68,
+        joinDate: '2026-02-01',
+        guideEnabled: true,
+        guideTypes: ['零基础', '亲子', '团建'],
+        guideMethods: ['底钓', '矶钓', '路亚'],
+        teachStyle: '手把手耐心教',
+        provideGear: true,
+        mandarin: true,
+        guideFee: '导钓费¥180/人（含装备+饮料水果，亲子半价）',
+        guideNewbies: 38
+      }
+    ],
+    bookings: [
+      {
+        id: 'b1',
+        captainId: 'c1',
+        captainName: '阿强船长',
+        userName: '深圳老张',
+        userContact: '138****8888',
+        date: '2026-05-20',
+        slot: '早班 05:00-12:00',
+        people: 2,
+        price: 300,
+        status: 'completed',
+        createdAt: '2026-05-18'
+      },
+      {
+        id: 'b2',
+        captainId: 'c2',
+        captainName: '老陈船长',
+        userName: '潮州钓友',
+        userContact: '139****9999',
+        date: '2026-05-22',
+        slot: '全日 06:00-17:00',
+        people: 3,
+        price: 400,
+        status: 'confirmed',
+        createdAt: '2026-05-19'
+      },
+      {
+        id: 'b3',
+        captainId: 'c3',
+        captainName: '海哥',
+        userName: '普宁老刘',
+        userContact: '137****7777',
+        date: '2026-05-25',
+        slot: '夜钓 17:00-24:00',
+        people: 4,
+        price: 350,
+        status: 'pending',
+        createdAt: '2026-05-21'
+      }
+    ],
+    currentCaptainId: null,
+    currentMode: 'fisherman',
+    currentFilter: 'all',
+    currentSubMode: 'boat',
+    currentGuideFilter: 'all',
+    currentView: 'list',
+    selectedDate: null,
+    weatherCache: {},
+    catches: [
+      { id: 'ct1', fishName: '黑鲷', alias: '海鲋', weight: '2.3斤', length: '35cm', port: '南澳岛', bait: '活虾', date: '2026-05-20', photo: null, note: '早班出海，涨潮时钓到的' },
+      { id: 'ct2', fishName: '真鲷', alias: '加吉鱼', weight: '1.8斤', length: '30cm', port: '南澳岛', bait: '沙蚕', date: '2026-05-15', photo: null, note: '风浪较大，但鱼口不错' },
+      { id: 'ct3', fishName: '石斑', alias: '龙胆', weight: '4.5斤', length: '52cm', port: '潮阳海门', bait: '活虾', date: '2026-05-10', photo: null, note: '海哥船长带的点，爆护了' },
+    ],
+    chains: [
+      {
+        id: 'chain-1',
+        creatorName: '深圳老张',
+        creatorContact: '138****8888',
+        port: '南澳岛',
+        date: '2026-05-31',
+        slot: '全日 06:00-17:00',
+        targetFish: '真鲷、石斑',
+        maxPeople: 6,
+        participants: [
+          { name: '深圳老张', count: 2, contact: '138****8888' },
+          { name: '广州小李', count: 1, contact: '139****9999' }
+        ],
+        status: 'open',
+        createdAt: '2026-05-28'
+      },
+      {
+        id: 'chain-2',
+        creatorName: '汕头阿明',
+        creatorContact: '136****5678',
+        port: '澄海莱芜',
+        date: '2026-05-30',
+        slot: '早班 05:00-12:00',
+        targetFish: '黄鳍鲷、沙钻',
+        maxPeople: 4,
+        participants: [
+          { name: '汕头阿明', count: 1, contact: '136****5678' },
+          { name: '潮州小王', count: 1, contact: '135****1111' },
+          { name: '揭阳老刘', count: 2, contact: '137****2222' }
+        ],
+        status: 'full',
+        createdAt: '2026-05-27'
+      }
+    ]
+  };
+}
+
+function loadData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return getDefaultData();
+  try { return JSON.parse(raw); } catch(e) { return getDefaultData(); }
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+let APP = loadData();
+// Ensure all captains have required fields
+APP.captains.forEach(c => {
+  if (!c.schedules) c.schedules = [];
+  if (!c.joinDate) c.joinDate = '2026-05-01';
+  if (c.guideEnabled === undefined) c.guideEnabled = false;
+  if (!c.guideTypes) c.guideTypes = [];
+  if (!c.guideMethods) c.guideMethods = [];
+  if (!c.teachStyle) c.teachStyle = '手把手耐心教';
+  if (c.provideGear === undefined) c.provideGear = false;
+  if (c.mandarin === undefined) c.mandarin = true;
+  if (!c.guideFee) c.guideFee = '';
+  if (c.guideNewbies === undefined) c.guideNewbies = 0;
+});
+APP.currentSubMode = APP.currentSubMode || 'boat';
+APP.currentGuideFilter = APP.currentGuideFilter || 'all';
+APP.currentView = APP.currentView || 'list';
+if (!APP.chains) APP.chains = [];
+if (!APP.catches) APP.catches = [];
+APP.chains.forEach(ch => {
+  if (!ch.participants) ch.participants = [];
+  if (!ch.status) ch.status = 'open';
+});
+
+// ==================== UTILS ====================
+function $(id) { return document.getElementById(id); }
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function formatDate(d) {
+  const date = new Date(d);
+  return `${date.getMonth()+1}月${date.getDate()}日`;
+}
+
+function avgRating(reviews) {
+  if (!reviews || reviews.length === 0) return 0;
+  return (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+}
+
+function starStr(rating) {
+  return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+}
+
+// ==================== MODE SWITCH ====================
+function switchMode(mode) {
+  APP.currentMode = mode;
+  saveData(APP);
+
+  $('modeFisherman').classList.toggle('active', mode === 'fisherman');
+  $('modeCaptain').classList.toggle('active', mode === 'captain');
+
+  $('fishermanPages').style.display = mode === 'fisherman' ? 'block' : 'none';
+  $('captainPages').style.display = mode === 'captain' ? 'block' : 'none';
+
+  $('fishermanNav').style.display = mode === 'fisherman' ? 'flex' : 'none';
+  $('captainNav').style.display = mode === 'captain' ? 'flex' : 'none';
+
+  // subModeRow is now inside group page, no need to toggle here
+
+  if (mode === 'fisherman') {
+    switchFishermanTab('find');
+    renderCaptainList();
+  } else {
+    switchCaptainTab('profile');
+    loadCaptainProfile();
+  }
+}
+
+// ==================== SUB-MODE SWITCH ====================
+function switchSubMode(mode) {
+  APP.currentSubMode = mode;
+  saveData(APP);
+  document.querySelectorAll('#groupCaptains .sub-mode-btn').forEach(b => b.classList.remove('active'));
+  if (mode === 'boat') document.getElementById('subModeBoat').classList.add('active');
+  else document.getElementById('subModeGuide').classList.add('active');
+  $('filterRow').style.display = mode === 'boat' ? 'flex' : 'none';
+  $('guideFilterRow').style.display = mode === 'guide' ? 'flex' : 'none';
+  if (mode === 'guide') {
+    APP.currentFilter = 'all';
+    APP.currentGuideFilter = 'all';
+    document.querySelectorAll('#guideFilterRow .filter-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+  }
+  if (APP.currentGroupView === 'rank') renderRankList();
+  else renderCaptainList();
+}
+
+function filterGuide(type, el) {
+  APP.currentGuideFilter = type;
+  document.querySelectorAll('#guideFilterRow .filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderCaptainList();
+}
+
+// ==================== CHAIN (拼船接龙) ====================
+function showCreateChainForm() {
+  $('chainDate').value = new Date().toISOString().split('T')[0];
+  $('chainName').value = '';
+  $('chainContact').value = '';
+  $('chainCreateModal').classList.remove('hidden');
+}
+
+function createChain() {
+  const date = $('chainDate').value;
+  const slot = $('chainSlot').value;
+  const port = $('chainPort').value;
+  const fish = ($('chainFish').value || '').trim();
+  const max = parseInt($('chainMax').value) || 4;
+  const name = ($('chainName').value || '').trim();
+  const contact = ($('chainContact').value || '').trim();
+
+  if (!date) { showToast('请选择日期'); return; }
+  if (!name) { showToast('请输入你的称呼'); return; }
+  if (!contact) { showToast('请输入联系方式'); return; }
+
+  const chain = {
+    id: 'chain-' + Date.now(),
+    creatorName: name,
+    creatorContact: contact,
+    port, date, slot,
+    targetFish: fish || '未指定',
+    maxPeople: max,
+    participants: [{ name, count: 1, contact }],
+    status: 'open',
+    createdAt: new Date().toISOString().split('T')[0]
+  };
+
+  APP.chains.push(chain);
+  saveData(APP);
+  closeModal('chainCreateModal');
+  showToast('拼船接龙已发起！');
+  renderChainList();
+}
+
+function showJoinChainForm(chainId) {
+  const ch = APP.chains.find(c => c.id === chainId);
+  if (!ch) return;
+  APP._joiningChainId = chainId;
+
+  $('joinName').value = '';
+  $('joinCount').value = 1;
+  $('joinContact').value = '';
+
+  const joined = ch.participants.reduce((s, p) => s + p.count, 0);
+  const remaining = ch.maxPeople - joined;
+
+  $('chainJoinPreview').innerHTML = `
+    <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:12px;font-size:13px;">
+      <div style="font-weight:600;margin-bottom:4px;">${ch.creatorName} 发起的拼船</div>
+      <div>📍 ${ch.port} · 📅 ${formatDate(ch.date)} · ${ch.slot}</div>
+      <div>🐟 ${ch.targetFish} · 👥 ${joined}/${ch.maxPeople}人 · 还剩${remaining}位</div>
+    </div>
+  `;
+  $('chainJoinModal').classList.remove('hidden');
+}
+
+function joinChain() {
+  const ch = APP.chains.find(c => c.id === APP._joiningChainId);
+  if (!ch) return;
+
+  const name = ($('joinName').value || '').trim();
+  const count = parseInt($('joinCount').value) || 1;
+  const contact = ($('joinContact').value || '').trim();
+
+  if (!name) { showToast('请输入你的称呼'); return; }
+  if (!contact) { showToast('请输入联系方式'); return; }
+
+  const joined = ch.participants.reduce((s, p) => s + p.count, 0);
+  if (joined + count > ch.maxPeople) {
+    showToast('人数不够了！最多还能加' + (ch.maxPeople - joined) + '人');
+    return;
+  }
+
+  ch.participants.push({ name, count, contact });
+  if (ch.participants.reduce((s, p) => s + p.count, 0) >= ch.maxPeople) {
+    ch.status = 'full';
+  }
+
+  saveData(APP);
+  closeModal('chainJoinModal');
+  showToast('加入成功！');
+  renderChainList();
+}
+
+function renderChainList() {
+  const chains = APP.chains.filter(c => c.status !== 'closed').sort((a, b) => {
+    if (a.status === 'full' && b.status !== 'full') return 1;
+    if (b.status === 'full' && a.status !== 'full') return -1;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
+  const container = $('chainList');
+  if (chains.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">✋</div><div class="empty-text">暂无拼船接龙</div><div class="empty-hint">点击上方按钮发起第一个</div></div>';
+    return;
+  }
+
+  container.innerHTML = chains.map(ch => {
+    const joined = ch.participants.reduce((s, p) => s + p.count, 0);
+    const pct = Math.round((joined / ch.maxPeople) * 100);
+    const badge = ch.status === 'full' ? '<span class="chain-badge full">已满</span>' : '<span class="chain-badge open">拼船中</span>';
+
+    return `
+    <div class="chain-card ${ch.status === 'full' ? 'full' : ''}">
+      <div class="chain-header">
+        <span class="chain-creator">${ch.creatorName} 发起的拼船</span>
+        ${badge}
+      </div>
+      <div class="chain-info">
+        <span>📍 ${ch.port}</span>
+        <span>📅 ${formatDate(ch.date)}</span>
+        <span>⏰ ${ch.slot}</span>
+        <span>🐟 ${ch.targetFish}</span>
+      </div>
+      <div class="chain-participants">
+        ${ch.participants.map((p, i) => `<div class="chain-participant"><span>${i + 1}. ${p.name}</span><span style="color:var(--text-light);">${p.count}人</span></div>`).join('')}
+      </div>
+      <div class="chain-progress">
+        <div class="chain-progress-bar">
+          <div class="chain-progress-fill" style="width:${pct}%;"></div>
+        </div>
+        <span class="chain-progress-text">${joined}/${ch.maxPeople}人</span>
+      </div>
+      ${ch.status !== 'full' ? `<div class="chain-join-btn"><button class="btn btn-outline" onclick="event.stopPropagation(); showJoinChainForm('${ch.id}')">✋ 我要接龙</button></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ==================== HOME PAGE ====================
+function renderHomePage() {
+  renderHomeCatches();
+  renderHomeChains();
+  if (!APP.selectedDate) renderCaptainList(); // preload
+}
+
+function renderHomeCatches() {
+  const catches = APP.catches.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+  if (catches.length === 0) {
+    $('homeCatches').innerHTML = '<div style="background:var(--white);border-radius:var(--radius);padding:16px;text-align:center;color:var(--text-light);font-size:13px;">还没有渔获记录<br><span style="color:var(--primary);cursor:pointer;" onclick="switchFishermanTab(\'record\')">去拍照识鱼 →</span></div>';
+    return;
+  }
+  $('homeCatches').innerHTML = catches.map(ct => `
+    <div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);display:flex;gap:12px;align-items:center;" onclick="switchFishermanTab('record')">
+      <div style="font-size:28px;">🐟</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;font-size:14px;">${ct.fishName}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">${ct.weight} · ${ct.port} · ${formatDate(ct.date)}</div>
+      </div>
+      <div style="color:var(--text-light);font-size:20px;">›</div>
+    </div>
+  `).join('');
+}
+
+function renderHomeChains() {
+  const chains = APP.chains.filter(c => c.status === 'open').slice(0, 2);
+  if (chains.length === 0) {
+    $('homeChains').innerHTML = '<div style="background:var(--white);border-radius:var(--radius);padding:16px;text-align:center;color:var(--text-light);font-size:13px;">暂无拼船接龙<br><span style="color:var(--primary);cursor:pointer;" onclick="switchFishermanTab(\'group\');setTimeout(()=>showCreateChainForm(),200);">发起一个 →</span></div>';
+    return;
+  }
+  $('homeChains').innerHTML = chains.map(ch => {
+    const joined = ch.participants.reduce((s, p) => s + p.count, 0);
+    return `
+    <div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);" onclick="switchFishermanTab('group')">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:600;font-size:14px;">${ch.creatorName} 发起的拼船</span>
+        <span style="font-size:12px;color:var(--success);">${joined}/${ch.maxPeople}人</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">📍 ${ch.port} · 📅 ${formatDate(ch.date)} · ${ch.slot}</div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== RECORD PAGE (识鱼+渔获) ====================
+function simulateFishID() {
+  const result = document.getElementById('fish-result');
+  result.style.display = 'block';
+  // Store fish data for save
+  window._lastFish = { name: '黑鲷（真鲷）', alias: '海鲋、青鳞' };
+}
+
+function saveCatchFromID() {
+  const fish = window._lastFish || { name: '黑鲷（真鲷）', alias: '海鲋、青鳞' };
+  APP.catches.unshift({
+    id: 'ct' + Date.now(),
+    fishName: fish.name,
+    alias: fish.alias || '',
+    weight: '',
+    length: '',
+    port: '南澳岛',
+    bait: '',
+    date: new Date().toISOString().split('T')[0],
+    photo: null,
+    note: '拍照识鱼自动记录'
+  });
+  saveData(APP);
+  document.getElementById('fish-result').style.display = 'none';
+  showToast('渔获已记录！');
+  renderCatchTimeline();
+  renderHomeCatches();
+}
+
+function showAddCatchForm() {
+  const html = `
+    <div class="form-group"><label class="form-label">鱼种</label><input class="form-input" id="catchName" placeholder="如：黑鲷"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">重量</label><input class="form-input" id="catchWeight" placeholder="如：2.3斤"></div>
+      <div class="form-group"><label class="form-label">长度</label><input class="form-input" id="catchLength" placeholder="如：35cm"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">钓点</label><input class="form-input" id="catchPort" placeholder="如：南澳岛"></div>
+      <div class="form-group"><label class="form-label">日期</label><input class="form-input" type="date" id="catchDate" value="${new Date().toISOString().split('T')[0]}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">饵料</label><input class="form-input" id="catchBait" placeholder="如：活虾"></div>
+    <button class="btn btn-primary" onclick="saveCatch()">✅ 保存渔获</button>
+  `;
+  $('catchTimeline').innerHTML = `<div class="card">${html}</div>`;
+}
+
+function saveCatch() {
+  const name = ($('catchName').value || '').trim();
+  if (!name) { showToast('请输入鱼种'); return; }
+  APP.catches.unshift({
+    id: 'ct' + Date.now(),
+    fishName: name,
+    alias: '',
+    weight: ($('catchWeight').value || '').trim(),
+    length: ($('catchLength').value || '').trim(),
+    port: ($('catchPort').value || '').trim(),
+    bait: ($('catchBait').value || '').trim(),
+    date: $('catchDate').value || new Date().toISOString().split('T')[0],
+    photo: null,
+    note: ''
+  });
+  saveData(APP);
+  showToast('渔获已记录！');
+  renderCatchTimeline();
+  renderHomeCatches();
+}
+
+function renderCatchTimeline() {
+  const catches = APP.catches.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (catches.length === 0) {
+    $('catchTimeline').innerHTML = '<div class="empty"><div class="empty-icon">🎣</div><div class="empty-text">还没有渔获记录</div><div class="empty-hint">拍照识鱼或手动添加你的第一条渔获</div></div>';
+    return;
+  }
+
+  // Stats
+  const totalFish = catches.length;
+  const species = new Set(catches.map(c => c.fishName)).size;
+  const maxWeight = catches.reduce((max, c) => {
+    const w = parseFloat(c.weight) || 0; return w > max ? w : max;
+  }, 0);
+
+  let html = `<div class="stats-grid" style="margin-bottom:14px;">
+    <div class="stat-card"><div class="stat-val">${totalFish}</div><div class="stat-lbl">渔获总数</div></div>
+    <div class="stat-card"><div class="stat-val">${species}</div><div class="stat-lbl">鱼种数</div></div>
+    <div class="stat-card"><div class="stat-val">${maxWeight > 0 ? maxWeight + '斤' : '-'}</div><div class="stat-lbl">最大单尾</div></div>
+  </div>`;
+
+  html += catches.map((ct, i) => `
+    <div style="background:var(--white);border-radius:var(--radius);padding:14px;margin-bottom:8px;box-shadow:var(--shadow-sm);position:relative;">
+      <div style="position:absolute;left:-2px;top:14px;bottom:14px;width:3px;background:var(--primary);border-radius:2px;"></div>
+      <div style="margin-left:8px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:600;">🐟 ${ct.fishName}</span>
+          <span style="font-size:12px;color:var(--text-light);">${ct.date}</span>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">
+          ${ct.weight ? ct.weight + ' · ' : ''}${ct.length ? ct.length + ' · ' : ''}📍 ${ct.port || '未记录'}
+        </div>
+        ${ct.bait ? `<div style="font-size:12px;color:var(--text-light);margin-top:2px;">🪱 ${ct.bait}</div>` : ''}
+        ${ct.note ? `<div style="font-size:12px;color:var(--text-light);margin-top:2px;">💬 ${ct.note}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  $('catchTimeline').innerHTML = html;
+}
+
+// ==================== GROUP PAGE helpers ====================
+function switchGroupView(view, el) {
+  APP.currentGroupView = view;
+  document.querySelectorAll('#groupCaptains .view-toggle-btn').forEach(b => {
+    b.style.background = 'white'; b.style.color = 'var(--text-secondary)';
+  });
+  if (el) { el.style.background = 'var(--primary)'; el.style.color = 'white'; }
+  if (view === 'rank') {
+    $('captainList').style.display = 'none';
+    $('rankList').style.display = 'flex';
+    $('filterRow').style.display = 'none';
+    $('guideFilterRow').style.display = 'none';
+    renderRankList();
+  } else {
+    $('captainList').style.display = 'flex';
+    $('rankList').style.display = 'none';
+    $('filterRow').style.display = 'flex';
+    $('guideFilterRow').style.display = APP.currentSubMode === 'guide' ? 'flex' : 'none';
+    renderCaptainList();
+  }
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ==================== DATE PICKER & WEATHER ====================
+function renderDatePicker() {
+  const today = new Date();
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const wd = weekDays[d.getDay()];
+    const day = d.getDate();
+    const month = d.getMonth() + 1;
+    const isToday = i === 0;
+    const active = APP.selectedDate === dateStr || (!APP.selectedDate && isToday);
+
+    // Check if any captain has a schedule on this date
+    const hasSchedule = APP.captains.some(c => (c.schedules || []).some(s => s.date === dateStr && s.remaining > 0));
+
+    // Weather icon placeholder
+    const cached = APP.weatherCache[dateStr];
+    const wIcon = cached ? getWeatherIcon(cached.data) : '';
+
+    html += `<div class="date-chip${active ? ' active' : ''}" onclick="selectDate('${dateStr}', this)" data-date="${dateStr}">
+      <span class="day">${month}/${day}</span>
+      <span class="weekday">${isToday ? '今天' : wd}</span>
+      ${wIcon ? `<span class="icon">${wIcon}</span>` : (hasSchedule ? '<span class="dot"></span>' : '')}
+    </div>`;
+  }
+  $('datePicker').innerHTML = html;
+
+  // Set default date if not set
+  if (!APP.selectedDate) {
+    selectDate(today.toISOString().split('T')[0], $('datePicker').querySelector('.date-chip'));
+  }
+}
+
+function getWeatherIcon(dayData) {
+  if (!dayData) return '';
+  const text = (dayData.textDay || '').toLowerCase();
+  if (text.includes('雨')) return '🌧';
+  if (text.includes('云') || text.includes('阴')) return '☁️';
+  if (text.includes('晴')) return '☀️';
+  if (text.includes('风')) return '💨';
+  return '';
+}
+
+function selectDate(dateStr, el) {
+  APP.selectedDate = dateStr;
+  document.querySelectorAll('#datePicker .date-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  saveData(APP);
+
+  // Determine port from current filter
+  let port = APP.currentFilter;
+  if (port === 'all' || !PORT_CITY[port]) port = '南澳岛';
+  const cityId = PORT_CITY[port] || '101280501';
+
+  fetchWeather(dateStr, cityId, port).then(() => renderCaptainList());
+}
+
+async function fetchWeather(dateStr, cityId, port) {
+  // Try cache first
+  const cache = APP.weatherCache[dateStr];
+  if (cache && (Date.now() - cache.fetchedAt) < WX_CONFIG.cacheTTL) {
+    renderWeather(cache.data, port);
+    return;
+  }
+
+  try {
+    const url = `${WX_CONFIG.host}/v7/weather/7d?location=${cityId}&key=${WX_CONFIG.key}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    if (json.code === '200') {
+      const target = json.daily.find(d => d.fxDate === dateStr);
+      if (target) {
+        APP.weatherCache[dateStr] = { data: target, fetchedAt: Date.now() };
+        saveData(APP);
+        renderWeather(target, port);
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn('Weather API error, using fallback');
+  }
+
+  // Fallback: simulated data for demo
+  const mock = generateMockWeather(dateStr);
+  renderWeather(mock, port, true);
+}
+
+function generateMockWeather(dateStr) {
+  const d = new Date(dateStr);
+  const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  // Simulate seasonal wind patterns: summer winds in Guangdong are typically SE 2-4级
+  const seed = dayOfYear % 30;
+  const windScales = [2, 3, 2, 3, 4, 3, 2, 3, 4, 5, 3, 2, 3, 4, 3];
+  const windDirs = [135, 150, 120, 140, 160, 130, 145, 155, 125, 140, 135, 150, 120, 140, 135];
+  const temps = [28, 29, 30, 31, 29, 28, 30, 32, 31, 29, 28, 30, 31, 29, 28];
+  const vis = [15, 20, 18, 12, 10, 15, 20, 18, 15, 12, 10, 15, 20, 15, 18];
+
+  const idx = seed % windScales.length;
+  return {
+    windScaleDay: String(windScales[idx]),
+    wind360Day: windDirs[idx],
+    windSpeedDay: String(windScales[idx] * 5 + 5), // rough km/h
+    tempMax: String(temps[idx]),
+    vis: String(vis[idx]),
+    textDay: ['晴', '多云', '晴间多云', '多云', '阴', '晴', '多云'][idx % 7],
+    _mock: true
+  };
+}
+
+function renderWeather(dayData, port, isMock) {
+  const card = $('weatherCard');
+  if (!dayData) {
+    card.style.display = 'block';
+    card.className = 'weather-card';
+    $('weatherDate').textContent = formatDate(APP.selectedDate);
+    $('weatherPort').textContent = '📍 ' + port;
+    $('wWind').textContent = '--';
+    $('wWave').textContent = '--m';
+    $('wTemp').textContent = '--°C';
+    $('weatherAdvice').textContent = '⏳ 天气数据加载失败';
+    $('weatherAdvice').className = 'weather-advice';
+    $('weatherHint').textContent = '使用缓存数据或下拉刷新重试';
+    return;
+  }
+
+  const windScale = dayData.windScaleDay || '--';
+  const windDir = getWindDir(dayData.wind360Day || 0);
+  const windSpeed = dayData.windSpeedDay || '--';
+  const temp = dayData.tempMax || '--';
+  const advice = getWeatherAdvice(windScale);
+  const wave = estimateWave(windSpeed);
+
+  card.style.display = 'block';
+  card.className = 'weather-card advice-' + advice.level;
+
+  // Format date: "5月29日 周四"
+  const d = new Date(APP.selectedDate);
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  $('weatherDate').textContent = '📅 ' + formatDate(APP.selectedDate) + ' ' + weekDays[d.getDay()];
+  $('weatherPort').textContent = '📍 ' + port;
+
+  $('wWind').innerHTML = `${windDir}<br>${windScale}级`;
+  $('wWave').textContent = wave + 'm';
+  $('wTemp').textContent = temp + '°C';
+
+  $('weatherAdvice').innerHTML = `${advice.icon} ${advice.text}`;
+  $('weatherAdvice').className = 'weather-advice ' + advice.level;
+  $('weatherHint').textContent = advice.hint + ' · 能见度' + (dayData.vis || '--') + 'km' + (isMock ? '（模拟数据）' : '');
+  renderWindowTimeline(dayData, advice.level);
+}
+
+function renderWindowTimeline(dayData, adviceLevel) {
+  const sunrise = dayData.sunrise || '06:00';
+  const sunset  = dayData.sunset  || '18:00';
+  const windScale = parseInt(dayData.windScaleDay) || 3;
+
+  // Calculate window: sunrise+30min to sunset-30min, adjusted by wind
+  let startH = parseInt(sunrise.split(':')[0]);
+  let startM = parseInt(sunrise.split(':')[1]) + 30;
+  if (startM >= 60) { startH++; startM -= 60; }
+  let endH = parseInt(sunset.split(':')[0]);
+  let endM = parseInt(sunset.split(':')[1]) - 30;
+  if (endM < 0) { endH--; endM += 60; }
+
+  // Wind adjustment: strong wind shortens window
+  if (windScale >= 6) { endH -= 4; }
+  else if (windScale >= 4) { endH -= 2; }
+
+  const startStr = String(startH).padStart(2,'0') + ':' + String(startM).padStart(2,'0');
+  const endStr   = String(endH).padStart(2,'0') + ':' + String(endM).padStart(2,'0');
+
+  // Calculate timeline percentage (day = 06:00 to 18:00 = 12h)
+  const dayStartMin = 6 * 60; // 06:00
+  const dayEndMin   = 18 * 60; // 18:00
+  const totalMin = dayEndMin - dayStartMin;
+  const windowStartMin = Math.max(dayStartMin, startH * 60 + startM);
+  const windowEndMin   = Math.min(dayEndMin, endH * 60 + endM);
+  const leftPct  = ((windowStartMin - dayStartMin) / totalMin) * 100;
+  const widthPct = ((windowEndMin - windowStartMin) / totalMin) * 100;
+
+  $('windowFill').style.width = widthPct + '%';
+  $('windowFill').style.left = leftPct + '%';
+  $('windowFill').className = 'window-timeline-fill ' + adviceLevel;
+  $('windowLabel').textContent = startStr + ' - ' + endStr + '（日出' + sunrise + ' 日落' + sunset + '）';
+  $('windowLabel').className = 'window-label ' + (adviceLevel === 'good' ? '' : adviceLevel);
+  $('windowMarks').innerHTML = '<span>06:00</span><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span>';
+}
+
+function getSchedulesOnDate(captain) {
+  if (!APP.selectedDate) return [];
+  return (captain.schedules || []).filter(s => s.date === APP.selectedDate && s.remaining > 0);
+}
+
+function calcRecIndex(captain) {
+  let score = 0;
+  const rating = parseFloat(avgRating(captain.reviews)) || 0;
+
+  // Rating (0-40 points)
+  score += Math.min(rating, 5) / 5 * 40;
+
+  // Schedule on selected date (0-25 points)
+  if (getSchedulesOnDate(captain).length > 0) score += 25;
+
+  // Guide enabled (0-20 points)
+  if (captain.guideEnabled) score += 20;
+
+  // Volume & trust (0-15 points)
+  const orderBonus = Math.min(captain.completedOrders / 100, 1) * 10;
+  const reviewBonus = Math.min(captain.reviews.length / 20, 1) * 5;
+  score += orderBonus + reviewBonus;
+
+  return Math.round(Math.min(score, 100));
+}
+
+function getRecLevel(score) {
+  if (score >= 75) return 'high';
+  if (score >= 50) return 'mid';
+  return 'low';
+}
+
+function getRecIcon(score) {
+  if (score >= 80) return '🏆';
+  if (score >= 60) return '👍';
+  if (score >= 40) return '👌';
+  return '—';
+}
+
+// ==================== VIEW SWITCH & RANKING ====================
+function switchView(view, el) {
+  APP.currentView = view;
+  saveData(APP);
+  $('viewList').classList.toggle('active', view === 'list');
+  $('viewRank').classList.toggle('active', view === 'rank');
+  $('captainList').style.display = view === 'list' ? 'flex' : 'none';
+  $('rankList').style.display = view === 'rank' ? 'flex' : 'none';
+  $('filterRow').style.display = view === 'list' && APP.currentSubMode === 'boat' ? 'flex' : 'none';
+  $('guideFilterRow').style.display = view === 'list' && APP.currentSubMode === 'guide' ? 'flex' : 'none';
+  if (view === 'list') renderCaptainList();
+  else renderRankList();
+}
+
+function renderRankList() {
+  const isGuide = APP.currentSubMode === 'guide';
+  let captains = APP.captains.slice();
+
+  // In guide mode, only show captains with guideEnabled
+  if (isGuide) captains = captains.filter(c => c.guideEnabled);
+
+  // Calculate scores and sort: rating DESC, reviews count DESC, completedOrders DESC
+  captains = captains.map(c => ({
+    ...c,
+    _score: avgRating(c.reviews),
+    _reviewCount: c.reviews.length
+  })).sort((a, b) => {
+    if (b._score !== a._score) return b._score - a._score;
+    if (b._reviewCount !== a._reviewCount) return b._reviewCount - a._reviewCount;
+    return b.completedOrders - a.completedOrders;
+  });
+
+  const container = $('rankList');
+  if (captains.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">暂无船长数据</div></div>';
+    $('resultCount').textContent = '';
+    return;
+  }
+
+  $('resultCount').textContent = `${captains.length}位船长`;
+
+  container.innerHTML = captains.map((c, i) => {
+    const rank = i + 1;
+    let rankClass = 'default';
+    let rankIcon = rank;
+    if (rank === 1) { rankClass = 'gold'; rankIcon = '👑'; }
+    else if (rank === 2) { rankClass = 'silver'; rankIcon = '🥈'; }
+    else if (rank === 3) { rankClass = 'bronze'; rankIcon = '🥉'; }
+
+    const tags = [];
+    if (isGuide) {
+      if (c.guideTypes) c.guideTypes.forEach(t => {
+        tags.push(`<span class="tag tag-guide">${t}</span>`);
+      });
+    } else {
+      tags.push(`<span class="tag tag-port">📍 ${c.port}</span>`);
+      if (c.guideEnabled) tags.push('<span class="tag tag-beginner">🎓 可导钓</span>');
+    }
+    if (c.cert) tags.push(`<span class="tag tag-cert">✅ 认证</span>`);
+
+    return `
+    <div class="rank-item" onclick="showCaptainDetail('${c.id}')">
+      <div class="rank-num ${rankClass}">${rankIcon}</div>
+      <div class="rank-avatar">${c.avatar}</div>
+      <div class="rank-info">
+        <div class="rank-name">${c.name}</div>
+        <div class="rank-meta">${c.completedOrders}次出海 · ${c.reviews.length}条评价 · ${c.port}</div>
+        <div class="captain-tags" style="margin-top:4px;">${tags.join('')}</div>
+      </div>
+      <div class="rank-rating">
+        <div class="rank-score">${c._score > 0 ? c._score : '-'}</div>
+        <div class="rank-stars">${c._score > 0 ? starStr(c._score) : '暂无评分'}</div>
+        <div class="rank-reviews">${c._reviewCount}条评价</div>
+        ${(() => { const ri = calcRecIndex(c); return `<span class="rec-index ${getRecLevel(ri)}" style="margin-top:2px;">${getRecIcon(ri)} ${ri}分</span>`; })()}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getPendingReviewCount() {
+  return APP.bookings.filter(b => b.status === 'completed' && b.userName).filter(b => {
+    const c = APP.captains.find(cap => cap.id === b.captainId);
+    return c && !c.reviews.some(r => r.userName === b.userName && r.date === b.date);
+  }).length;
+}
+
+function updateNavBadge() {
+  const pending = getPendingReviewCount();
+  const nav = $('navGroup');
+  if (!nav) return;
+  if (pending > 0) {
+    nav.innerHTML = '<span class="nav-icon">✋</span>拼船<span class="pending-badge">' + pending + '</span>';
+  } else {
+    nav.innerHTML = '<span class="nav-icon">✋</span>拼船';
+  }
+}
+
+function toggleGuideService() {
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  const enabled = !(c && c.guideEnabled);
+  $('guideFields').style.display = enabled ? 'block' : 'none';
+  $('guideToggleBtn').textContent = enabled ? '🔘 已开启导钓服务（点击关闭）' : '🔘 暂不提供';
+  $('guideToggleBtn').className = enabled ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+  $('guideToggleBtn').style.width = 'auto';
+}
+
+function toggleChip(el) {
+  el.classList.toggle('checked');
+}
+
+function getChipValues(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} .chip-check.checked`)).map(el => el.dataset.key);
+}
+
+// ==================== FISHERMAN TABS ====================
+function switchFishermanTab(tab) {
+  ['home', 'record', 'group'].forEach(t => {
+    const page = document.getElementById(`fisherman-${t}`);
+    if (page) page.classList.toggle('active', t === tab);
+  });
+  document.querySelectorAll('#fishermanNav .nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = { home: 'navHome', record: 'navRecord', group: 'navGroup' };
+  const nav = document.getElementById(navMap[tab]);
+  if (nav) nav.classList.add('active');
+
+  updateNavBadge();
+  if (tab === 'home') { renderDatePicker(); renderHomePage(); }
+  if (tab === 'record') renderCatchTimeline();
+  if (tab === 'group') { renderChainList(); renderCaptainList(); renderMyBookings(); }
+}
+
+function filterCaptains(port, el) {
+  APP.currentFilter = port;
+  document.querySelectorAll('#filterRow .filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderCaptainList();
+}
+
+function renderCaptainList() {
+  const search = ($('searchPort').value || '').toLowerCase();
+  const isGuide = APP.currentSubMode === 'guide';
+  let captains = APP.captains;
+
+  // Guide mode: only show captains with guideEnabled=true
+  if (isGuide) {
+    captains = captains.filter(c => c.guideEnabled);
+    if (APP.currentGuideFilter !== 'all') {
+      captains = captains.filter(c => c.guideTypes.includes(APP.currentGuideFilter));
+    }
+  }
+
+  // Port filter (only in boat mode)
+  if (!isGuide && APP.currentFilter !== 'all') {
+    captains = captains.filter(c => c.port === APP.currentFilter);
+  }
+
+  if (search) {
+    captains = captains.filter(c =>
+      c.name.toLowerCase().includes(search) ||
+      c.port.toLowerCase().includes(search) ||
+      c.fishTarget.toLowerCase().includes(search) ||
+      c.boatName.toLowerCase().includes(search) ||
+      (c.guideTypes || []).some(t => t.includes(search))
+    );
+  }
+
+  // Sort: captains with schedules on selected date first
+  if (APP.selectedDate) {
+    captains = captains.slice().sort((a, b) => {
+      const aHas = getSchedulesOnDate(a).length > 0 ? 1 : 0;
+      const bHas = getSchedulesOnDate(b).length > 0 ? 1 : 0;
+      return bHas - aHas;
+    });
+  }
+
+  const container = $('captainList');
+  if (captains.length === 0) {
+    const msg = isGuide ? '暂无提供导钓服务的船长' : '该港口暂无船长';
+    const hint = isGuide ? '试试切换筛选条件' : '试试切换筛选条件';
+    container.innerHTML = `<div class="empty"><div class="empty-icon">${isGuide ? '🎓' : '🚤'}</div><div class="empty-text">${msg}</div><div class="empty-hint">${hint}</div></div>`;
+    return;
+  }
+
+  container.innerHTML = captains.map(c => {
+    const rating = avgRating(c.reviews);
+    const tags = [];
+
+    if (isGuide) {
+      // Guide mode cards: emphasize teaching ability
+      if (c.guideTypes) c.guideTypes.forEach(t => {
+        const iconMap = { '零基础': '🔰', '亲子': '👨‍👧', '团建': '🏢', '进阶': '📈' };
+        tags.push(`<span class="tag tag-guide">${iconMap[t] || ''} ${t}</span>`);
+      });
+      if (c.mandarin) tags.push('<span class="tag tag-lang">🗣 普通话</span>');
+      if (c.provideGear) tags.push('<span class="tag tag-gear">🎒 可租装备</span>');
+    } else {
+      // Boat mode cards: emphasize boat/schedule
+      tags.push(`<span class="tag tag-port">📍 ${c.port}</span>`);
+      if (c.cert) tags.push(`<span class="tag tag-cert">✅ 认证</span>`);
+      tags.push(`<span class="tag tag-fish">🐟 ${c.fishTarget}</span>`);
+      if (c.guideEnabled) tags.push('<span class="tag tag-guide">🎓 可导钓</span>');
+    }
+
+    const schedulesOnDate = getSchedulesOnDate(c);
+    const hasSchedule = schedulesOnDate.length > 0;
+
+    return `
+    <div class="captain-card ${hasSchedule ? 'has-schedule' : 'no-schedule'}" onclick="showCaptainDetail('${c.id}')">
+      <div class="captain-header">
+        <div class="captain-avatar">${c.avatar}</div>
+        <div class="captain-info">
+          <div class="captain-name">${c.name}</div>
+          <div class="captain-boat">${c.boatName} · ${c.boatType}</div>
+          <div class="captain-meta">
+            <span class="captain-rating">⭐ ${rating}</span>
+            <span class="captain-orders">${c.completedOrders}次出海</span>
+            ${(() => { const ri = calcRecIndex(c); return `<span class="rec-index ${getRecLevel(ri)}" style="margin-left:4px;">${getRecIcon(ri)} ${ri}分</span>`; })()}
+            ${isGuide && c.guideNewbies > 0 ? '<span style="margin-left:4px;font-size:12px;color:#7C3AED;">· 带过' + c.guideNewbies + '位新手</span>' : ''}
+          </div>
+        </div>
+      </div>
+      ${isGuide ? `
+      <div class="guide-highlights">
+        <div class="guide-highlight-item">🎯 ${c.teachStyle}</div>
+        <div class="guide-highlight-item">🐟 ${c.guideMethods.slice(0, 3).join(' · ')}</div>
+        ${c.guideFee ? `<div class="guide-highlight-item" style="color:#7C3AED;">💰 ${c.guideFee}</div>` : ''}
+      </div>
+      ` : ''}
+      <div class="captain-tags">${tags.join('')}</div>
+      ${hasSchedule ? schedulesOnDate.map(s => `<div class="schedule-preview">⏰ ${formatDate(s.date)} · ${s.slot} · ¥${s.price}/人 · 余${s.remaining}位</div>`).join('') : `<div class="no-schedule-badge">📅 ${APP.selectedDate ? formatDate(APP.selectedDate) : ''}暂无排期</div>`}
+    </div>`;
+  }).join('');
+  $('resultCount').textContent = `${captains.length}位船长`;
+  // Also update rank list in background
+  renderRankList();
+}
+
+function showCaptainDetail(captainId) {
+  const c = APP.captains.find(cap => cap.id === captainId);
+  if (!c) return;
+
+  const rating = avgRating(c.reviews);
+  const schedules = c.schedules || [];
+  const activeSchedules = schedules.filter(s => s.remaining > 0);
+
+  $('detailContent').innerHTML = `
+    <div class="detail-hero">
+      <div class="detail-back" onclick="closeModal('detailModal')">← 返回列表</div>
+      <div class="detail-avatar">
+        <span class="detail-avatar-icon">${c.avatar}</span>
+        <div class="detail-name">${c.name}</div>
+        <div class="detail-boat">${c.boatName} · ${c.boatType}</div>
+      </div>
+      <div class="detail-stats">
+        <div class="detail-stat">
+          <div class="detail-stat-val">⭐ ${rating}</div>
+          <div class="detail-stat-lbl">评分</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-val">${c.completedOrders}</div>
+          <div class="detail-stat-lbl">出海次数</div>
+        </div>
+        ${(() => { const ri = calcRecIndex(c); return `<div class="detail-stat"><div class="detail-stat-val" style="color:#7C3AED;">${getRecIcon(ri)} ${ri}</div><div class="detail-stat-lbl">推荐指数</div></div>`; })()}
+        <div class="detail-stat">
+          <div class="detail-stat-val">${c.reviews.length}</div>
+          <div class="detail-stat-lbl">评价数</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-content">
+      <div class="card">
+        <div class="card-title">📋 船长信息</div>
+        <div style="margin-bottom:12px;">
+          <span class="cert-badge">✅ ${c.cert}</span>
+        </div>
+        <div style="margin-bottom:8px;"><span style="color:var(--text-secondary);">📍 港口：</span>${c.port}</div>
+        <div style="margin-bottom:8px;"><span style="color:var(--text-secondary);">🎯 鱼种：</span>${c.fishTarget}</div>
+        <div style="color:var(--text-secondary);">${c.desc}</div>
+      </div>
+
+      ${c.guideEnabled ? `
+      <div class="guide-card">
+        <div class="card-title">🎓 导钓服务</div>
+        <div class="guide-grid">
+          <div class="guide-grid-item">🎯 类型：${c.guideTypes.map(t => { const m = { '零基础': '🔰零基础', '亲子': '👨‍👧亲子', '团建': '🏢团建', '进阶': '📈进阶' }; return m[t] || t; }).join(' ')}</div>
+          <div class="guide-grid-item">🐟 钓法：${c.guideMethods.join(' · ')}</div>
+          <div class="guide-grid-item"><span class="guide-style-badge">${c.teachStyle}</span></div>
+          <div class="guide-grid-item">👥 已带${c.guideNewbies}位新手</div>
+        </div>
+        <div class="guide-check-list">
+          ${c.provideGear ? '<div class="guide-check-item">✅ 提供装备租赁</div>' : '<div class="guide-check-item">❌ 需自备装备</div>'}
+          ${c.mandarin ? '<div class="guide-check-item">✅ 可用普通话沟通</div>' : '<div class="guide-check-item">⚠️ 仅会说本地方言</div>'}
+          ${c.guideFee ? '<div class="guide-check-item" style="color:#7C3AED;font-weight:500;">💰 ' + c.guideFee + '</div>' : ''}
+        </div>
+      </div>
+      ` : ''}
+
+      <div class="card">
+        <div class="card-title">📅 可约排期</div>
+        ${activeSchedules.length > 0 ? activeSchedules.map(s => `
+          <div class="schedule-item">
+            <div>
+              <div class="schedule-date">${formatDate(s.date)} · ${s.slot}</div>
+              <div class="schedule-info">剩余 ${s.remaining}/${s.capacity} 位</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="schedule-price">¥${s.price}/人</div>
+              <button class="btn btn-sm btn-primary" onclick="showBookingForm('${c.id}', '${s.date}', '${s.slot}', ${s.price})" style="margin-top:4px;">预约</button>
+            </div>
+          </div>
+        `).join('') : '<div class="empty"><div class="empty-text">暂无排期</div><div class="empty-hint">船长暂未发布可约排期</div></div>'}
+      </div>
+
+      <div class="card">
+        <div class="card-title">⭐ 钓友评价 (${c.reviews.length})</div>
+        ${c.reviews.length > 0 ? c.reviews.map(r => `
+          <div style="padding:10px 0;border-bottom:1px solid var(--border);">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-weight:500;">${r.userName}</span>
+              <span class="stars">${starStr(r.rating)}</span>
+            </div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${r.comment}</div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:2px;">${r.date}</div>
+          </div>
+        `).join('') : '<div class="empty"><div class="empty-text">暂无评价</div></div>'}
+      </div>
+    </div>
+  `;
+  $('detailModal').classList.remove('hidden');
+}
+
+function showBookingForm(captainId, date, slot, price) {
+  const c = APP.captains.find(cap => cap.id === captainId);
+  $('bookingForm').innerHTML = `
+    <div class="form-group">
+      <label class="form-label">船长</label>
+      <input class="form-input" value="${c.name} · ${c.boatName}" disabled>
+    </div>
+    <div class="form-group">
+      <label class="form-label">排期</label>
+      <input class="form-input" value="${formatDate(date)} · ${slot} · ¥${price}/人" disabled>
+    </div>
+    <div class="form-group">
+      <label class="form-label">人数</label>
+      <input class="form-input" type="number" id="bookingPeople" min="1" max="10" value="2">
+    </div>
+    <div class="form-group">
+      <label class="form-label">你的称呼</label>
+      <input class="form-input" id="bookingName" placeholder="怎么称呼你">
+    </div>
+    <div class="form-group">
+      <label class="form-label">联系方式</label>
+      <input class="form-input" id="bookingContact" type="tel" placeholder="手机号或微信">
+    </div>
+    <div class="form-hint">💡 预约后船长会联系你确认。费用当面沟通。</div>
+    <button class="btn btn-primary" onclick="submitBooking('${captainId}', '${date}', '${slot}', ${price})" style="margin-top:12px;">✅ 提交预约</button>
+  `;
+  $('bookingModal').classList.remove('hidden');
+  closeModal('detailModal');
+}
+
+function submitBooking(captainId, date, slot, price) {
+  const people = parseInt($('bookingPeople').value) || 2;
+  const name = ($('bookingName').value || '').trim();
+  const contact = ($('bookingContact').value || '').trim();
+
+  if (!name) { showToast('请输入你的称呼'); return; }
+  if (!contact) { showToast('请输入联系方式'); return; }
+
+  const c = APP.captains.find(cap => cap.id === captainId);
+  if (!c) return;
+
+  const booking = {
+    id: 'b' + Date.now(),
+    captainId: captainId,
+    captainName: c.name,
+    userName: name,
+    userContact: contact,
+    date: date,
+    slot: slot,
+    people: people,
+    price: price,
+    status: 'pending',
+    createdAt: new Date().toISOString().split('T')[0]
+  };
+
+  APP.bookings.push(booking);
+
+  // Reduce schedule remaining
+  const sched = c.schedules.find(s => s.date === date && s.slot === slot);
+  if (sched) sched.remaining = Math.max(0, sched.remaining - people);
+
+  saveData(APP);
+  closeModal('bookingModal');
+  showToast('预约已提交，等待船长确认');
+  setTimeout(() => { switchFishermanTab('bookings'); renderMyBookings(); }, 500);
+}
+
+function renderMyBookings() {
+  const bookings = APP.bookings.filter(b => b.userName);
+  const container = $('myBookingsList');
+  if (bookings.length === 0) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">暂无预约</div><div class="empty-hint">去找个船长预约出海吧</div></div>';
+    return;
+  }
+
+  container.innerHTML = bookings.slice().reverse().map(b => {
+    const badgeClass = { pending: 'badge-pending', confirmed: 'badge-confirmed', completed: 'badge-completed' }[b.status] || '';
+    const badgeText = { pending: '待确认', confirmed: '已确认', completed: '已完成' }[b.status] || b.status;
+    let actionBtn = '';
+    if (b.status === 'completed') {
+      // Check if already reviewed
+      const c = APP.captains.find(cap => cap.id === b.captainId);
+      const alreadyReviewed = c && c.reviews.some(r => r.userName === b.userName && r.date === b.date);
+      if (!alreadyReviewed) {
+        actionBtn = `<button class="btn btn-sm btn-outline" onclick="showReviewForm('${b.id}', '${b.captainId}')" style="margin-top:8px;">去评价</button>`;
+      }
+    }
+    return `
+    <div class="booking-item">
+      <div>
+        <div class="booking-captain">${b.captainName}</div>
+        <div class="booking-date">${formatDate(b.date)} · ${b.slot}</div>
+        <div class="booking-meta">${b.people}人 · ¥${b.price}/人 · 联系人：${b.userContact}</div>
+      </div>
+      <div style="text-align:right;">
+        <span class="badge ${badgeClass}">${badgeText}</span>
+        ${actionBtn}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showReviewForm(bookingId, captainId) {
+  const b = APP.bookings.find(bk => bk.id === bookingId);
+  if (!b) return;
+
+  $('reviewForm').innerHTML = `
+    <div class="form-group" style="text-align:center;">
+      <label class="form-label">${b.captainName} · ${formatDate(b.date)}</label>
+    </div>
+    <div class="form-group" style="text-align:center;">
+      <label class="form-label">评分</label>
+      <div class="star-input" id="starInput" style="font-size:32px;letter-spacing:6px;">
+        <span onclick="setStar(1)">☆</span><span onclick="setStar(2)">☆</span><span onclick="setStar(3)">☆</span><span onclick="setStar(4)">☆</span><span onclick="setStar(5)">☆</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">评价</label>
+      <textarea class="form-textarea" id="reviewComment" placeholder="分享一下你的出海体验..."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="submitReview('${bookingId}', '${captainId}')">⭐ 提交评价</button>
+  `;
+  window._reviewStar = 5;
+  $('reviewModal').classList.remove('hidden');
+}
+
+function setStar(n) {
+  window._reviewStar = n;
+  const stars = document.querySelectorAll('#starInput span');
+  stars.forEach((s, i) => { s.textContent = i < n ? '★' : '☆'; });
+}
+
+function submitReview(bookingId, captainId) {
+  const comment = ($('reviewComment').value || '').trim();
+  if (!comment) { showToast('请输入评价内容'); return; }
+
+  const b = APP.bookings.find(bk => bk.id === bookingId);
+  const c = APP.captains.find(cap => cap.id === captainId);
+  if (!b || !c) return;
+
+  c.reviews.push({
+    userName: b.userName,
+    rating: window._reviewStar || 5,
+    comment: comment,
+    date: new Date().toISOString().split('T')[0]
+  });
+
+  saveData(APP);
+  closeModal('reviewModal');
+  showToast('评价已提交，谢谢反馈！');
+  updateNavBadge();
+  renderMyBookings();
+  renderRankList();
+}
+
+// ==================== CAPTAIN TABS ====================
+function switchCaptainTab(tab) {
+  ['profile', 'schedule', 'bookings', 'stats'].forEach(t => {
+    $(`captain-${t}`).classList.toggle('active', t === tab);
+    const navId = t === 'bookings' ? 'navCapBookings' : `nav${t.charAt(0).toUpperCase() + t.slice(1)}`;
+    document.querySelectorAll('#captainNav .nav-item').forEach(n => n.classList.remove('active'));
+    if (document.getElementById(navId)) document.getElementById(navId).classList.add('active');
+  });
+  if (tab === 'profile') loadCaptainProfile();
+  if (tab === 'schedule') renderScheduleList();
+  if (tab === 'bookings') renderCaptainBookings();
+  if (tab === 'stats') renderStats();
+}
+
+function loadCaptainProfile() {
+  if (!APP.currentCaptainId) {
+    // Try to load from first captain in data or show empty
+    $('capAvatar').value = '';
+    $('capName').value = '';
+    $('capPhone').value = '';
+    $('capBoatName').value = '';
+    $('capBoatType').value = '';
+    $('capPort').value = '南澳岛';
+    $('capFish').value = '';
+    $('capCert').value = '';
+    $('capDesc').value = '';
+    return;
+  }
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+  $('capAvatar').value = c.avatar || '';
+  $('capName').value = c.name || '';
+  $('capPhone').value = c.phone || '';
+  $('capBoatName').value = c.boatName || '';
+  $('capBoatType').value = c.boatType || '';
+  $('capPort').value = c.port || '南澳岛';
+  $('capFish').value = c.fishTarget || '';
+  $('capCert').value = c.cert || '';
+  $('capDesc').value = c.desc || '';
+  // Guide fields
+  if (c.guideEnabled) {
+    $('guideFields').style.display = 'block';
+    $('guideToggleBtn').textContent = '🔘 已开启导钓服务（点击关闭）';
+    $('guideToggleBtn').className = 'btn btn-sm btn-primary';
+    $('guideToggleBtn').style.width = 'auto';
+    // Set guide type chips
+    document.querySelectorAll('#guideTypes .chip-check').forEach(el => {
+      el.classList.toggle('checked', (c.guideTypes || []).includes(el.dataset.key));
+    });
+    document.querySelectorAll('#guideMethods .chip-check').forEach(el => {
+      el.classList.toggle('checked', (c.guideMethods || []).includes(el.dataset.key));
+    });
+  } else {
+    $('guideFields').style.display = 'none';
+    $('guideToggleBtn').textContent = '🔘 暂不提供';
+    $('guideToggleBtn').className = 'btn btn-sm btn-outline';
+    $('guideToggleBtn').style.width = 'auto';
+  }
+  $('capTeachStyle').value = c.teachStyle || '手把手耐心教';
+  $('capProvideGear').value = c.provideGear ? '1' : '0';
+  $('capMandarin').value = c.mandarin ? '1' : '0';
+  $('capGuideFee').value = c.guideFee || '';
+}
+
+function saveCaptainProfile() {
+  const name = ($('capName').value || '').trim();
+  const phone = ($('capPhone').value || '').trim();
+  if (!name) { showToast('请输入姓名'); return; }
+  if (!phone) { showToast('请输入手机号'); return; }
+
+  if (!APP.currentCaptainId) {
+    // New captain registration
+    APP.currentCaptainId = 'c' + Date.now();
+    APP.captains.push({
+      id: APP.currentCaptainId,
+      name: '',
+      avatar: '👨‍✈️',
+      phone: '',
+      boatName: '',
+      boatType: '',
+      port: '南澳岛',
+      fishTarget: '',
+      cert: '',
+      desc: '',
+      schedules: [],
+      reviews: [],
+      completedOrders: 0,
+      joinDate: new Date().toISOString().split('T')[0]
+    });
+  }
+
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+
+  c.avatar = ($('capAvatar').value || '').trim() || '👨‍✈️';
+  c.name = name;
+  c.phone = phone;
+  c.boatName = ($('capBoatName').value || '').trim();
+  c.boatType = ($('capBoatType').value || '').trim();
+  c.port = $('capPort').value;
+  c.fishTarget = ($('capFish').value || '').trim();
+  c.cert = ($('capCert').value || '').trim();
+  c.desc = ($('capDesc').value || '').trim();
+
+  // Guide fields
+  c.guideEnabled = $('guideFields').style.display === 'block';
+  if (c.guideEnabled) {
+    c.guideTypes = getChipValues('guideTypes');
+    c.guideMethods = getChipValues('guideMethods');
+    c.teachStyle = $('capTeachStyle').value;
+    c.provideGear = $('capProvideGear').value === '1';
+    c.mandarin = $('capMandarin').value === '1';
+    c.guideFee = ($('capGuideFee').value || '').trim();
+  }
+
+  saveData(APP);
+  showToast('资料保存成功！');
+}
+
+function publishSchedule() {
+  if (!APP.currentCaptainId) { showToast('请先保存船长资料'); return; }
+
+  const date = $('schedDate').value;
+  const slot = $('schedSlot').value;
+  const capacity = parseInt($('schedCapacity').value) || 4;
+  const price = parseInt($('schedPrice').value) || 300;
+
+  if (!date) { showToast('请选择日期'); return; }
+  if (new Date(date) < new Date(new Date().toISOString().split('T')[0])) {
+    showToast('不能发布过去的日期');
+    return;
+  }
+
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+
+  // Check duplicate
+  if (c.schedules.some(s => s.date === date && s.slot === slot)) {
+    showToast('该时段已有排期');
+    return;
+  }
+
+  c.schedules.push({ date, slot, capacity, price, remaining: capacity });
+  saveData(APP);
+  showToast('排期发布成功！');
+  renderScheduleList();
+}
+
+function renderScheduleList() {
+  if (!APP.currentCaptainId) {
+    $('scheduleList').innerHTML = '<div class="empty"><div class="empty-text">请先保存船长资料</div></div>';
+    return;
+  }
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+
+  const schedules = c.schedules || [];
+  if (schedules.length === 0) {
+    $('scheduleList').innerHTML = '<div class="empty"><div class="empty-text">暂无排期</div><div class="empty-hint">在上面发布你的可约时段</div></div>';
+    return;
+  }
+
+  $('scheduleList').innerHTML = schedules.map((s, i) => `
+    <div class="schedule-item">
+      <div>
+        <div class="schedule-date">${formatDate(s.date)} · ${s.slot}</div>
+        <div class="schedule-info">¥${s.price}/人 · ${s.remaining}/${s.capacity} 位剩余</div>
+      </div>
+      <button class="btn btn-sm btn-ghost" onclick="deleteSchedule(${i})">删除</button>
+    </div>
+  `).join('');
+}
+
+function deleteSchedule(index) {
+  if (!APP.currentCaptainId) return;
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+  c.schedules.splice(index, 1);
+  saveData(APP);
+  renderScheduleList();
+}
+
+function renderCaptainBookings() {
+  if (!APP.currentCaptainId) {
+    $('captainBookingsList').innerHTML = '<div class="empty"><div class="empty-text">请先保存船长资料</div></div>';
+    return;
+  }
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+
+  const bookings = APP.bookings.filter(b => b.captainId === APP.currentCaptainId);
+  if (bookings.length === 0) {
+    $('captainBookingsList').innerHTML = '<div class="empty"><div class="empty-icon">📨</div><div class="empty-text">暂无预约</div><div class="empty-hint">等你发布了排期，钓友就能预约了</div></div>';
+    return;
+  }
+
+  $('captainBookingsList').innerHTML = bookings.slice().reverse().map(b => {
+    const badgeClass = { pending: 'badge-pending', confirmed: 'badge-confirmed', completed: 'badge-completed' }[b.status] || '';
+    const badgeText = { pending: '待确认', confirmed: '已确认', completed: '已完成' }[b.status] || b.status;
+    let actions = '';
+    if (b.status === 'pending') {
+      actions = `
+        <button class="btn btn-sm btn-success" onclick="updateBookingStatus('${b.id}', 'confirmed')">确认</button>
+      `;
+    } else if (b.status === 'confirmed') {
+      actions = `
+        <button class="btn btn-sm btn-primary" onclick="updateBookingStatus('${b.id}', 'completed')">完成</button>
+      `;
+    }
+    return `
+    <div class="booking-item">
+      <div>
+        <div class="booking-captain">${b.userName}</div>
+        <div class="booking-date">${formatDate(b.date)} · ${b.slot}</div>
+        <div class="booking-meta">${b.people}人 · ¥${b.price}/人 · 📞${b.userContact}</div>
+      </div>
+      <div style="text-align:right;">
+        <span class="badge ${badgeClass}">${badgeText}</span>
+        ${actions ? '<div style="margin-top:6px;">' + actions + '</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateBookingStatus(bookingId, newStatus) {
+  const b = APP.bookings.find(bk => bk.id === bookingId);
+  if (!b) return;
+  b.status = newStatus;
+
+  if (newStatus === 'completed') {
+    const c = APP.captains.find(cap => cap.id === b.captainId);
+    if (c) c.completedOrders = (c.completedOrders || 0) + 1;
+  }
+
+  saveData(APP);
+  showToast(newStatus === 'confirmed' ? '已确认预约' : '已完成出海');
+  renderCaptainBookings();
+  renderStats();
+}
+
+function renderStats() {
+  if (!APP.currentCaptainId) {
+    $('statOrders').textContent = '0';
+    $('statRevenue').textContent = '¥0';
+    $('statRating').textContent = '-';
+    return;
+  }
+
+  const c = APP.captains.find(cap => cap.id === APP.currentCaptainId);
+  if (!c) return;
+
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+  const monthBookings = APP.bookings.filter(b =>
+    b.captainId === APP.currentCaptainId &&
+    b.status === 'completed' &&
+    b.createdAt >= monthStart
+  );
+  const monthRevenue = monthBookings.reduce((sum, b) => sum + (b.price * b.people), 0);
+  const rating = avgRating(c.reviews);
+
+  $('statOrders').textContent = monthBookings.length;
+  $('statRevenue').textContent = '¥' + monthRevenue;
+  $('statRating').textContent = rating > 0 ? '⭐ ' + rating : '-';
+}
+
+// ==================== MODALS ====================
+function closeModal(id) {
+  $(id).classList.add('hidden');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) closeModal(this.id);
+  });
+});
+
+// ==================== INIT ====================
+// Set today as default date for schedule
+$('schedDate').value = new Date().toISOString().split('T')[0];
+
+// Initial render
+APP.currentGroupView = APP.currentGroupView || 'list';
+if (APP.currentMode === 'fisherman') {
+  $('captainPages').style.display = 'none';
+  $('captainNav').style.display = 'none';
+  renderDatePicker();
+  renderHomePage();
+} else {
+  $('fishermanPages').style.display = 'none';
+  $('fishermanNav').style.display = 'none';
+}
+// Set today for schedule date
+$('schedDate').value = new Date().toISOString().split('T')[0];
+updateNavBadge();
+</script>
+</body>
+</html>
