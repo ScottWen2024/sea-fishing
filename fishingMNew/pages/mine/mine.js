@@ -1,0 +1,1 @@
+Page({ data:{stats:'3条渔获 · 3次出海'}, goRecord(){wx.switchTab({url:'/pages/record/record'});}, goMarket(){wx.navigateTo({url:'/pages/market/market'});}, goMoon(){wx.navigateTo({url:'/pages/moon/moon'});}, showSafety(){wx.showToast({title:'安全须知（待迁移）',icon:'none'});} });

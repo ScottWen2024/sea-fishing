@@ -1,0 +1,44 @@
+<view class="page" style="padding:0 20rpx;">
+  <button style="width:100%;background:linear-gradient(135deg,#7C3AED,#A78BFA);color:white;padding:24rpx;border:none;border-radius:16rpx;margin-bottom:20rpx;font-size:32rpx;font-weight:700;box-shadow:0 4rpx 16rpx rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;gap:8rpx;" bindtap="showCreateChain">
+    <text style="font-size:44rpx;">📢</text> 发起约钓
+  </button>
+
+  <view style="font-size:30rpx;font-weight:600;margin-bottom:12rpx;">📡 进行中的约钓</view>
+  <block wx:for="{{chains}}" wx:key="id">
+    <view class="card" style="margin-bottom:12rpx;">
+      <view style="display:flex;justify-content:space-between;">
+        <text style="font-weight:600;">{{item.creatorName}} 约钓</text>
+        <text style="font-size:22rpx;padding:4rpx 12rpx;border-radius:16rpx;{{item.status==='full'?'background:#FFFBEB;color:#92400E;':'background:#ECFDF5;color:#065F46;'}}">{{item.status==='full'?'已满':'进行中'}}</text>
+      </view>
+      <view style="font-size:24rpx;color:var(--text-secondary);margin-top:8rpx;">📍 {{item.port}} · 📅 {{item.date}} · 🐟 {{item.targetFish}}</view>
+      <view style="display:flex;align-items:center;gap:12rpx;margin-top:12rpx;">
+        <view style="flex:1;height:10rpx;background:#E5E7EB;border-radius:5rpx;"><view style="height:100%;background:#10B981;border-radius:5rpx;width:{{item.joined/item.maxPeople*100}}%;"></view></view>
+        <text style="font-size:22rpx;color:var(--text-secondary);">{{item.joined}}/{{item.maxPeople}}人</text>
+      </view>
+      <button wx:if="{{item.status!=='full'}}" class="btn btn-outline btn-sm" bindtap="joinChain" data-id="{{item.id}}" style="margin-top:12rpx;width:100%;">加入</button>
+    </view>
+  </block>
+  <view wx:if="{{chains.length===0}}" class="empty"><view class="empty-text">暂无约钓</view></view>
+
+  <view style="margin-top:30rpx;border-top:2rpx dashed var(--border);padding-top:20rpx;" wx:if="{{!showCaptains}}">
+    <text style="font-size:24rpx;color:var(--text-light);text-align:center;display:block;" bindtap="toggleCaptains">── 需要找船长？点击展开 › ──</text>
+  </view>
+  <view wx:if="{{showCaptains}}">
+    <view style="display:flex;gap:8rpx;margin-bottom:12rpx;margin-top:20rpx;">
+      <button class="btn {{subMode==='boat'?'btn-primary':'btn-outline'}} btn-sm" bindtap="switchSubMode" data-mode="boat" style="flex:1;">🚤 拼船</button>
+      <button class="btn {{subMode==='guide'?'btn-primary':'btn-outline'}} btn-sm" bindtap="switchSubMode" data-mode="guide" style="flex:1;">🎓 导钓</button>
+    </view>
+    <block wx:for="{{filteredCaptains}}" wx:key="id">
+      <view class="card" style="margin-bottom:12rpx;">
+        <view style="display:flex;gap:16rpx;align-items:center;">
+          <text style="font-size:44rpx;">{{item.avatar}}</text>
+          <view style="flex:1;"><text style="font-weight:600;font-size:30rpx;">{{item.name}}</text><text style="font-size:22rpx;color:var(--warm);margin-left:8rpx;">⭐ {{item.rating}}</text>
+            <view style="font-size:24rpx;color:var(--text-secondary);">{{item.boatName}} · {{item.boatType}}</view>
+            <view style="font-size:22rpx;color:var(--text-light);">📍{{item.port}} · {{item.completedOrders}}次</view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <text style="font-size:22rpx;color:var(--text-light);text-align:center;display:block;margin-top:8rpx;" bindtap="toggleCaptains">── 收起 › ──</text>
+  </view>
+</view>

@@ -1,0 +1,1 @@
+.m-name{font-weight:600;font-size:30rpx;}.m-date{font-size:24rpx;color:var(--text-light);margin-top:4rpx;}.m-price{margin-top:8rpx;display:flex;gap:16rpx;align-items:center;}.price-tag{font-size:28rpx;color:var(--danger);font-weight:600;}

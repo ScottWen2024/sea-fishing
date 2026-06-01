@@ -1,0 +1,5 @@
+Page({data:{types:["nearshore","rock","lure","night"],curType:"nearshore",data:{}},
+EQUIP_DATA:{nearshore:{must:["life jacket","seasick med","sunscreen+hat","rod+reel+line","bait","water 2L+"],rec:["sunglasses","gloves","cooler+ice","towel"],opt:["gopro","power bank","headlamp"]},rock:{must:["spiked shoes","life jacket","sunscreen","rod+reel","bait","water"],rec:["chum bucket","net","cooler"],opt:["waterproof bag"]},lure:{must:["lure rod+reel","life jacket","sunscreen","lures","leader line"],rec:["sunglasses","pliers","waders"],opt:["spare lures"]},night:{must:["headlamp+battery","life jacket","bug spray","warm clothes","rod+reel","bait"],rec:["glow sticks","hot drink","spare light"],opt:["snake powder","chair"]}},
+onLoad(){this.switchType({currentTarget:{dataset:{type:"nearshore"}}})},
+switchType(e){var t=e.currentTarget.dataset.type;this.setData({curType:t,data:this.EQUIP_DATA[t]})}
+})

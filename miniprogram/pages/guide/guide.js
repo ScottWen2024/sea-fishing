@@ -1,0 +1,1 @@
+Page({data:{tabs:["Seasick","Preserve"],curTab:"Seasick"},switchTab(e){this.setData({curTab:e.currentTarget.dataset.tab})}})

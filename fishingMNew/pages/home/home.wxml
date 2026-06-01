@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="weather-card" wx:if="{{weather}}">
+    <view class="weather-main">
+      <view class="weather-metric"><view class="w-icon">💨</view><view class="w-value">{{weather.wind}}</view><view class="w-label">风力风向</view></view>
+      <view class="weather-metric"><view class="w-icon">🌊</view><view class="w-value">{{weather.wave}}</view><view class="w-label">浪高</view></view>
+      <view class="weather-metric"><view class="w-icon">🌡️</view><view class="w-value">{{weather.temp}}°C</view><view class="w-label">温度</view></view>
+    </view>
+    <view class="weather-advice {{weather.level}}">{{weather.advice}}</view>
+    <view class="weather-hint">{{weather.hint}}</view>
+  </view>
+
+  <!-- 3 Big Buttons -->
+  <view style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16rpx;margin-bottom:20rpx;">
+    <button style="background:linear-gradient(135deg,#7C3AED,#A78BFA);border:none;border-radius:16rpx;padding:28rpx 8rpx;color:white;font-size:28rpx;font-weight:600;box-shadow:0 4rpx 16rpx rgba(124,58,237,0.25);display:flex;flex-direction:column;align-items:center;gap:8rpx;" bindtap="goChainCreate">
+      <text style="font-size:40rpx;">📢</text>约钓
+    </button>
+    <button style="background:linear-gradient(135deg,#3B82F6,#60A5FA);border:none;border-radius:16rpx;padding:28rpx 8rpx;color:white;font-size:28rpx;font-weight:600;box-shadow:0 4rpx 16rpx rgba(59,130,246,0.25);display:flex;flex-direction:column;align-items:center;gap:8rpx;" bindtap="goRecord">
+      <text style="font-size:40rpx;">📸</text>识鱼
+    </button>
+    <button style="background:linear-gradient(135deg,#F97316,#FB923C);border:none;border-radius:16rpx;padding:28rpx 8rpx;color:white;font-size:28rpx;font-weight:600;box-shadow:0 4rpx 16rpx rgba(249,115,22,0.25);display:flex;flex-direction:column;align-items:center;gap:8rpx;" bindtap="goFindCaptain">
+      <text style="font-size:40rpx;">🔍</text>找船
+    </button>
+  </view>
+
+  <!-- Daily Fish Tip -->
+  <view style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:12rpx;padding:16rpx 20rpx;margin-bottom:20rpx;box-shadow:var(--shadow-sm);">
+    <view style="font-weight:600;color:#92400E;margin-bottom:4rpx;font-size:26rpx;">💡 每日鱼经</view>
+    <view style="color:#A16207;font-size:24rpx;">{{fishTip}}</view>
+  </view>
+
+  <!-- Knowledge Row -->
+  <view style="display:flex;gap:8rpx;margin-bottom:20rpx;justify-content:center;flex-wrap:wrap;">
+    <text style="background:var(--white);padding:10rpx 20rpx;border-radius:20rpx;font-size:24rpx;box-shadow:var(--shadow-sm);" bindtap="showWiki">🐠 鱼种百科</text>
+    <text style="background:var(--white);padding:10rpx 20rpx;border-radius:20rpx;font-size:24rpx;box-shadow:var(--shadow-sm);" bindtap="showSeasick">💊 晕船</text>
+    <text style="background:var(--white);padding:10rpx 20rpx;border-radius:20rpx;font-size:24rpx;box-shadow:var(--shadow-sm);" bindtap="showPreserve">🧊 保鲜</text>
+    <text style="background:var(--white);padding:10rpx 20rpx;border-radius:20rpx;font-size:24rpx;box-shadow:var(--shadow-sm);" bindtap="showEquip">🎒 装备</text>
+  </view>
+
+  <!-- Hot Chains -->
+  <view wx:if="{{chains.length>0}}">
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:12rpx;">📡 热门约钓</view>
+    <block wx:for="{{chains}}" wx:key="id">
+      <view class="card" style="margin-bottom:12rpx;" bindtap="goTrip">
+        <view style="display:flex;justify-content:space-between;"><text style="font-weight:600;">{{item.creatorName}} 发起的约钓</text><text style="font-size:22rpx;color:var(--success);">{{item.joined}}/{{item.maxPeople}}人</text></view>
+        <view style="font-size:24rpx;color:var(--text-secondary);margin-top:4rpx;">📍 {{item.port}} · 📅 {{item.date}}</view>
+      </view>
+    </block>
+  </view>
+</view>

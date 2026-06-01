@@ -1,0 +1,55 @@
+/* 全局样式 — 从 H5 迁移 */
+page { --primary: #0066CC; --ocean: #0A4D68; --success: #10B981; --warning: #F59E0B; --danger: #EF4444; --text: #1F2937; --text-secondary: #6B7280; --text-light: #9CA3AF; --border: #E5E7EB; --bg: #F3F4F6; --white: #FFF; --radius: 12rpx; --radius-sm: 8rpx; --shadow-sm: 0 2rpx 8rpx rgba(0,0,0,0.06); background: var(--bg); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 28rpx; color: var(--text); }
+
+.card { background: var(--white); border-radius: var(--radius); padding: 28rpx; margin-bottom: 20rpx; box-shadow: var(--shadow-sm); }
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 20rpx; }
+
+.btn { display: flex; align-items: center; justify-content: center; padding: 18rpx 32rpx; border-radius: var(--radius-sm); font-size: 28rpx; font-weight: 500; border: none; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-outline { background: white; color: var(--primary); border: 2rpx solid var(--primary); }
+.btn-sm { padding: 10rpx 24rpx; font-size: 24rpx; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-ghost { background: transparent; color: var(--text-light); }
+
+.empty { text-align: center; padding: 80rpx 0; }
+.empty-text { font-size: 28rpx; color: var(--text-secondary); }
+.empty-hint { font-size: 24rpx; color: var(--text-light); margin-top: 10rpx; }
+
+.tag { display: inline-block; padding: 6rpx 14rpx; border-radius: 6rpx; font-size: 20rpx; font-weight: 500; margin-right: 8rpx; }
+.tag-guide { background: #F3E8FF; color: #7C3AED; }
+.tag-beginner { background: #FCE7F3; color: #DB2777; }
+.tag-port { background: #E8F4F8; color: #0A4D68; }
+.tag-cert { background: #ECFDF5; color: #065F46; }
+.tag-fish { background: #FFFBEB; color: #92400E; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; }
+.stat-card { background: var(--bg); border-radius: var(--radius-sm); padding: 24rpx 16rpx; text-align: center; }
+.stat-val { font-size: 40rpx; font-weight: 700; color: var(--ocean); }
+.stat-lbl { font-size: 22rpx; color: var(--text-light); margin-top: 4rpx; }
+
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14rpx; margin-bottom: 28rpx; padding: 24rpx; background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.feature-item { display: flex; flex-direction: column; align-items: center; gap: 10rpx; padding: 16rpx 8rpx; font-size: 22rpx; color: var(--text); background: none; border: none; }
+.feature-icon { width: 88rpx; height: 88rpx; border-radius: 24rpx; display: flex; align-items: center; justify-content: center; font-size: 44rpx; }
+.feature-icon.blue { background: #EFF6FF; color: #3B82F6; }
+.feature-icon.green { background: #ECFDF5; color: #10B981; }
+.feature-icon.purple { background: #F5F3FF; color: #7C3AED; }
+.feature-icon.orange { background: #FFF7ED; color: #F97316; }
+.feature-icon.teal { background: #F0FDFA; color: #14B8A6; }
+.feature-icon.pink { background: #FDF2F8; color: #EC4899; }
+.feature-icon.amber { background: #FFFBEB; color: #D97706; }
+.feature-icon.indigo { background: #EEF2FF; color: #6366F1; }
+
+.date-picker-row { display: flex; gap: 10rpx; overflow-x: auto; padding: 8rpx 0; white-space: nowrap; }
+.date-chip { flex-shrink: 0; width: 120rpx; padding: 12rpx 8rpx; border-radius: var(--radius-sm); text-align: center; border: 2rpx solid var(--border); background: white; font-size: 22rpx; }
+.date-chip.active { border-color: var(--primary); background: var(--primary); color: white; }
+
+.weather-card { background: white; border-radius: var(--radius); padding: 28rpx; margin-bottom: 20rpx; box-shadow: var(--shadow-sm); }
+.weather-main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; margin-bottom: 16rpx; }
+.weather-metric { text-align: center; }
+.w-icon { font-size: 40rpx; }
+.w-value { font-size: 30rpx; font-weight: 700; }
+.w-label { font-size: 20rpx; color: var(--text-light); }
+
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 100rpx; background: white; display: flex; border-top: 2rpx solid var(--border); z-index: 100; }
+
+.hidden { display: none; }

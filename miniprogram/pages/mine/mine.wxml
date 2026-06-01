@@ -1,0 +1,23 @@
+<view class="page" style="padding:0 20rpx;">
+  <view style="background:linear-gradient(135deg,#0A4D68,#0066CC);color:white;border-radius:var(--radius);padding:32rpx;margin-bottom:24rpx;display:flex;align-items:center;gap:24rpx;">
+    <view style="width:100rpx;height:100rpx;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:48rpx;">👤</view>
+    <view><view style="font-size:34rpx;font-weight:600;">钓友</view><view style="font-size:24rpx;opacity:0.8;">{{stats}}</view></view>
+  </view>
+
+  <view class="stats-grid" style="margin-bottom:24rpx;grid-template-columns:repeat(4,1fr);">
+    <view class="stat-card"><view class="stat-val">3</view><view class="stat-lbl">渔获总数</view></view>
+    <view class="stat-card"><view class="stat-val">3</view><view class="stat-lbl">鱼种数</view></view>
+    <view class="stat-card"><view class="stat-val">3</view><view class="stat-lbl">出海次数</view></view>
+    <view class="stat-card"><view class="stat-val">4.5斤</view><view class="stat-lbl">最大单尾</view></view>
+  </view>
+
+  <view class="card" bindtap="goRecord"><view style="font-weight:500;">📸 我的渔获</view></view>
+  <view class="card" bindtap="goMarket"><view style="font-weight:500;">🐟 渔获市场</view></view>
+  <view class="card" bindtap="goWiki"><view style="font-weight:500;">🐠 鱼种百科</view></view>
+  <view class="card" bindtap="goGear"><view style="font-weight:500;">💰 装备推荐</view></view>
+  <view class="card" bindtap="goSeasick"><view style="font-weight:500;">💊 晕船指南</view></view>
+  <view class="card" bindtap="goEquip"><view style="font-weight:500;">🎒 出海装备清单</view></view>
+  <view class="card" bindtap="goMoon"><view style="font-weight:500;">🌙 月相日历</view></view>
+  <view class="card" bindtap="goPreserve"><view style="font-weight:500;">🧊 渔获保鲜指南</view></view>
+  <view class="card" bindtap="goRank"><view style="font-weight:500;">🏆 大鱼挑战榜</view></view>
+</view>

@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/trip/trip",
+    "pages/record/record",
+    "pages/mine/mine",
+    "pages/captain/captain",
+    "pages/equip/equip",
+    "pages/wiki/wiki",
+    "pages/market/market",
+    "pages/guide/guide",
+    "pages/gear/gear",
+    "pages/moon/moon"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0A4D68",
+    "navigationBarTitleText": "海钓通",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F3F4F6"
+  },
+  "tabBar": {
+    "color": "#9CA3AF",
+    "selectedColor": "#0066CC",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/trip/trip", "text": "出行" },
+      { "pagePath": "pages/record/record", "text": "渔获" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

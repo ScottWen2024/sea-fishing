@@ -4,31 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>海钓通 - 找靠谱船长</title>
+<script>
+  window._AMapSecurityConfig = { securityJsCode: '8f1c1d2fdf389366a09ad1678e5d13aa' };
+</script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
-  --primary: #0066CC;
-  --primary-light: #E8F4F8;
-  --ocean: #0A4D68;
-  --ocean-light: #E8F4F8;
-  --sand: #F5DEB3;
-  --sand-light: #FDF8F0;
-  --success: #10B981;
-  --success-light: #ECFDF5;
-  --warning: #F59E0B;
+  /* Deep Waters Maritime Palette */
+  --primary: #0F4F67;        /* Navy — 主色，按钮、强调 */
+  --primary-dark: #092E42;   /* Depth — 深色文字、渐变 */
+  --ocean: #1E7087;          /* Harbor — 副色，图标、标签 */
+  --ocean-light: #DDECF9;    /* Glacier — 浅蓝背景 */
+  --warm: #C4966C;           /* Timber — 暖色点缀（价格、星星） */
+  --warm-light: #FDF4EB;     /* 浅木色 */
+
+  --success: #16A34A;
+  --success-light: #F0FDF4;
+  --warning: #D97706;
   --warning-light: #FFFBEB;
-  --danger: #EF4444;
+  --danger: #DC2626;
   --danger-light: #FEF2F2;
-  --text: #1F2937;
-  --text-secondary: #6B7280;
-  --text-light: #9CA3AF;
-  --border: #E5E7EB;
-  --bg: #F3F4F6;
+  --text: #092E42;
+  --text-secondary: #54778A;
+  --text-light: #8BA3B5;
+  --border: #C8D9F2;
+  --bg: #E8F0F6;
   --white: #FFF;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 2px rgba(9,46,66,0.06);
+  --shadow: 0 2px 8px rgba(9,46,66,0.1);
+  --shadow-lg: 0 4px 16px rgba(9,46,66,0.14);
   --radius: 12px;
   --radius-sm: 8px;
 }
@@ -43,7 +48,7 @@ body {
 
 /* Header */
 .app-header {
-  background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 100%);
+  background: linear-gradient(135deg, #092E42 0%, #0F4F67 100%);
   color: var(--white);
   padding: 16px;
   position: sticky;
@@ -111,6 +116,15 @@ body {
   margin-bottom: 10px;
 }
 .date-picker-row::-webkit-scrollbar { display: none; }
+.date-picker-wrap { position: relative; }
+.date-picker-wrap::after {
+  content: '›';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 28px;
+  background: linear-gradient(90deg, transparent, var(--bg) 70%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--text-light); pointer-events: none;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
 .date-chip {
   flex-shrink: 0; width: 68px; padding: 8px 4px;
   border-radius: var(--radius-sm); text-align: center;
@@ -213,7 +227,47 @@ body {
 .rec-index.high { background: #ECFDF5; color: #065F46; }
 .rec-index.mid  { background: #FFFBEB; color: #92400E; }
 .rec-index.low { background: #FEF2F2; color: #991B1B; }
-.rec-stars { font-size: 11px; letter-spacing: 1px; }
+/* Feature grid */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 16px; padding: 12px; background: var(--white);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.feature-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 10px 4px; cursor: pointer; border-radius: var(--radius-sm);
+  transition: background 0.15s; border: none; background: none;
+  font-family: inherit; font-size: 12px; color: var(--text);
+}
+.feature-item:active { background: var(--bg); }
+.feature-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.feature-icon.blue  { background: #EFF6FF; color: #3B82F6; }
+.feature-icon.green { background: #ECFDF5; color: #10B981; }
+.feature-icon.purple { background: #F5F3FF; color: #7C3AED; }
+.feature-icon.orange { background: #FFF7ED; color: #F97316; }
+.feature-icon.teal { background: #F0FDFA; color: #14B8A6; }
+.feature-icon.pink { background: #FDF2F8; color: #EC4899; }
+.feature-icon.amber { background: #FFFBEB; color: #D97706; }
+.feature-icon.indigo { background: #EEF2FF; color: #6366F1; }
+
+/* Tide chart page */
+.tide-chart-card { background: var(--white); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+.tide-chart { position: relative; height: 140px; margin: 16px 0 8px; display: flex; align-items: flex-end; gap: 1px; }
+.tide-bar { flex: 1; border-radius: 2px 2px 0 0; min-height: 2px; position: relative; background: #93C5FD; }
+.tide-bar-label { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-secondary); white-space: nowrap; }
+.tide-bar.highlight { background: var(--primary) !important; }
+.tide-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light); padding: 0 2px; }
+.tide-types { display: flex; gap: 8px; margin-bottom: 12px; }
+.tide-type-item { flex: 1; padding: 10px; border-radius: var(--radius-sm); text-align: center; }
+.tide-type-item.high { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); border: 1px solid #93C5FD; }
+.tide-type-item.low { background: linear-gradient(135deg, #FEF3C7, #FDE68A); border: 1px solid #FCD34D; }
+.tide-type-time { font-size: 16px; font-weight: 700; }
+.tide-type-height { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.tide-type-label { font-size: 11px; color: var(--text-light); margin-top: 1px; }
 
 /* Chain cards */
 .chain-card {
@@ -371,7 +425,7 @@ body {
 .captain-name { font-size: 16px; font-weight: 600; }
 .captain-boat { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
 .captain-meta { display: flex; gap: 12px; margin-top: 4px; }
-.captain-rating { color: var(--warning); font-size: 13px; }
+.captain-rating { color: var(--warm); font-size: 13px; font-weight: 600; }
 .captain-orders { font-size: 12px; color: var(--text-light); }
 .captain-tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .tag {
@@ -425,7 +479,7 @@ body {
 
 /* Captain Detail */
 .detail-hero {
-  background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 100%);
+  background: linear-gradient(135deg, #092E42 0%, #1E7087 100%);
   color: var(--white);
   padding: 24px 16px 60px;
 }
@@ -540,7 +594,7 @@ body {
 .rank-name { font-size: 15px; font-weight: 600; }
 .rank-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
 .rank-rating { text-align: right; flex-shrink: 0; }
-.rank-score { font-size: 20px; font-weight: 700; color: var(--ocean); }
+.rank-score { font-size: 20px; font-weight: 700; color: var(--primary); }
 .rank-stars { font-size: 12px; color: var(--warning); }
 .rank-reviews { font-size: 11px; color: var(--text-light); }
 
@@ -621,6 +675,13 @@ body {
       <button class="mode-btn" onclick="switchMode('captain')" id="modeCaptain">我是船长</button>
     </div>
   </div>
+  <div style="display:flex;align-items:center;gap:6px;font-size:14px;opacity:0.9;margin-top:8px;">
+    <span onclick="showPortPicker()" style="cursor:pointer;display:flex;align-items:center;gap:4px;flex:1;">
+      <span>📍</span><span id="currentLocation">广东 · 汕头市 · 南澳岛</span><span style="font-size:12px;">▼</span>
+    </span>
+    <span onclick="openMap()" style="cursor:pointer;background:rgba(255,255,255,0.15);padding:4px 8px;border-radius:12px;font-size:12px;white-space:nowrap;">🗺️</span>
+    <span onclick="locateGPS()" style="cursor:pointer;background:rgba(255,255,255,0.15);padding:4px 8px;border-radius:12px;font-size:12px;white-space:nowrap;" id="gpsBtn">📡</span>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -630,7 +691,7 @@ body {
 <div id="fishermanPages" class="active">
   <!-- ====== HOME ====== -->
   <div class="page active content" id="fisherman-home">
-    <div class="date-picker-row" id="datePicker"></div>
+    <div class="date-picker-wrap"><div class="date-picker-row" id="datePicker"></div></div>
     <div class="weather-card" id="weatherCard" style="display:none;">
       <div class="weather-header">
         <span id="weatherDate">--</span>
@@ -643,6 +704,41 @@ body {
       </div>
       <div class="weather-advice" id="weatherAdvice"></div>
       <div class="weather-hint" id="weatherHint"></div>
+      <!-- Wave Level Bar -->
+      <div style="margin-bottom:6px;" id="waveBar">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-light);margin-bottom:2px;">
+          <span>🌊 浪高程度</span><span id="waveBarLabel">轻微</span>
+        </div>
+        <div style="height:4px;background:#E5E7EB;border-radius:2px;overflow:hidden;">
+          <div id="waveBarFill" style="height:100%;border-radius:2px;width:15%;background:#10B981;transition:width 0.5s;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-light);margin-top:2px;">
+          <span>0m</span><span>0.5m</span><span>1.5m</span><span>3m+</span>
+        </div>
+      </div>
+      <!-- Fishing Index -->
+      <div id="fishingIndex" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,0.06);display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:12px;font-weight:600;">📊 智能钓鱼指数</span>
+          <span style="font-size:18px;font-weight:700;" id="fiScore">--</span>
+        </div>
+        <div style="height:6px;background:#E5E7EB;border-radius:3px;overflow:hidden;margin-bottom:6px;">
+          <div id="fiBar" style="height:100%;border-radius:3px;transition:width 0.5s;width:0%;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:10px;text-align:center;color:var(--text-light);" id="fiDetails"></div>
+      </div>
+      <div class="tide-row" id="tideRow" onclick="showTideDetail()" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,0.06);cursor:pointer;">
+        <div style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);border:1px solid #93C5FD;border-radius:8px;padding:8px 10px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">早潮</div>
+          <div style="font-size:14px;font-weight:600;" id="tideHigh1">--</div>
+          <div style="font-size:11px;color:var(--text-secondary);" id="tideHigh1M">--</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:1px solid #FCD34D;border-radius:8px;padding:8px 10px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-light);">晚潮</div>
+          <div style="font-size:14px;font-weight:600;" id="tideHigh2">--</div>
+          <div style="font-size:11px;color:var(--text-secondary);" id="tideHigh2M">--</div>
+        </div>
+      </div>
       <div class="window-timeline" id="windowTimeline">
         <div class="window-timeline-header">⏰ 出海窗口推荐</div>
         <div class="window-label" id="windowLabel"></div>
@@ -653,30 +749,39 @@ body {
       </div>
     </div>
 
-    <div class="quick-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-      <button class="quick-btn" onclick="switchFishermanTab('record')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:var(--shadow-sm);cursor:pointer;">
-        <span style="font-size:26px;">📸</span><span>拍照识鱼</span>
+    <!-- 3 Big Action Buttons -->
+    <div class="big-actions" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+      <button onclick="switchFishermanTab('trip'); setTimeout(()=>showCreateChainForm(),200);" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);border:none;border-radius:14rpx;padding:18px 8px;color:white;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(124,58,237,0.25);display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <span style="font-size:28px;">📢</span>约钓
       </button>
-      <button class="quick-btn" onclick="switchFishermanTab('group'); setTimeout(()=>showCreateChainForm(),200);" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:var(--shadow-sm);cursor:pointer;">
-        <span style="font-size:26px;">✋</span><span>发起拼船</span>
+      <button onclick="switchFishermanTab('record')" style="background:linear-gradient(135deg,#3B82F6,#60A5FA);border:none;border-radius:14rpx;padding:18px 8px;color:white;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(59,130,246,0.25);display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <span style="font-size:28px;">📸</span>识鱼
+      </button>
+      <button onclick="switchFishermanTab('trip'); setTimeout(()=>document.getElementById('captains').scrollIntoView({behavior:'smooth'}),200);" style="background:linear-gradient(135deg,#F97316,#FB923C);border:none;border-radius:14rpx;padding:18px 8px;color:white;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(249,115,22,0.25);display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <span style="font-size:28px;">🔍</span>找船
       </button>
     </div>
 
-    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <span style="font-size:15px;font-weight:600;">🎣 我的渔获</span>
-      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="switchFishermanTab('record')">全部 ›</span>
+    <!-- Daily Fish Tip -->
+    <div id="dailyTip" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:12rpx;padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow-sm);cursor:pointer;font-size:13px;">
+      <div style="font-weight:600;color:#92400E;margin-bottom:2px;">💡 每日鱼经</div>
+      <div id="dailyTipText" style="color:#A16207;font-size:12px;">--</div>
     </div>
-    <div id="homeCatches" style="margin-bottom:14px;"></div>
+
+    <!-- Knowledge Row -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;font-size:12px;color:var(--text-secondary);justify-content:center;">
+      <span onclick="renderFishWikiList()" style="cursor:pointer;background:var(--white);padding:6px 14px;border-radius:16px;box-shadow:var(--shadow-sm);">🐠 鱼种百科</span>
+      <span onclick="showSeasickGuide()" style="cursor:pointer;background:var(--white);padding:6px 14px;border-radius:16px;box-shadow:var(--shadow-sm);">💊 晕船指南</span>
+      <span onclick="showFishPreserveGuide()" style="cursor:pointer;background:var(--white);padding:6px 14px;border-radius:16px;box-shadow:var(--shadow-sm);">🧊 保鲜</span>
+      <span onclick="showEquipChecklist()" style="cursor:pointer;background:var(--white);padding:6px 14px;border-radius:16px;box-shadow:var(--shadow-sm);">🎒 装备</span>
+    </div>
 
     <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <span style="font-size:15px;font-weight:600;">✋ 热门拼船</span>
-      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="switchFishermanTab('group')">全部 ›</span>
+      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="switchFishermanTab('trip')">全部 ›</span>
     </div>
     <div id="homeChains" style="margin-bottom:14px;"></div>
 
-    <div style="text-align:center;margin:12px 0;">
-      <button class="btn btn-outline" onclick="switchFishermanTab('group')" style="width:auto;padding:10px 24px;">🔍 找船长 / 导钓</button>
-    </div>
   </div>
 
   <!-- ====== RECORD ====== -->
@@ -698,71 +803,94 @@ body {
       </div>
     </div>
 
-    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <span style="font-size:15px;font-weight:600;">📋 渔获记录</span>
-      <span style="font-size:12px;color:var(--text-light);" onclick="showAddCatchForm()">+ 手动添加</span>
+    <div style="display:flex;gap:0;margin-bottom:10px;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);">
+      <span id="recordTabMy" style="flex:1;text-align:center;padding:10px;font-size:13px;font-weight:600;background:var(--primary);color:white;cursor:pointer;" onclick="switchRecordTab('my')">🎣 我的渔获</span>
+      <span id="recordTabRank" style="flex:1;text-align:center;padding:10px;font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;" onclick="switchRecordTab('rank')">🏆 大鱼排行</span>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;" id="recordAddBtn">
+      <span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="showAddCatchForm()">+ 手动添加</span>
     </div>
     <div id="catchTimeline"></div>
   </div>
 
   <!-- ====== GROUP ====== -->
-  <div class="page content" id="fisherman-group">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-      <button class="quick-btn" onclick="scrollToSection('chains')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:8px;font-size:13px;box-shadow:var(--shadow-sm);cursor:pointer;">
-        <span style="font-size:22px;">✋</span><span>拼船接龙</span>
-      </button>
-      <button class="quick-btn" onclick="scrollToSection('captains')" style="background:var(--white);border:none;padding:14px;border-radius:var(--radius);display:flex;align-items:center;gap:8px;font-size:13px;box-shadow:var(--shadow-sm);cursor:pointer;">
-        <span style="font-size:22px;">🔍</span><span>找船长/导钓</span>
-      </button>
-    </div>
+  <div class="page content" id="fisherman-trip">
+    <!-- CTA: 发起约钓 -->
+    <button class="btn" style="width:100%;background:linear-gradient(135deg,#7C3AED,#A78BFA);color:white;padding:20px;border:none;border-radius:14rpx;margin-bottom:14px;font-size:16px;font-weight:700;box-shadow:0 4px 14px rgba(124,58,237,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="showCreateChainForm()">
+      <span style="font-size:26px;">📢</span> 发起约钓
+      <span style="font-size:12px;opacity:0.8;font-weight:400;">选日期港口，广播给所有钓友</span>
+    </button>
 
+    <!-- 进行中的约钓 -->
     <div id="groupChains">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:15px;font-weight:600;" id="chains">✋ 拼船接龙</span>
-        <button class="btn btn-sm btn-primary" onclick="showCreateChainForm()" style="width:auto;padding:6px 12px;">+ 发起</button>
-      </div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:8px;">📡 进行中的约钓</div>
       <div id="chainList"></div>
     </div>
 
-    <div id="groupCaptains" style="margin-top:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:15px;font-weight:600;" id="captains">🔍 找船长/导钓</span>
-        <div style="display:flex;gap:4px;">
-          <button class="view-toggle-btn btn-sm active" onclick="switchGroupView('list',this)" id="gvList" style="font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:10px;background:var(--primary);color:white;">列表</button>
-          <button class="view-toggle-btn btn-sm" onclick="switchGroupView('rank',this)" id="gvRank" style="font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text-secondary);">排行</button>
+    <!-- 找船长 - 弱化为底部小字 -->
+    <div id="groupCaptains" style="margin-top:24px;border-top:1px dashed var(--border);padding-top:16px;">
+      <div style="font-size:12px;color:var(--text-light);text-align:center;margin-bottom:8px;cursor:pointer;" onclick="document.getElementById('captainDetail').classList.remove('hidden');renderCaptainList();">
+        ── 需要找船长？点击展开 › ──
+      </div>
+      <div id="captainDetail" class="hidden">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="btn btn-sm" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;" onclick="switchSubMode('boat')" id="subModeBoat">🚤 拼船</button>
+          <button class="btn btn-sm" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;" onclick="switchSubMode('guide')" id="subModeGuide">🎓 导钓</button>
         </div>
-      </div>
-      <div class="sub-mode-row" style="display:flex;margin-bottom:8px;">
-        <div class="sub-mode-toggle" style="border:1px solid var(--border);background:var(--white);">
-          <button class="sub-mode-btn active" onclick="switchSubMode('boat')" id="subModeBoat" style="color:var(--text);">🚤 拼船</button>
-          <button class="sub-mode-btn" onclick="switchSubMode('guide')" id="subModeGuide" style="color:var(--text);">🎓 导钓</button>
+        <div class="filter-row" id="filterRow">
+          <button class="filter-chip active" onclick="filterCaptains('all', this)">全部</button>
+          <button class="filter-chip" onclick="filterCaptains('南澳岛', this)">南澳岛</button>
+          <button class="filter-chip" onclick="filterCaptains('澄海莱芜', this)">澄海莱芜</button>
+          <button class="filter-chip" onclick="filterCaptains('潮阳海门', this)">潮阳海门</button>
         </div>
+        <div class="filter-row" id="guideFilterRow" style="display:none;">
+          <button class="filter-chip active" onclick="filterGuide('all', this)">全部导钓</button>
+          <button class="filter-chip" onclick="filterGuide('零基础', this)">🔰 零基础</button>
+          <button class="filter-chip" onclick="filterGuide('亲子', this)">👨‍👧 亲子</button>
+          <button class="filter-chip" onclick="filterGuide('团建', this)">🏢 团建</button>
+          <button class="filter-chip" onclick="filterGuide('进阶', this)">📈 进阶</button>
+        </div>
+        <div class="captain-list" id="captainList"></div>
+        <div class="rank-list" id="rankList" style="display:none;"></div>
       </div>
-      <div class="search-bar">
-        <input class="search-input" id="searchPort" placeholder="搜索船长/港口/鱼种..." oninput="renderCaptainList()">
+    </div>
+  </div>
+
+  <!-- ====== MINE ====== -->
+  <div class="page content" id="fisherman-mine">
+    <div class="my-profile" style="background:linear-gradient(135deg,#092E42,#1E7087);color:white;border-radius:var(--radius);padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;">👤</div>
+      <div>
+        <div style="font-size:17px;font-weight:600;">钓友</div>
+        <div style="font-size:12px;opacity:0.8;" id="mineStats">--</div>
       </div>
-      <div class="filter-row" id="filterRow">
-        <button class="filter-chip active" onclick="filterCaptains('all', this)">全部港口</button>
-        <button class="filter-chip" onclick="filterCaptains('南澳岛', this)">南澳岛</button>
-        <button class="filter-chip" onclick="filterCaptains('澄海莱芜', this)">澄海莱芜</button>
-        <button class="filter-chip" onclick="filterCaptains('潮阳海门', this)">潮阳海门</button>
-      </div>
-      <div class="filter-row" id="guideFilterRow" style="display:none;">
-        <button class="filter-chip active" onclick="filterGuide('all', this)">全部导钓</button>
-        <button class="filter-chip" onclick="filterGuide('零基础', this)">🔰 零基础</button>
-        <button class="filter-chip" onclick="filterGuide('亲子', this)">👨‍👧 亲子</button>
-        <button class="filter-chip" onclick="filterGuide('团建', this)">🏢 团建</button>
-        <button class="filter-chip" onclick="filterGuide('进阶', this)">📈 进阶</button>
-      </div>
-      <div class="captain-list" id="captainList"></div>
-      <div class="rank-list" id="rankList" style="display:none;"></div>
     </div>
 
-    <div id="groupBookings" style="margin-top:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:15px;font-weight:600;">📋 我的预约</span>
-      </div>
-      <div id="myBookingsList"></div>
+    <div class="stats-grid" style="margin-bottom:14px;" id="mineStatsGrid"></div>
+
+    <div class="card">
+      <div class="card-title">📋 我的预约</div>
+      <div id="mineBookings"></div>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="switchFishermanTab('record'); switchRecordTab('my');">
+      <div class="card-title" style="margin-bottom:0;">📸 我的渔获 <span style="float:right;color:var(--text-light);">›</span></div>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="renderFishMarket()">
+      <div class="card-title" style="margin-bottom:0;">🐟 渔获市场 <span style="float:right;color:var(--text-light);">›</span></div>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="showMoonCalendar()">
+      <div class="card-title" style="margin-bottom:0;">🌙 月相日历 <span style="float:right;color:var(--text-light);">›</span></div>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="checkSafety(()=>{})">
+      <div class="card-title" style="margin-bottom:0;">⚠️ 出海安全须知 <span style="float:right;color:var(--text-light);">›</span></div>
+    </div>
+
+    <div style="text-align:center;margin:16px 0;color:var(--text-light);font-size:11px;">
+      海钓通 v3 — 让每一次出海都不靠猜
     </div>
   </div>
 </div>
@@ -971,6 +1099,50 @@ body {
   </div>
 </div>
 
+<!-- Tide Detail Modal -->
+<div class="modal-overlay hidden" id="tideDetailModal">
+  <div class="modal" style="padding:0;">
+    <div style="background:linear-gradient(135deg,#0EA5E9,#38BDF8);color:white;padding:20px 16px 30px;border-radius:16px 16px 0 0;">
+      <div style="font-size:13px;opacity:0.8;margin-bottom:4px;" id="tideDetailDate">--</div>
+      <div style="font-size:18px;font-weight:600;">🌊 潮汐曲线</div>
+    </div>
+    <div class="tide-chart-card" style="margin:-20px 12px 12px;position:relative;z-index:10;">
+      <div class="tide-types" id="tideTypes"></div>
+      <div class="tide-chart" id="tideChart"></div>
+      <div class="tide-axis" id="tideAxis"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Map Modal -->
+<div class="modal-overlay hidden" id="mapModal">
+  <div class="modal" style="padding:0;max-height:90vh;border-radius:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--white);border-radius:16px 16px 0 0;">
+      <span style="font-weight:600;">🗺️ 钓点地图</span>
+      <span onclick="closeModal('mapModal')" style="font-size:20px;cursor:pointer;">✕</span>
+    </div>
+    <div id="mapContainer" style="width:100%;height:320px;"></div>
+    <div style="padding:12px 16px;background:var(--white);border-radius:0 0 16px 16px;">
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-outline" onclick="locateOnMap()" style="width:auto;flex:1;">📡 我的位置</button>
+        <button class="btn btn-sm btn-primary" onclick="closeModal('mapModal')" style="width:auto;flex:1;">关闭</button>
+      </div>
+      <div id="mapPortInfo" style="margin-top:8px;font-size:13px;color:var(--text-secondary);text-align:center;">
+        📍 点击标注查看港口天气
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Port Picker Modal -->
+<div class="modal-overlay hidden" id="portPickerModal">
+  <div class="modal" style="max-height:80vh;">
+    <div class="modal-title">📍 选择港口</div>
+    <div class="filter-row" id="cityTabs" style="margin-bottom:12px;"></div>
+    <div id="portList"></div>
+  </div>
+</div>
+
 <!-- Chain Create Modal -->
 <div class="modal-overlay hidden" id="chainCreateModal">
   <div class="modal">
@@ -1042,16 +1214,94 @@ body {
   </div>
 </div>
 
+<!-- Safety Modal -->
+<div class="modal-overlay hidden" id="safetyModal">
+  <div class="modal">
+    <div class="modal-title">⚠️ 出海安全须知</div>
+    <div style="font-size:12px;color:var(--text-light);margin-bottom:12px;">首次使用导钓/拼船功能，请阅读以下安全事项</div>
+    <div class="guide-check-list" id="safetyChecks">
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 🦺 穿好救生衣，全程不脱下</label>
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 💊 提前30分钟吃晕船药（推荐日本大白兔）</label>
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 🧴 涂防晒霜+戴帽子+墨镜，海上紫外线是陆地3倍</label>
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 📞 保存船长电话，紧急情况拨打海警12395</label>
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 🛡️ 确认已购买户外保险（支付宝搜"海钓保险"）</label>
+      <label class="guide-check-item" style="cursor:pointer;padding:8px 0;"><input type="checkbox" class="safety-cb" onchange="checkSafetyAll()"> 📵 海上可能无信号，提前告知家人行程</label>
+    </div>
+    <button class="btn btn-primary" id="safetyConfirm" onclick="confirmSafety()" disabled>☐ 请勾选全部安全事项后确认</button>
+    <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text-light);">本提示不构成法律建议，出海风险请自行评估</div>
+  </div>
+</div>
+
+<!-- Fish Wiki Modal -->
+<div class="modal-overlay hidden" id="fishWikiModal">
+  <div class="modal"><div id="fishWikiContent"></div></div>
+</div>
+
+<!-- Fish Wiki List Modal -->
+<div class="modal-overlay hidden" id="fishWikiListModal">
+  <div class="modal" style="max-height:80vh;">
+    <div class="modal-title">🐟 鱼种百科</div>
+    <div id="fishWikiList"></div>
+  </div>
+</div>
+
+<!-- Tips Modal -->
+<div class="modal-overlay hidden" id="tipModal">
+  <div class="modal"><div id="tipContent"></div></div>
+</div>
+
+<!-- Gear Recommendation Modal -->
+<div class="modal-overlay hidden" id="gearModal">
+  <div class="modal" style="max-height:80vh;">
+    <div class="modal-title">💰 装备购买推荐</div>
+    <div class="filter-row" id="gearTabs"></div>
+    <div id="gearList"></div>
+  </div>
+</div>
+
+<!-- Fish Market Modal -->
+<div class="modal-overlay hidden" id="fishMarketModal">
+  <div class="modal" style="max-height:80vh;">
+    <div class="modal-title">🐟 渔获市场</div>
+    <div id="fishMarketList"></div>
+  </div>
+</div>
+
+<!-- Trip Reminder Modal -->
+<div class="modal-overlay hidden" id="reminderModal">
+  <div class="modal"><div id="reminderContent"></div></div>
+</div>
+
+<!-- Equipment Modal -->
+<div class="modal-overlay hidden" id="equipModal">
+  <div class="modal" style="max-height:80vh;">
+    <div class="modal-title">🎒 出海装备清单</div>
+    <div class="filter-row" id="equipTabs"></div>
+    <div id="equipList"></div>
+  </div>
+</div>
+
+<!-- Complaint Modal -->
+<div class="modal-overlay hidden" id="complaintModal">
+  <div class="modal">
+    <div class="modal-title">⚠️ 投诉船长</div>
+    <div id="complaintForm"><div class="form-group"><label class="form-label">船长</label><input class="form-input" id="compCaptain" disabled></div><div class="form-group"><label class="form-label">问题类型</label><select class="form-select" id="compType"><option>船况与描述不符</option><option>船长态度恶劣</option><option>偷渔获/虚报重量</option><option>爽约/迟到</option><option>安全隐患</option><option>其他</option></select></div><div class="form-group"><label class="form-label">描述</label><textarea class="form-textarea" id="compDesc" placeholder="请详细描述问题..."></textarea></div><div class="form-hint">📎 建议保留聊天记录截图作为证据</div><button class="btn btn-danger" onclick="submitComplaint()" style="margin-top:12px;">提交投诉</button></div>
+  </div>
+</div>
+
 <!-- ==================== BOTTOM NAV ==================== -->
-<div class="bottom-nav" id="fishermanNav">
+<div class="bottom-nav" id="fishermanNav" style="height:60px;">
   <button class="nav-item active" onclick="switchFishermanTab('home')" id="navHome">
     <span class="nav-icon">🏠</span>首页
   </button>
-  <button class="nav-item" onclick="switchFishermanTab('record')" id="navRecord">
-    <span class="nav-icon">📸</span>记录
+  <button class="nav-item" onclick="switchFishermanTab('trip')" id="navTrip">
+    <span class="nav-icon">📡</span>约钓
   </button>
-  <button class="nav-item" onclick="switchFishermanTab('group')" id="navGroup">
-    <span class="nav-icon">✋</span>拼船
+  <button class="nav-item" onclick="switchFishermanTab('record')" id="navRecord">
+    <span class="nav-icon">📸</span>渔获
+  </button>
+  <button class="nav-item" onclick="switchFishermanTab('mine')" id="navMine">
+    <span class="nav-icon">👤</span>我的
   </button>
 </div>
 
@@ -1071,6 +1321,7 @@ body {
 </div>
 
 <script>
+console.log('JS started');
 // ==================== WEATHER CONFIG ====================
 const WX_CONFIG = {
   key: 'c3cb514f98e5491d81cbd4a685298151',
@@ -1078,12 +1329,51 @@ const WX_CONFIG = {
   cacheTTL: 30 * 60 * 1000 // 30 min
 };
 
-// Port to city ID mapping
-const PORT_CITY = {
-  '南澳岛': '101280501',
-  '澄海莱芜': '101280501',
-  '潮阳海门': '101280501'
-};
+// Haversine distance (km) between two lat/lng points
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371; const dLat = (lat2-lat1)*Math.PI/180;
+  const dLng = (lng2-lng1)*Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ============ PORT DATABASE ============
+const PORT_DATA = [
+  // 汕头（23.2-23.5N, 116.6-117.2E）
+  { name: '南澳岛', city: '汕头', cityId: '101280501', tideStation: 'P2970', lat: 23.42, lng: 117.10, desc: '广东最大海钓渔场之一，真鲷/石斑/黑鲷' },
+  { name: '澄海莱芜', city: '汕头', cityId: '101280501', tideStation: 'P2970', lat: 23.48, lng: 116.88, desc: '黄鳍鲷/沙钻/带鱼' },
+  { name: '潮阳海门', city: '汕头', cityId: '101280501', tideStation: 'P2970', lat: 23.18, lng: 116.62, desc: '带鱼/马鲛/红衫鱼/巴浪' },
+  // 深圳（22.5-22.7N, 113.9-114.6E）
+  { name: '南澳月亮湾', city: '深圳', cityId: '101280601', tideStation: 'P2970', lat: 22.54, lng: 114.48, desc: '大鹏半岛热门出海点，黑鲷/石斑/鱿鱼' },
+  { name: '大鹏东山码头', city: '深圳', cityId: '101280601', tideStation: 'P2970', lat: 22.52, lng: 114.50, desc: '夜钓鱿鱼吹筒胜地，矶钓/船钓皆可' },
+  { name: '盐田海鲜街码头', city: '深圳', cityId: '101280601', tideStation: 'P2970', lat: 22.57, lng: 114.27, desc: '近市区，适合半天快艇出海' },
+  { name: '蛇口渔港', city: '深圳', cityId: '101280601', tideStation: 'P2970', lat: 22.49, lng: 113.91, desc: '深圳老渔港，近珠江口' },
+  // 惠州（22.5-23.0N, 114.4-114.9E）
+  { name: '巽寮湾亚婆角', city: '惠州', cityId: '101280301', tideStation: 'P2970', lat: 22.73, lng: 114.77, desc: '大亚湾热门出海点，小船限载6人' },
+  { name: '大亚湾澳头', city: '惠州', cityId: '101280301', tideStation: 'P2970', lat: 22.72, lng: 114.53, desc: '大亚湾500+钓点，船费800起' },
+  { name: '惠东港口', city: '惠州', cityId: '101280301', tideStation: 'P2970', lat: 22.58, lng: 114.88, desc: '双月湾附近，矶钓/船钓两相宜' },
+  // 珠海（21.9-22.4N, 113.1-114.3E）
+  { name: '香洲港码头', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 22.29, lng: 113.59, desc: '珠海主码头，通桂山/万山/外伶仃' },
+  { name: '桂山岛', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 22.14, lng: 113.82, desc: '21个垂钓区，防波堤矶钓天堂' },
+  { name: '万山岛', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 21.94, lng: 113.73, desc: '万山渔场核心，200+鱼种，水深鱼大' },
+  { name: '外伶仃岛', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 22.10, lng: 114.03, desc: '香洲港出发70分钟，深水大鱼' },
+  { name: '东澳岛', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 22.02, lng: 113.71, desc: '蜜月小镇，配套成熟' },
+  { name: '横琴码头', city: '珠海', cityId: '101280701', tideStation: 'P2971', lat: 22.12, lng: 113.54, desc: '近澳门，可往桂山/万山' },
+  // 阳江（21.5-22.0N, 111.5-112.4E）
+  { name: '闸坡渔港', city: '阳江', cityId: '101281801', tideStation: 'P2970', lat: 21.58, lng: 111.82, desc: '国家级中心渔港，筏钓/鱼排钓为主' },
+  { name: '东平渔港', city: '阳江', cityId: '101281801', tideStation: 'P2970', lat: 21.74, lng: 112.18, desc: '全国海钓锦标赛场地，矶钓圣地' },
+  { name: '沙扒渔港', city: '阳江', cityId: '101281801', tideStation: 'P2970', lat: 21.48, lng: 111.44, desc: '30公里海岸线，中国"马尔代夫"' }
+];
+
+// Build port lookup helpers
+const PORT_CITY = {};
+const PORT_TIDE = {};
+const CITIES = [...new Set(PORT_DATA.map(p => p.city))];
+PORT_DATA.forEach(p => { PORT_CITY[p.name] = p.cityId; PORT_TIDE[p.name] = p.tideStation; });
+
+// Original mapping kept for backward compat
+Object.assign(PORT_CITY, { '南澳岛': '101280501', '澄海莱芜': '101280501', '潮阳海门': '101280501' });
+Object.assign(PORT_TIDE, { '南澳岛': 'P2970', '澄海莱芜': 'P2970', '潮阳海门': 'P2970' });
 
 function getWindDir(degree) {
   const dirs = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
@@ -1298,6 +1588,10 @@ function getDefaultData() {
     currentView: 'list',
     selectedDate: null,
     weatherCache: {},
+    currentPort: '南澳岛',
+    currentCity: '汕头',
+    safetyAccepted: false,
+    equipState: {},
     catches: [
       { id: 'ct1', fishName: '黑鲷', alias: '海鲋', weight: '2.3斤', length: '35cm', port: '南澳岛', bait: '活虾', date: '2026-05-20', photo: null, note: '早班出海，涨潮时钓到的' },
       { id: 'ct2', fishName: '真鲷', alias: '加吉鱼', weight: '1.8斤', length: '30cm', port: '南澳岛', bait: '沙蚕', date: '2026-05-15', photo: null, note: '风浪较大，但鱼口不错' },
@@ -1537,6 +1831,8 @@ function joinChain() {
   closeModal('chainJoinModal');
   showToast('加入成功！');
   renderChainList();
+  // Show pre-trip reminder
+  setTimeout(() => showTripReminder({ port: ch.port, date: formatDate(ch.date), slot: ch.slot }), 500);
 }
 
 function renderChainList() {
@@ -1583,45 +1879,89 @@ function renderChainList() {
   }).join('');
 }
 
-// ==================== HOME PAGE ====================
-function renderHomePage() {
-  renderHomeCatches();
-  renderHomeChains();
-  if (!APP.selectedDate) renderCaptainList(); // preload
+// ==================== FISH MARKET ====================
+function renderFishMarket() {
+  const items = APP.catches.filter(c => c.forSale).sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (items.length === 0) {
+    $('fishMarketList').innerHTML = '<div class="empty"><div class="empty-icon">🐟</div><div class="empty-text">暂无在售渔获</div><div class="empty-hint">在渔获记录中点击「💰 出售」上架</div></div>';
+  } else {
+    $('fishMarketList').innerHTML = items.map(ct => `
+      <div style="background:var(--white);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;box-shadow:var(--shadow-sm);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:15px;">🐟 ${ct.fishName} ${ct.weight}</div>
+            <div style="font-size:12px;color:var(--text-light);margin-top:2px;">📅 ${ct.date} · 📍 ${ct.port || '未知'}</div>
+            <div style="margin-top:6px;display:flex;gap:8px;">
+              <span style="font-size:13px;color:var(--danger);font-weight:600;">💰 ¥${ct.price}</span>
+              <span style="font-size:12px;color:var(--text-secondary);">📍 ${ct.takeMethod || '自提'}</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline" onclick="alert('联系方式：' + ('${(ct.sellerContact || '暂无')}'))" style="margin-top:8px;width:auto;font-size:12px;">📞 联系卖家</button>
+      </div>
+    `).join('');
+  }
+  $('fishMarketModal').classList.remove('hidden');
 }
 
-function renderHomeCatches() {
-  const catches = APP.catches.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
-  if (catches.length === 0) {
-    $('homeCatches').innerHTML = '<div style="background:var(--white);border-radius:var(--radius);padding:16px;text-align:center;color:var(--text-light);font-size:13px;">还没有渔获记录<br><span style="color:var(--primary);cursor:pointer;" onclick="switchFishermanTab(\'record\')">去拍照识鱼 →</span></div>';
-    return;
+function toggleForSale(catchId) {
+  const ct = APP.catches.find(c => c.id === catchId);
+  if (!ct) return;
+  if (!ct.forSale) {
+    const price = prompt('请输入售价（元）：', ct.price || '');
+    if (!price) return;
+    const method = prompt('取货方式（自提/同城）：', ct.takeMethod || '自提');
+    const contact = prompt('你的联系方式（微信/手机）：', ct.sellerContact || '');
+    ct.forSale = true; ct.price = price; ct.takeMethod = method || '自提'; ct.sellerContact = contact || '';
+    showToast('已上架渔获市场');
+  } else {
+    ct.forSale = false;
+    showToast('已下架');
   }
-  $('homeCatches').innerHTML = catches.map(ct => `
-    <div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);display:flex;gap:12px;align-items:center;" onclick="switchFishermanTab('record')">
-      <div style="font-size:28px;">🐟</div>
-      <div style="flex:1;">
-        <div style="font-weight:600;font-size:14px;">${ct.fishName}</div>
-        <div style="font-size:12px;color:var(--text-secondary);">${ct.weight} · ${ct.port} · ${formatDate(ct.date)}</div>
-      </div>
-      <div style="color:var(--text-light);font-size:20px;">›</div>
-    </div>
-  `).join('');
+  saveData(APP);
+  renderCatchTimeline();
+}
+
+// ==================== DAILY TIP ====================
+const DAILY_TIPS = [
+  { tip: '涨潮前2小时鱼口最猛，别错过窗口期', icon: '⏰' },
+  { tip: '潮差越大鱼越活跃，大潮日别偷懒', icon: '🌊' },
+  { tip: '阴天比大晴天好钓，鱼不躲深水', icon: '☁️' },
+  { tip: '满月前后三天是大潮，爆护概率翻倍', icon: '🌕' },
+  { tip: '清晨和黄昏是黄金时段，别睡懒觉', icon: '🌅' },
+  { tip: '活虾比死虾效果好3倍，保温箱里放冰袋', icon: '🦐' },
+  { tip: '气压稳定在1010-1020hPa最适合出海', icon: '🎈' },
+  { tip: '北风天鱼口好，南风天鱼不开口', icon: '💨' },
+  { tip: '深水鱼上岸先放气再放血，肉质更好', icon: '🩸' },
+  { tip: '新手别买贵装备，¥500入门套装够用了', icon: '💰' },
+  { tip: '同一个点超过20分钟没口就换，别死磕', icon: '📍' },
+  { tip: '出海前30分钟吃晕船药，晕了再吃就晚了', icon: '💊' },
+  { tip: '海钓三件宝：救生衣、防晒霜、偏光镜', icon: '🦺' },
+  { tip: '涨潮时鱼往岸边靠，退潮时鱼往外海走', icon: '📈' },
+];
+function renderDailyTip() {
+  const d = new Date(); const idx = d.getDate() % DAILY_TIPS.length;
+  const t = DAILY_TIPS[idx];
+  $('dailyTipText').textContent = t.icon + ' ' + t.tip;
+}
+
+// ==================== HOME PAGE ====================
+function renderHomePage() {
+  renderHomeChains();
 }
 
 function renderHomeChains() {
   const chains = APP.chains.filter(c => c.status === 'open').slice(0, 2);
+  const container = $('homeChains');
+  if (!container) return;
   if (chains.length === 0) {
-    $('homeChains').innerHTML = '<div style="background:var(--white);border-radius:var(--radius);padding:16px;text-align:center;color:var(--text-light);font-size:13px;">暂无拼船接龙<br><span style="color:var(--primary);cursor:pointer;" onclick="switchFishermanTab(\'group\');setTimeout(()=>showCreateChainForm(),200);">发起一个 →</span></div>';
+    container.innerHTML = '<div style="background:var(--white);border-radius:var(--radius);padding:14px;text-align:center;color:var(--text-light);font-size:13px;box-shadow:var(--shadow-sm);">暂无拼船接龙<br><span style="color:var(--primary);cursor:pointer;" onclick="switchFishermanTab(\'trip\');setTimeout(()=>showCreateChainForm(),200);">发起一个 →</span></div>';
     return;
   }
-  $('homeChains').innerHTML = chains.map(ch => {
+  container.innerHTML = chains.map(ch => {
     const joined = ch.participants.reduce((s, p) => s + p.count, 0);
-    return `
-    <div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);" onclick="switchFishermanTab('group')">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-weight:600;font-size:14px;">${ch.creatorName} 发起的拼船</span>
-        <span style="font-size:12px;color:var(--success);">${joined}/${ch.maxPeople}人</span>
-      </div>
+    return `<div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);cursor:pointer;" onclick="switchFishermanTab('trip')">
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:600;font-size:14px;">${ch.creatorName} 发起的拼船</span><span style="font-size:12px;color:var(--success);">${joined}/${ch.maxPeople}人</span></div>
       <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">📍 ${ch.port} · 📅 ${formatDate(ch.date)} · ${ch.slot}</div>
     </div>`;
   }).join('');
@@ -1719,7 +2059,7 @@ function renderCatchTimeline() {
       <div style="position:absolute;left:-2px;top:14px;bottom:14px;width:3px;background:var(--primary);border-radius:2px;"></div>
       <div style="margin-left:8px;">
         <div style="display:flex;justify-content:space-between;">
-          <span style="font-weight:600;">🐟 ${ct.fishName}</span>
+          <span style="font-weight:600;cursor:pointer;color:var(--primary);" onclick="event.stopPropagation();showFishWiki('${ct.fishName}')">🐟 ${ct.fishName}</span>
           <span style="font-size:12px;color:var(--text-light);">${ct.date}</span>
         </div>
         <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">
@@ -1727,11 +2067,97 @@ function renderCatchTimeline() {
         </div>
         ${ct.bait ? `<div style="font-size:12px;color:var(--text-light);margin-top:2px;">🪱 ${ct.bait}</div>` : ''}
         ${ct.note ? `<div style="font-size:12px;color:var(--text-light);margin-top:2px;">💬 ${ct.note}</div>` : ''}
+        ${ct.forSale ? `<div style="font-size:12px;color:var(--danger);margin-top:4px;font-weight:500;">💰 在售 ¥${ct.price} · ${ct.takeMethod||'自提'}</div>` : ''}
       </div>
+      <button class="btn btn-sm ${ct.forSale ? 'btn-ghost' : 'btn-outline'}" onclick="event.stopPropagation();toggleForSale('${ct.id}')" style="margin-top:6px;width:auto;font-size:11px;">${ct.forSale ? '🔽 下架' : '💰 出售'}</button>
     </div>
   `).join('');
 
   $('catchTimeline').innerHTML = html;
+}
+
+function switchRecordTab(tab) {
+  document.getElementById('recordTabMy').style.background = tab === 'my' ? 'var(--primary)' : 'var(--white)';
+  document.getElementById('recordTabMy').style.color = tab === 'my' ? 'white' : 'var(--text-secondary)';
+  document.getElementById('recordTabRank').style.background = tab === 'rank' ? 'var(--primary)' : 'var(--white)';
+  document.getElementById('recordTabRank').style.color = tab === 'rank' ? 'white' : 'var(--text-secondary)';
+  document.getElementById('recordAddBtn').style.display = tab === 'my' ? 'flex' : 'none';
+  if (tab === 'my') renderCatchTimeline();
+  else renderChallengeBoard();
+}
+
+function renderChallengeBoard() {
+  // Group catches by fishName, find max weight per species
+  const fishMap = {};
+  APP.catches.forEach(ct => {
+    const w = parseFloat(ct.weight) || 0;
+    if (!fishMap[ct.fishName] || w > (parseFloat(fishMap[ct.fishName].weight) || 0)) {
+      fishMap[ct.fishName] = ct;
+    }
+  });
+
+  const ranked = Object.values(fishMap).sort((a, b) => (parseFloat(b.weight) || 0) - (parseFloat(a.weight) || 0));
+
+  if (ranked.length === 0) {
+    $('catchTimeline').innerHTML = '<div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">还没有渔获记录</div><div class="empty-hint">记录渔获后自动上榜</div></div>';
+    return;
+  }
+
+  const medals = ['🥇', '🥈', '🥉'];
+  $('catchTimeline').innerHTML = `
+    <div style="background:var(--white);border-radius:var(--radius);padding:12px;margin-bottom:8px;box-shadow:var(--shadow-sm);text-align:center;font-size:12px;color:var(--text-light);">
+      🏆 按鱼种取最大单尾重量排行
+    </div>
+    ${ranked.map((ct, i) => `
+    <div style="background:var(--white);border-radius:var(--radius);padding:14px;margin-bottom:8px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:12px;">
+      <div style="font-size:${i < 3 ? '24px' : '16px'};width:32px;text-align:center;">${medals[i] || (i + 1)}</div>
+      <div style="font-size:28px;">🐟</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;cursor:pointer;color:var(--primary);" onclick="showFishWiki('${ct.fishName}')">${ct.fishName}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">${ct.date} · 📍 ${ct.port || '未知'}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:18px;font-weight:700;color:var(--ocean);">${ct.weight || '-'}</div>
+      </div>
+    </div>
+    `).join('')}
+  `;
+}
+
+// Make fish result name clickable
+function updateFishIDResult() {
+  const fn = document.getElementById('fish-name');
+  if (fn) {
+    fn.style.cursor = 'pointer';
+    fn.onclick = function() { showFishWiki('黑鲷'); };
+  }
+}
+
+// ==================== MINE PAGE ====================
+function renderMinePage() {
+  const totalCatches = APP.catches.length;
+  const species = new Set(APP.catches.map(c => c.fishName)).size;
+  const bookings = APP.bookings.filter(b => b.userName).length;
+  const maxW = APP.catches.reduce((m, c) => Math.max(m, parseFloat(c.weight) || 0), 0);
+
+  $('mineStats').textContent = totalCatches + '条渔获 · ' + bookings + '次出海';
+  $('mineStatsGrid').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${totalCatches}</div><div class="stat-lbl">渔获总数</div></div>
+    <div class="stat-card"><div class="stat-val">${species}</div><div class="stat-lbl">鱼种数</div></div>
+    <div class="stat-card"><div class="stat-val">${bookings}</div><div class="stat-lbl">出海次数</div></div>
+    <div class="stat-card"><div class="stat-val">${maxW > 0 ? maxW + '斤' : '-'}</div><div class="stat-lbl">最大单尾</div></div>
+  `;
+
+  // Mini bookings
+  const myBookings = APP.bookings.filter(b => b.userName).slice(-3).reverse();
+  $('mineBookings').innerHTML = myBookings.length === 0
+    ? '<div style="text-align:center;color:var(--text-light);font-size:13px;padding:8px;">暂无预约</div>'
+    : myBookings.map(b => {
+        const st = { pending: '待确认', confirmed: '已确认', completed: '已完成' }[b.status] || b.status;
+        return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          <span>${b.captainName}</span><span style="color:var(--text-light);">${b.date} · ${st}</span>
+        </div>`;
+      }).join('');
 }
 
 // ==================== GROUP PAGE helpers ====================
@@ -1761,11 +2187,552 @@ function scrollToSection(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
+// ==================== GPS LOCATION ====================
+function locateGPS() {
+  const btn = $('gpsBtn');
+  btn.textContent = '📡 定位中...';
+  if (!navigator.geolocation) {
+    btn.textContent = '📡 定位';
+    showToast('浏览器不支持GPS定位');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      // Find nearest port
+      let nearest = null, minDist = Infinity;
+      PORT_DATA.forEach(p => {
+        const d = haversine(lat, lng, p.lat, p.lng);
+        if (d < minDist) { minDist = d; nearest = p; }
+      });
+      if (nearest) {
+        const dist = minDist < 1 ? (minDist * 1000).toFixed(0) + 'm' : minDist.toFixed(1) + 'km';
+        selectPort(nearest.name);
+        btn.textContent = '📡';
+        showToast('已定位: ' + nearest.name + ' (距' + dist + ')');
+      } else {
+        btn.textContent = '📡 定位';
+        showToast('附近没有收录的港口');
+      }
+    },
+    (err) => {
+      btn.textContent = '📡 定位';
+      const msgs = { 1: '请允许定位权限', 2: '无法获取位置', 3: '定位超时' };
+      showToast(msgs[err.code] || '定位失败');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
+  );
+}
+
+// ==================== IM - migrate to mini-program native SDK ====================
+// IM (chat) feature removed from H5 - will be implemented in mini-program with native SDK
+
+async function openMap() {
+  $('mapModal').classList.remove('hidden');
+  await loadAmapSDK();
+  setTimeout(() => initMap(), 200);
+}
+
+function getFakeWeather(port) {
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const seed = Math.abs(Math.round(port.lat * 100 + port.lng * 100 + dayOfYear)) % 30;
+  const windScales = [2, 3, 2, 3, 4, 3, 2, 3, 4, 2, 3, 4, 3, 2, 3];
+  const windDirs = ['北', '东北', '东', '东南', '南', '西南', '西', '西北', '北', '东北', '东', '东南', '南', '北', '东'];
+  const temps = [26, 28, 30, 32, 29, 27, 31, 33, 30, 28, 29, 31, 32, 27, 30];
+  const idx = seed % windScales.length;
+  return { windScale: windScales[idx], windDir: windDirs[idx], temp: temps[idx] };
+}
+
+function refreshMapMarkers() {
+  if (!amapInstance) return;
+  amapInstance.clearMap();
+  amapInstance.addControl(new AMap.Scale());
+  const dirArrow = { '北': '↑', '东北': '↗', '东': '→', '东南': '↘', '南': '↓', '西南': '↙', '西': '←', '西北': '↖' };
+
+  PORT_DATA.forEach(p => {
+    const cached = APP.weatherCache[APP.selectedDate];
+    let wx;
+    if (cached && !cached.isMock && cached.data) {
+      wx = { windScale: cached.data.windScaleDay || '--', windDir: (cached.data.windDirDay || '北风').replace('风', ''), temp: cached.data.tempMax || '--' };
+    } else {
+      wx = getFakeWeather(p);
+    }
+    const isCurrent = p.name === APP.currentPort;
+    const dotColor = wx.windScale >= 6 ? '#EF4444' : wx.windScale >= 4 ? '#F59E0B' : '#10B981';
+
+    const content = `<div style="text-align:center;transform:translate(-50%,-100%);white-space:nowrap;cursor:pointer;">
+      <div style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.92);padding:2px 6px;border-radius:8px;display:inline-block;box-shadow:0 1px 2px rgba(0,0,0,0.15);line-height:1.3;">
+        ${dirArrow[wx.windDir] || '→'} ${wx.windScale}级 · ${wx.temp}°C
+      </div><br>
+      <span style="font-size:11px;font-weight:700;color:${isCurrent ? '#0066CC' : '#333'};text-shadow:0 0 2px white;">${p.name}</span>
+    </div>`;
+
+    const m = new AMap.Marker({ position: [p.lng, p.lat], content: content, offset: new AMap.Pixel(0, 0) });
+    m.on('click', () => showMapPortInfo(p));
+    m.setMap(amapInstance);
+  });
+  amapInstance.setFitView(null, false, [60, 60, 60, 60]);
+}
+
+function initMap() {
+  if (!window.AMap) return;
+  const container = document.getElementById('mapContainer');
+  if (!container || container.innerHTML) return;
+  const center = APP.currentPort ? PORT_DATA.find(p => p.name === APP.currentPort) : PORT_DATA[0];
+  amapInstance = new AMap.Map('mapContainer', {
+    zoom: 9, center: [center.lng, center.lat], resizeEnable: true
+  });
+  refreshMapMarkers();
+}
+
+function showMapPortInfo(port) {
+  const wx = getFakeWeather(port);
+  const dirArrow = { '北': '↑', '东北': '↗', '东': '→', '东南': '↘', '南': '↓', '西南': '↙', '西': '←', '西北': '↖' };
+  $('mapPortInfo').innerHTML = `
+    <div style="font-weight:600;">📍 ${port.name} <span style="font-size:11px;color:var(--text-light);">${port.city}市</span></div>
+    <div style="font-size:12px;color:var(--text-secondary);">${port.desc}</div>
+    <div style="font-size:12px;margin-top:4px;color:var(--text-secondary);">💨 ${dirArrow[wx.windDir]||'→'} ${wx.windDir}风 ${wx.windScale}级 · 🌡️ ${wx.temp}°C</div>
+    <button class="btn btn-sm btn-outline" onclick="loadRealWeather('${port.name}')" style="margin-top:6px;width:auto;">🔄 查看真实天气</button>
+    <button class="btn btn-sm btn-primary" onclick="selectPort('${port.name}'); closeModal('mapModal');" style="margin-top:4px;width:auto;">✅ 设为当前港口</button>
+  `;
+}
+
+function loadRealWeather(portName) {
+  const port = PORT_DATA.find(p => p.name === portName);
+  if (!port) return;
+  const dateStr = APP.selectedDate || new Date().toISOString().split('T')[0];
+  fetchWeather(dateStr, port.cityId, port.name).then(() => {
+    showMapPortInfo(port);
+    refreshMapMarkers();
+  });
+}
+
+function locateOnMap() {
+  if (!amapInstance) { showToast('地图未加载'); return; }
+  AMap.plugin('AMap.Geolocation', () => {
+    const geo = new AMap.Geolocation({ enableHighAccuracy: true, timeout: 10000 });
+    geo.getCurrentPosition((status, result) => {
+      if (status === 'complete') {
+        const pos = result.position;
+        amapInstance.setZoomAndCenter(14, [pos.lng, pos.lat]);
+        new AMap.Marker({ position: [pos.lng, pos.lat], icon: new AMap.Icon({ size: new AMap.Size(20,20), image: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="#10B981" stroke="white" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="white"/></svg>'), imageSize: new AMap.Size(20,20) }), title: '我的位置' }).setMap(amapInstance);
+        showToast('已定位到当前位置');
+      } else { showToast('定位失败'); }
+    });
+  });
+}
+
+// ==================== PORT PICKER ====================
+function showPortPicker() {
+  // Render city tabs
+  const allCities = ['全部', ...CITIES];
+  $('cityTabs').innerHTML = allCities.map((c, i) =>
+    `<button class="filter-chip${(APP.currentCity === c || (c === '全部' && !APP.currentCity)) ? ' active' : ''}" onclick="selectCity('${c}', this)">${c === '全部' ? '📍 全部' : c}</button>`
+  ).join('');
+
+  renderPortList(APP.currentCity || '全部');
+  $('portPickerModal').classList.remove('hidden');
+}
+
+function selectCity(city, el) {
+  APP.currentCity = city === '全部' ? null : city;
+  document.querySelectorAll('#cityTabs .filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderPortList(city === '全部' ? null : city);
+}
+
+function renderPortList(city) {
+  let ports = PORT_DATA;
+  if (city) ports = ports.filter(p => p.city === city);
+  $('portList').innerHTML = ports.map(p => `
+    <div style="background:var(--white);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;cursor:pointer;border:1px solid ${APP.currentPort === p.name ? 'var(--primary)' : 'var(--border)'};" onclick="selectPort('${p.name}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-weight:600;font-size:14px;">📍 ${p.name}</div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:2px;">${p.desc}</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">${p.city}市</div>
+        </div>
+        ${APP.currentPort === p.name ? '<span style="color:var(--primary);font-weight:600;font-size:12px;">当前 ✓</span>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectPort(portName) {
+  const port = PORT_DATA.find(p => p.name === portName);
+  if (!port) return;
+  APP.currentPort = portName;
+  APP.currentCity = port.city;
+  saveData(APP);
+
+  // Update header display
+  $('currentLocation').textContent = '广东 · ' + port.city + '市 · ' + portName;
+
+  // Close modal
+  closeModal('portPickerModal');
+
+  // Refresh weather for selected port
+  if (APP.selectedDate) {
+    fetchWeather(APP.selectedDate, port.cityId, portName).then(() => {
+      renderHomePage();
+    });
+  } else {
+    const today = new Date().toISOString().split('T')[0];
+    fetchWeather(today, port.cityId, portName).then(() => renderHomePage());
+  }
+}
+
+// Update selectDate to use current port
+function selectDate(dateStr, el) {
+  APP.selectedDate = dateStr;
+  document.querySelectorAll('#datePicker .date-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  saveData(APP);
+  const port = PORT_DATA.find(p => p.name === APP.currentPort) || PORT_DATA[0];
+  fetchWeather(dateStr, port.cityId, port.name).then(() => renderCaptainList());
+}
+
+// Update weather card port label
+function updateWeatherPortLabel() {
+  $('weatherPort').textContent = '📍 ' + (APP.currentPort || '南澳岛');
+}
+
+// ==================== SAFETY NOTICE ====================
+function checkSafety(safetyCallback) {
+  if (APP.safetyAccepted) { safetyCallback(); return; }
+  // Reset checkboxes
+  document.querySelectorAll('.safety-cb').forEach(cb => cb.checked = false);
+  $('safetyConfirm').disabled = true;
+  $('safetyConfirm').textContent = '☐ 请勾选全部安全事项后确认';
+  $('safetyModal').classList.remove('hidden');
+  window._safetyCallback = safetyCallback;
+}
+
+function checkSafetyAll() {
+  const all = document.querySelectorAll('.safety-cb');
+  const checked = document.querySelectorAll('.safety-cb:checked');
+  const btn = $('safetyConfirm');
+  if (checked.length === all.length) {
+    btn.disabled = false;
+    btn.textContent = '✅ 我已了解，继续';
+  } else {
+    btn.disabled = true;
+    btn.textContent = '☐ 已勾选 ' + checked.length + '/' + all.length;
+  }
+}
+
+function confirmSafety() {
+  APP.safetyAccepted = true;
+  saveData(APP);
+  closeModal('safetyModal');
+  if (window._safetyCallback) { window._safetyCallback(); window._safetyCallback = null; }
+}
+
+// Wrap actions that need safety check
+function safeAction(callback) {
+  if (APP.safetyAccepted) { callback(); return; }
+  checkSafety(callback);
+}
+
+// ==================== FISH WIKI ====================
+const FISH_WIKI = {
+  '黑鲷': { alias: '海鲋、青鳞', icon: '🐟', temp: '18-25°C', depth: '3-50米', time: '涨潮前后', season: '春、秋', weight: '0.5-3斤', methods: '底钓、矶钓、筏钓', eat: 4, eatNote: '肉质细嫩，刺少，清蒸红烧俱佳', desc: '近海底层鱼类，喜栖息于岩礁和沙泥底质海域。杂食性，以贝类、小虾为食。广东沿海全年可钓，春秋最旺。' },
+  '真鲷': { alias: '加吉鱼、铜盆鱼', icon: '🐟', temp: '15-22°C', depth: '10-80米', time: '涨潮至满潮', season: '秋、冬', weight: '1-8斤', methods: '底钓、船钓、路亚', eat: 5, eatNote: '顶级食用鱼，刺身级品质。清蒸最佳，肉质鲜甜弹牙', desc: '名贵海鱼，体色鲜红，栖息于较深水域。冬季肉质最佳，是海钓人的梦幻目标鱼。南澳岛周边11-2月为大真鲷季。' },
+  '石斑': { alias: '龙胆、青斑、芝麻斑', icon: '🐟', temp: '20-30°C', depth: '5-60米', time: '涨潮前后', season: '春、夏', weight: '1-20斤', methods: '底钓、船钓、活饵', eat: 5, eatNote: '高级食材，肉质紧实鲜嫩。清蒸石斑是粤菜名菜', desc: '暖水性底层鱼类，喜栖息于珊瑚礁和岩礁区域。性情凶猛，以小鱼虾蟹为食。钓石斑要用粗线大钩，防止钻洞断线。' },
+  '黄鳍鲷': { alias: '黄脚鱼、黄翅', icon: '🐟', temp: '18-28°C', depth: '2-30米', time: '涨潮至满潮', season: '春、秋', weight: '0.3-2斤', methods: '矶钓、筏钓、底钓', eat: 4, eatNote: '肉质细腻，适合清蒸或煮汤', desc: '浅海底层鱼类，广东沿海极为常见。喜栖息于沙泥底质和蚝排附近。咬口轻而谨慎，需要灵敏的钓组。' },
+  '马鲛': { alias: '马友、蓝点马鲛', icon: '🐟', temp: '18-28°C', depth: '5-50米', time: '清晨、傍晚', season: '夏、秋', weight: '2-20斤', methods: '拖钓、路亚、活饵', eat: 4, eatNote: '肉质略粗但鲜美，香煎马鲛是经典做法', desc: '中上层洄游鱼类，游速快、冲击力强。夏季在广东沿海成群出没。拖钓和路亚的首选目标，咬钩后洗鳃跳跃非常刺激。' },
+  '带鱼': { alias: '白带鱼、刀鱼', icon: '🐟', temp: '15-25°C', depth: '10-100米', time: '夜间、清晨', season: '秋、冬', weight: '0.3-2斤', methods: '船钓、夜钓', eat: 3, eatNote: '常见家常鱼，炸带鱼、红烧带鱼最受欢迎', desc: '深海洄游鱼类，白天栖息于较深水域，夜间上浮觅食。带鱼牙齿锋利，取钩注意安全。秋冬为盛产期。' },
+  '红衫鱼': { alias: '金线鱼、红三', icon: '🐟', temp: '16-26°C', depth: '10-80米', time: '全天', season: '全年', weight: '0.1-0.5斤', methods: '船钓、底钓', eat: 3, eatNote: '小型海鱼，适合香煎或煮汤', desc: '常见底层小型鱼类，广东近海渔获量最大的鱼种之一。繁殖力强，全年可钓。容易上钩，适合新手练习。' },
+  '沙钻': { alias: '沙尖、沙梭', icon: '🐟', temp: '18-28°C', depth: '1-20米', time: '涨潮时', season: '春、夏', weight: '0.1-0.6斤', methods: '滩钓、浮游矶钓', eat: 4, eatNote: '小型精品鱼，油炸酥脆，椒盐沙钻是下酒好菜', desc: '近海沙滩常见小型鱼类，喜栖息于沙质海底。肉质细嫩鲜美，是高性价比的食用鱼。沙滩滩钓的主要目标之一。' },
+  '巴浪': { alias: '巴浪鱼、圆鯵', icon: '🐟', temp: '20-30°C', depth: '0-30米', time: '清晨、傍晚', season: '夏、秋', weight: '0.2-1斤', methods: '路亚、拖钓', eat: 2, eatNote: '肉质较柴，多用于做鱼丸或鱼露', desc: '中上层小型鱼类，常成群出没于近海。游速快，喜追小鱼。路亚入门的好目标，咬口凶猛。' },
+  '鲈鱼': { alias: '海鲈、花鲈', icon: '🐟', temp: '15-25°C', depth: '2-30米', time: '涨潮时、夜间', season: '秋、冬', weight: '1-10斤', methods: '路亚、矶钓、活饵', eat: 5, eatNote: '上等食用鱼，清蒸海鲈是招牌菜', desc: '近海常见鱼类，适应性强，河口和近海礁区均有分布。游速快，咬口猛，是路亚钓的热门目标。秋冬季节最肥美。' },
+  '鱿鱼': { alias: '吹筒、乌贼', icon: '🦑', temp: '18-28°C', depth: '2-50米', time: '夜间', season: '夏、秋', weight: '0.1-2斤', methods: '夜钓、鱿鱼钩、灯光诱钓', eat: 5, eatNote: '白灼鱿鱼鲜美Q弹，爆炒鱿鱼下饭神器', desc: '软体动物，趋光性强。夜间用灯光诱集后用专用鱿鱼钩钓取。深圳大鹏和南澳是著名的夜钓吹筒圣地。' },
+  '黄鱼': { alias: '大黄鱼、黄花鱼', icon: '🐟', temp: '16-24°C', depth: '10-60米', time: '清晨、傍晚', season: '春、秋', weight: '0.5-3斤', methods: '船钓、底钓', eat: 5, eatNote: '顶级食用鱼，野生大黄鱼极为珍贵。清蒸或红烧皆可', desc: '中国四大海鱼之一，肉质鲜美。野生资源已大幅减少，钓获需珍惜。舟山和福建外海为主要分布区。' }
+};
+
+function showFishWiki(fishName) {
+  const fish = FISH_WIKI[fishName];
+  if (!fish) { showToast('暂无该鱼种的详细信息'); return; }
+  const starStr = '⭐'.repeat(fish.eat) + '☆'.repeat(5 - fish.eat);
+  $('fishWikiContent').innerHTML = `
+    <div style="text-align:center;font-size:48px;margin-bottom:8px;">${fish.icon}</div>
+    <div style="text-align:center;font-size:20px;font-weight:700;margin-bottom:4px;">${fishName}</div>
+    <div style="text-align:center;font-size:13px;color:var(--text-light);margin-bottom:12px;">别名：${fish.alias}</div>
+    <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;">📊 基本信息</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px;color:var(--text-secondary);">
+        <div>适宜水温：${fish.temp}</div><div>栖息水深：${fish.depth}</div>
+        <div>活跃时段：${fish.time}</div><div>最佳季节：${fish.season}</div>
+        <div>常见重量：${fish.weight}</div>
+      </div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px;">🎣 常用钓法</div>
+      <div style="font-size:12px;color:var(--text-secondary);">${fish.methods}</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px;">🍽️ 食用评价 ${starStr}</div>
+      <div style="font-size:12px;color:var(--text-secondary);">${fish.eatNote}</div>
+    </div>
+    <div style="font-size:12px;color:var(--text-light);line-height:1.5;">${fish.desc}</div>
+  `;
+  $('fishWikiModal').classList.remove('hidden');
+}
+
+function renderFishWikiList() {
+  const names = Object.keys(FISH_WIKI);
+  $('fishWikiList').innerHTML = names.map(name => {
+    const f = FISH_WIKI[name];
+    return `<div style="background:var(--white);border-radius:var(--radius-sm);padding:12px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-sm);" onclick="showFishWiki('${name}')">
+      <span style="font-size:28px;">${f.icon}</span>
+      <div style="flex:1;"><div style="font-weight:600;font-size:14px;">${name}</div><div style="font-size:11px;color:var(--text-light);">${f.alias}</div></div>
+      <span style="color:var(--text-light);">›</span>
+    </div>`;
+  }).join('');
+  $('fishWikiListModal').classList.remove('hidden');
+}
+
+// ==================== TIPS & GUIDES ====================
+// 3. Seasickness guide
+function showSeasickGuide() {
+  $('tipContent').innerHTML = `
+    <div class="modal-title">💊 晕船防治指南</div>
+    <div style="background:#FEF3C7;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#92400E;">⚡ 出海前30-60分钟吃，不要等晕了再吃——那时候已经晚了</div>
+    <div style="margin-bottom:12px;"><div style="font-weight:600;margin-bottom:4px;">🟢 推荐药物</div>
+      <div style="font-size:13px;line-height:1.6;">• <b>日本大白兔（Travelmin）</b> — 最常用，副作用小，药房¥30-50<br>• <b>茶苯海明（晕海宁）</b> — 国产经典，便宜有效，¥5-10<br>• <b>东莨菪碱贴片</b> — 耳后贴，管24小时，¥80-120</div>
+    </div>
+    <div style="margin-bottom:12px;"><div style="font-weight:600;margin-bottom:4px;">💡 辅助方法</div>
+      <div style="font-size:13px;line-height:1.6;">• 生姜片含在嘴里或贴肚脐<br>• 出发前一晚睡好，别喝酒<br>• 船上往远处看，别低头看手机<br>• 选船中间位置，颠簸最小<br>• 空腹或吃太饱都容易晕<br>• 晕了喝点温水，深呼吸</div>
+    </div>
+    <div style="background:#FEF2F2;border-radius:8px;padding:10px;font-size:12px;color:#991B1B;">⚠️ 严重眩晕、呕吐不止应立即返航，不要硬撑</div>
+  `;
+  $('tipModal').classList.remove('hidden');
+}
+
+// 2. Equipment purchase recommendations
+const GEAR_REC = {
+  '入门 ¥500': { desc: '新手入门，够用不贵', items: [
+    { name: '普通船钓竿 2.1-2.7m', price: '¥80-150', tip: '选玻璃钢材质，耐造' },
+    { name: '纺车轮 3000-4000型', price: '¥60-120', tip: '国产光威/迪佳即可' },
+    { name: 'PE线 3号 + 碳素前导线', price: '¥30-50', tip: '150米装够用' },
+    { name: '基础配件套装', price: '¥50-80', tip: '钩/铅坠/八字环/浮漂' },
+    { name: '救生衣', price: '¥80-150', tip: '必须有！泡沫芯比充气可靠' },
+    { name: '防晒帽+偏光镜', price: '¥50-100', tip: '偏光镜看鱼用' },
+  ]},
+  '进阶 ¥2000': { desc: '有经验钓手，性价比之选', items: [
+    { name: '碳素船钓竿 2.4-3.0m', price: '¥300-600', tip: '轻量化，灵敏度高' },
+    { name: '品牌纺车轮 4000-6000型', price: '¥300-500', tip: 'Shimano/Daiwa入门款' },
+    { name: 'PE线 2-3号 + 氟碳前导', price: '¥80-150', tip: '进口线，拉力值更稳' },
+    { name: '专业配件+钓箱', price: '¥200-400', tip: '含抄网/控鱼器/路亚钳' },
+    { name: '自动充气救生衣', price: '¥300-500', tip: '轻便舒适' },
+    { name: 'GoPro支架+手机防水袋', price: '¥100-200', tip: '记录渔获时刻' },
+  ]},
+  '专业 ¥5000+': { desc: '深度发烧友，一步到位', items: [
+    { name: '进口碳素竿 2.7-3.6m', price: '¥1500-3000', tip: 'Shimano/Daiwa/Gamakatsu' },
+    { name: '电绞轮/高端纺车轮', price: '¥1500-3000', tip: '深水大物必备' },
+    { name: '进口PE线+前导线', price: '¥200-400', tip: 'YGK/VARIVAS顶级线' },
+    { name: '鱼探/声呐', price: '¥800-2000', tip: '找鱼群神器' },
+    { name: '专业救生衣+防水服', price: '¥500-1000', tip: '防风防水保暖' },
+    { name: '全套摄影装备', price: '¥500-1500', tip: 'GoPro+无人机航拍' },
+  ]}
+};
+
+function showGearRecommend() {
+  const tiers = Object.keys(GEAR_REC);
+  $('gearTabs').innerHTML = tiers.map(t => `<button class="filter-chip${t === tiers[0] ? ' active' : ''}" onclick="renderGearRec('${t}', this)">${t}</button>`).join('');
+  renderGearRec(tiers[0], document.querySelector('#gearTabs .filter-chip'));
+  $('gearModal').classList.remove('hidden');
+}
+
+function renderGearRec(tier, el) {
+  document.querySelectorAll('#gearTabs .filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const data = GEAR_REC[tier];
+  $('gearList').innerHTML = `<div style="font-size:12px;color:var(--text-light);margin-bottom:8px;">${data.desc}</div>
+    ${data.items.map((item, i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+      <div><span style="color:var(--primary);font-weight:500;">${i+1}.</span> ${item.name}<br><span style="font-size:11px;color:var(--text-light);">${item.tip}</span></div>
+      <span style="font-weight:600;color:var(--primary);white-space:nowrap;">${item.price}</span>
+    </div>`).join('')}
+    <div style="font-size:11px;color:var(--text-light);margin-top:8px;text-align:center;">💡 以上为参考价格，实际以渔具店为准</div>`;
+}
+
+// 5. Moon phase calendar
+function getMoonPhase(dateStr) {
+  const knownNewMoon = new Date('2026-05-08');
+  const target = new Date(dateStr);
+  const daysSince = Math.round((target - knownNewMoon) / 86400000);
+  const age = ((daysSince % 29.53) + 29.53) % 29.53;
+  const icons = ['🌑','🌒','🌒','🌓','🌓','🌔','🌔','🌕','🌖','🌖','🌗','🌗','🌘','🌘','🌑'];
+  const names = ['新月','蛾眉月','蛾眉月','上弦月','上弦月','盈凸月','盈凸月','满月','亏凸月','亏凸月','下弦月','下弦月','残月','残月','新月'];
+  const idx = Math.floor(age / 29.53 * icons.length) % icons.length;
+  return { icon: icons[idx], name: names[idx], isSpring: idx === 0 || idx === 7 };
+}
+
+function showMoonCalendar() {
+  const now = new Date();
+  const year = now.getFullYear(), month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 0).getDay();
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  const calc = getMoonPhase(year + '-' + String(month+1).padStart(2,'0') + '-01');
+
+  // Get moon data from weather cache if available
+  const todayStr = now.toISOString().split('T')[0];
+  const cached = APP.weatherCache[todayStr];
+
+  let html = '<div class="modal-title">🌙 月相日历 · ' + (month + 1) + '月</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:8px;">';
+  weekDays.forEach(d => { html += '<div style="font-size:11px;color:var(--text-light);padding:4px;">' + d + '</div>'; });
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) { html += '<div></div>'; }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    const isToday = d === now.getDate();
+    const mc = getMoonPhase(dateStr);
+    html += `<div style="padding:3px;border-radius:6px;${isToday ? 'background:var(--primary);color:white;' : ''}${mc.isSpring ? 'border:2px solid #F59E0B;' : ''}">
+      <div style="font-size:10px;${isToday ? '' : 'color:var(--text-light);'}">${d}</div>
+      <div style="font-size:14px;" title="${mc.name}">${mc.icon}</div>
+      ${mc.isSpring ? '<div style="font-size:8px;color:#F59E0B;">大潮</div>' : ''}
+    </div>`;
+  }
+  html += '</div>';
+  html += '<div style="font-size:11px;color:var(--text-light);text-align:center;">🟡 金色边框 = 大潮日（满月/新月）· 潮差最大，鱼最活跃</div>';
+
+  $('tipContent').innerHTML = html;
+  $('tipModal').classList.remove('hidden');
+}
+
+// 4. Fish preservation guide
+function showFishPreserveGuide() {
+  $('tipContent').innerHTML = `
+    <div class="modal-title">🧊 渔获保鲜指南</div>
+    <div style="margin-bottom:10px;"><div style="font-weight:600;margin-bottom:4px;">🩸 第一步：放血（钓上来立即做）</div>
+      <div style="font-size:13px;line-height:1.6;">• 用剪刀剪断鱼鳃下方的动脉，让血流出<br>• 放血后的鱼肉更白、更鲜、没腥味<br>• 不放血的鱼冷藏后肉质发黑发腥<br>• 大型鱼（石斑/马鲛）必须放血</div>
+    </div>
+    <div style="margin-bottom:10px;"><div style="font-weight:600;margin-bottom:4px;">🫧 第二步：放气（深水鱼必须做）</div>
+      <div style="font-size:13px;line-height:1.6;">• 深水鱼（>10米）上岸后鱼鳔会鼓出<br>• 用放气针从胸鳍后方斜刺入，排出气体<br>• 不放气鱼无法存活，肉质会变差<br>• 真鲷、石斑等深水鱼特别注意</div>
+    </div>
+    <div style="margin-bottom:10px;"><div style="font-weight:600;margin-bottom:4px;">🧊 第三步：加冰保存</div>
+      <div style="font-size:13px;line-height:1.6;">• 放血后用海水冲洗干净<br>• 保温箱底铺一层碎冰<br>• 鱼平放，鱼身周围填满冰<br>• 冰鱼比例至少 1:1（1斤鱼用1斤冰）<br>• 海水冰比淡水冰融化慢，效果更好</div>
+    </div>
+    <div style="margin-bottom:10px;"><div style="font-weight:600;margin-bottom:4px;">🚗 第四步：运输回家</div>
+      <div style="font-size:13px;line-height:1.6;">• 高铁/飞机禁止携带活鱼和带水包装<br>• 可托运冷冻鱼（需密封包装）<br>• 自驾建议备车载冰箱<br>• 同城可找冷链配送（顺丰冷运等）</div>
+    </div>
+    <div style="background:#ECFDF5;border-radius:8px;padding:10px;font-size:12px;color:#065F46;">💡 保鲜口诀：<b>先放血，再放气，冰要足，快回家</b></div>
+  `;
+  $('tipModal').classList.remove('hidden');
+}
+
+// 8. Pre-trip equipment reminder
+function showTripReminder(chainData) {
+  $('reminderContent').innerHTML = `
+    <div class="modal-title">🎒 出发前检查清单</div>
+    <div style="font-size:12px;color:var(--text-light);margin-bottom:10px;">${chainData.port} · ${chainData.date} · ${chainData.slot}</div>
+    <div class="guide-check-list">
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 🦺 救生衣</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 💊 晕船药（提前吃）</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 🧴 防晒霜+帽子+墨镜</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 🎣 竿+轮+线组+饵料</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 💧 饮用水 2L+</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 📱 手机满电+充电宝</label>
+      <label class="guide-check-item" style="padding:5px 0;"><input type="checkbox"> 🧊 保温箱+冰块</label>
+    </div>
+    <button class="btn btn-primary" onclick="closeModal('reminderModal')" style="margin-top:10px;">✅ 检查完毕</button>
+  `;
+  $('reminderModal').classList.remove('hidden');
+}
+
+// ==================== EQUIPMENT CHECKLIST ====================
+const EQUIP_DATA = {
+  '近海船钓': {
+    must: ['救生衣', '晕船药', '防晒霜+帽子', '竿+轮+线组', '饵料（活虾/沙蚕）', '饮用水2L+'],
+    rec: ['偏光镜', '防割手套', '保温箱+冰块', '毛巾', '备用子线'],
+    opt: ['GoPro/手机防水袋', '充电宝', '头灯（夜钓用）', '零食']
+  },
+  '矶钓': {
+    must: ['矶钓鞋（钉鞋）', '救生衣', '防晒装备', '矶竿+轮+线组', '饵料', '饮用水'],
+    rec: ['打窝桶+勺', '抄网', '钓箱/活鱼扣', '偏光镜'],
+    opt: ['防水背包', '手机防水袋', '备用阿波']
+  },
+  '路亚': {
+    must: ['路亚竿+轮', '救生衣', '防晒装备', '拟饵套装（米诺/软虫/铁板）', '前导线'],
+    rec: ['偏光镜（看鱼用）', '控鱼器+路亚钳', '涉水裤（岸抛用）'],
+    opt: ['备用拟饵', '防水背包', 'GoPro']
+  },
+  '夜钓': {
+    must: ['头灯+备用电池', '救生衣（带反光条）', '防蚊液', '保暖衣物', '竿+轮+线组', '饵料'],
+    rec: ['荧光棒/夜光漂', '保温杯热饮', '备用光源', '手机满电'],
+    opt: ['驱蛇粉（岸钓）', '折叠椅', '夜钓专用偏光镜']
+  }
+};
+
+function showEquipChecklist() {
+  const types = Object.keys(EQUIP_DATA);
+  $('equipTabs').innerHTML = types.map(t => `<button class="filter-chip${t === '近海船钓' ? ' active' : ''}" onclick="renderEquip('${t}', this)">${t}</button>`).join('');
+  renderEquip('近海船钓', $('equipTabs').querySelector('.filter-chip'));
+  $('equipModal').classList.remove('hidden');
+}
+
+function renderEquip(type, el) {
+  document.querySelectorAll('#equipTabs .filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const data = EQUIP_DATA[type];
+  $('equipList').innerHTML = `
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:600;color:var(--danger);margin-bottom:6px;">🔴 必带</div>
+      ${data.must.map((item, i) => `<label class="guide-check-item" style="padding:6px 0;"><input type="checkbox" onchange="saveEquipState('${type}','must',${i},this.checked)"> ${item}</label>`).join('')}
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:600;color:var(--warning);margin-bottom:6px;">🟡 推荐</div>
+      ${data.rec.map((item, i) => `<label class="guide-check-item" style="padding:6px 0;"><input type="checkbox" onchange="saveEquipState('${type}','rec',${i},this.checked)"> ${item}</label>`).join('')}
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:6px;">🟢 选带</div>
+      ${data.opt.map((item, i) => `<label class="guide-check-item" style="padding:6px 0;"><input type="checkbox" onchange="saveEquipState('${type}','opt',${i},this.checked)"> ${item}</label>`).join('')}
+    </div>`;
+}
+
+function saveEquipState(type, cat, idx, val) {
+  if (!APP.equipState) APP.equipState = {};
+if (APP.catches) APP.catches.forEach(c => { if (c.forSale === undefined) c.forSale = false; if (!c.sellerContact) c.sellerContact = ''; if (!c.price) c.price = ''; if (!c.takeMethod) c.takeMethod = '自提'; });
+  if (!APP.equipState[type]) APP.equipState[type] = { must: [], rec: [], opt: [] };
+  APP.equipState[type][cat][idx] = val;
+  saveData(APP);
+}
+
+// ==================== COMPLAINT ====================
+function showComplaintForm(bookingId) {
+  const b = APP.bookings.find(bk => bk.id === bookingId);
+  if (!b) return;
+  $('compCaptain').value = b.captainName;
+  $('compDesc').value = '';
+  window._compBookingId = bookingId;
+  $('complaintModal').classList.remove('hidden');
+}
+
+function submitComplaint() {
+  const desc = ($('compDesc').value || '').trim();
+  if (!desc) { showToast('请描述问题'); return; }
+  const b = APP.bookings.find(bk => bk.id === window._compBookingId);
+  if (!b) return;
+  b.complaint = { type: $('compType').value, desc, date: new Date().toISOString().split('T')[0] };
+  saveData(APP);
+  closeModal('complaintModal');
+  showToast('投诉已提交，我们会尽快处理');
+}
+
+// Hook: wrap booking-related actions with safety check
+const origShowBooking = showBookingForm;
+// We'll intercept in the chain/booking flows instead
+
 // ==================== DATE PICKER & WEATHER ====================
 function renderDatePicker() {
   const today = new Date();
   let html = '';
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 15; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() + i);
     const dateStr = d.toISOString().split('T')[0];
@@ -1822,33 +2789,57 @@ function selectDate(dateStr, el) {
 }
 
 async function fetchWeather(dateStr, cityId, port) {
-  // Try cache first
   const cache = APP.weatherCache[dateStr];
   if (cache && (Date.now() - cache.fetchedAt) < WX_CONFIG.cacheTTL) {
-    renderWeather(cache.data, port);
+    renderWeather(cache.data, port, cache.tideData, cache.isMock);
     return;
   }
 
+  let weatherData = null, tideData = null, isMock = false;
+
   try {
-    const url = `${WX_CONFIG.host}/v7/weather/7d?location=${cityId}&key=${WX_CONFIG.key}`;
-    const res = await fetch(url);
+    // Use 7d for near dates, 15d when user clicks beyond 7 days
+    const today = new Date(); today.setHours(0,0,0,0);
+    const target = new Date(dateStr); target.setHours(0,0,0,0);
+    const daysDiff = Math.floor((target - today) / 86400000);
+    const apiPath = daysDiff > 7 ? '/v7/weather/15d' : '/v7/weather/7d';
+    const url = `${WX_CONFIG.host}${apiPath}?location=${cityId}&key=${WX_CONFIG.key}`;
+    // 5s timeout so failed API doesn't freeze the page
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 3000);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(timer);
     const json = await res.json();
     if (json.code === '200') {
-      const target = json.daily.find(d => d.fxDate === dateStr);
-      if (target) {
-        APP.weatherCache[dateStr] = { data: target, fetchedAt: Date.now() };
-        saveData(APP);
-        renderWeather(target, port);
-        return;
-      }
+      // Cache all days returned from this API call
+      json.daily.forEach(d => {
+        const cacheKey = d.fxDate;
+        if (!APP.weatherCache[cacheKey] || (Date.now() - (APP.weatherCache[cacheKey].fetchedAt || 0)) > WX_CONFIG.cacheTTL) {
+          APP.weatherCache[cacheKey] = { data: d, tideData: null, isMock: false, fetchedAt: Date.now() };
+        }
+      });
+      const targetData = json.daily.find(d => d.fxDate === dateStr);
+      if (targetData) weatherData = targetData;
     }
-  } catch (e) {
-    console.warn('Weather API error, using fallback');
-  }
+  } catch (e) { console.warn('Weather API error'); }
 
-  // Fallback: simulated data for demo
-  const mock = generateMockWeather(dateStr);
-  renderWeather(mock, port, true);
+  // Fetch tide data
+  const tideStation = PORT_TIDE[port] || 'P2970';
+  try {
+    const tideUrl = `${WX_CONFIG.host}/v7/ocean/tide?location=${tideStation}&date=${dateStr.replace(/-/g, '')}&key=${WX_CONFIG.key}`;
+    const tc = new AbortController();
+    const tt = setTimeout(() => tc.abort(), 5000);
+    const tr = await fetch(tideUrl, { signal: tc.signal });
+    clearTimeout(tt);
+    const tj = await tr.json();
+    if (tj.code === '200' && tj.tideTable) tideData = tj;
+  } catch (e) { console.warn('Tide API error'); }
+
+  if (!weatherData) { weatherData = generateMockWeather(dateStr); isMock = true; }
+
+  APP.weatherCache[dateStr] = { data: weatherData, tideData, isMock, fetchedAt: Date.now() };
+  saveData(APP);
+  renderWeather(weatherData, port, tideData, isMock);
 }
 
 function generateMockWeather(dateStr) {
@@ -1873,7 +2864,7 @@ function generateMockWeather(dateStr) {
   };
 }
 
-function renderWeather(dayData, port, isMock) {
+function renderWeather(dayData, port, tideData, isMock) {
   const card = $('weatherCard');
   if (!dayData) {
     card.style.display = 'block';
@@ -1906,13 +2897,299 @@ function renderWeather(dayData, port, isMock) {
   $('weatherPort').textContent = '📍 ' + port;
 
   $('wWind').innerHTML = `${windDir}<br>${windScale}级`;
-  $('wWave').textContent = wave + 'm';
+  // Enhanced wave display with level indicator
+  const waveLevel = parseFloat(wave) < 0.5 ? '<span style="color:#10B981;">🟢</span>' : parseFloat(wave) < 1.5 ? '<span style="color:#F59E0B;">🟡</span>' : '<span style="color:#EF4444;">🔴</span>';
+  const waveLabel = parseFloat(wave) < 0.5 ? '轻微' : parseFloat(wave) < 1.5 ? '中等' : '较大';
+  $('wWave').innerHTML = `${wave}m<br><span style="font-size:11px;color:${parseFloat(wave) < 0.5 ? '#10B981' : parseFloat(wave) < 1.5 ? '#F59E0B' : '#EF4444'};">${waveLevel} ${waveLabel}</span>`;
   $('wTemp').textContent = temp + '°C';
 
   $('weatherAdvice').innerHTML = `${advice.icon} ${advice.text}`;
   $('weatherAdvice').className = 'weather-advice ' + advice.level;
-  $('weatherHint').textContent = advice.hint + ' · 能见度' + (dayData.vis || '--') + 'km' + (isMock ? '（模拟数据）' : '');
+  const uv = dayData.uvIndex || '--';
+  const uvTip = uv >= 8 ? '🔴 紫外线极强，必须防晒！' : uv >= 5 ? '🟡 紫外线较强，建议防晒' : '🟢 紫外线较弱';
+  $('weatherHint').textContent = advice.hint + ' · 能见度' + (dayData.vis || '--') + 'km · UV' + uv + ' ' + uvTip + (isMock ? '（模拟数据）' : '');
+  // Wave level bar
+  const wv = parseFloat(wave) || 0; const wpct = Math.min(wv / 3 * 100, 100);
+  $('waveBarFill').style.width = wpct + '%';
+  $('waveBarFill').style.background = wv < 0.5 ? '#10B981' : wv < 1.5 ? '#F59E0B' : '#EF4444';
+  $('waveBarLabel').textContent = wv < 0.5 ? '轻微 · 安全' : wv < 1.5 ? '中等 · 注意' : '较大 · 危险';
+  $('waveBarLabel').style.color = wv < 0.5 ? '#10B981' : wv < 1.5 ? '#F59E0B' : '#EF4444';
+  renderTide(tideData);
+  calcFishingIndex(dayData, tideData);
   renderWindowTimeline(dayData, advice.level);
+}
+
+function calcFishingIndex(dayData, tideData) {
+  // === Six-factor scientific fishing index ===
+  // References: Solunar Theory (Knight 1935), Hanson et al. (2008), Quigley et al. (2023)
+  // Tide as strongest saltwater predictor; barometric pressure overrides lunar in short-term
+
+  // 1. WIND (20pts) — safety + water oxygen
+  const windScale = parseInt(dayData.windScaleDay) || 3;
+  let wWind; if (windScale <= 2) wWind = 20; else if (windScale === 3) wWind = 16; else if (windScale === 4) wWind = 12; else if (windScale === 5) wWind = 7; else if (windScale === 6) wWind = 3; else wWind = 0;
+
+  // 2. BAROMETRIC PRESSURE (20pts) — stable/rising good, falling bad
+  const press = parseInt(dayData.pressure) || 1013;
+  let wPress;
+  if (press >= 1010 && press <= 1020) wPress = 20;     // stable high
+  else if (press >= 1005 && press < 1010) wPress = 16;  // slightly low
+  else if (press >= 1020 && press <= 1025) wPress = 15; // high but stable
+  else if (press >= 1000 && press < 1005) wPress = 10;  // low, fish sluggish
+  else if (press > 1025) wPress = 8;                    // very high, overcast
+  else wPress = 5;                                       // very low, stormy
+
+  // 3. TIDE DIFFERENTIAL (20pts) — strongest saltwater factor (spring tide = more food)
+  let wTide = 10;
+  if (tideData && tideData.tideTable && tideData.tideTable.length >= 2) {
+    const heights = tideData.tideTable.map(t => parseFloat(t.height) || 0);
+    const diff = Math.max(...heights) - Math.min(...heights);
+    if (diff > 3.0) wTide = 20; else if (diff > 2.5) wTide = 18; else if (diff > 2.0) wTide = 16; else if (diff > 1.5) wTide = 14; else if (diff > 1.0) wTide = 11; else if (diff > 0.5) wTide = 8; else wTide = 5;
+  }
+
+  // 4. WATER TEMPERATURE (15pts) — fish are cold-blooded
+  const temp = parseInt(dayData.tempMax) || 25;
+  let wTemp; if (temp >= 20 && temp <= 28) wTemp = 15; else if (temp >= 16 && temp < 20 || temp > 28 && temp <= 32) wTemp = 12; else if (temp >= 12 && temp < 16 || temp > 32 && temp <= 35) wTemp = 8; else wTemp = 5;
+
+  // 5. MOON PHASE (10pts) — full/new moon = spring tide = more fish activity
+  const moonIcon = dayData.moonPhaseIcon || '800';
+  let wMoon;
+  if (moonIcon === '800' || moonIcon === '801') wMoon = 10;      // 新月/满月
+  else if (moonIcon === '802' || moonIcon === '806') wMoon = 8;  // 峨眉月
+  else if (moonIcon === '803' || moonIcon === '805') wMoon = 6;  // 盈凸/亏凸
+  else if (moonIcon === '804') wMoon = 4;                         // 上弦/下弦
+  else wMoon = 6;
+
+  // 6. WEATHER CONDITION (15pts) — overcast often better than bright sun
+  const text = (dayData.textDay || '').toLowerCase();
+  let wWeather;
+  if (text.includes('多云')) wWeather = 15;
+  else if (text.includes('阴')) wWeather = 13;
+  else if (text.includes('晴')) wWeather = 10;
+  else if (text.includes('小雨') || text.includes('阵雨')) wWeather = 8;
+  else if (text.includes('中雨')) wWeather = 5;
+  else if (text.includes('大雨') || text.includes('暴雨')) wWeather = 2;
+  else if (text.includes('雷')) wWeather = 0;
+  else wWeather = 10;
+
+  const total = wWind + wPress + wTide + wTemp + wMoon + wWeather;
+  const pct = Math.min(total, 100);
+
+  // Render
+  $('fishingIndex').style.display = 'block';
+  $('fiScore').textContent = total + '分';
+  const bar = $('fiBar');
+  bar.style.width = pct + '%';
+  if (total >= 80) bar.style.background = 'linear-gradient(90deg,#10B981,#34D399)';
+  else if (total >= 60) bar.style.background = 'linear-gradient(90deg,#F59E0B,#FBBF24)';
+  else bar.style.background = 'linear-gradient(90deg,#EF4444,#F87171)';
+
+  // Color helper
+  const c = (s, max) => { const r = s / max; return r >= 0.8 ? '#10B981' : r >= 0.6 ? '#F59E0B' : '#EF4444'; };
+  $('fiDetails').innerHTML = `
+    <div>💨 风力<br><b style="font-size:12px;color:${c(wWind,20)};">${wWind}/20</b></div>
+    <div>🎈 气压<br><b style="font-size:12px;color:${c(wPress,20)};">${wPress}/20</b></div>
+    <div>🌊 潮差<br><b style="font-size:12px;color:${c(wTide,20)};">${wTide}/20</b></div>
+    <div>🌡️ 水温<br><b style="font-size:12px;color:${c(wTemp,15)};">${wTemp}/15</b></div>
+    <div>🌙 月相<br><b style="font-size:12px;color:${c(wMoon,10)};">${wMoon}/10</b></div>
+    <div>☁️ 天气<br><b style="font-size:12px;color:${c(wWeather,15)};">${wWeather}/15</b></div>`;
+}
+
+function renderTide(tideData) {
+  if (!tideData || !tideData.tideTable || tideData.tideTable.length === 0) {
+    $('tideRow').style.display = 'none';
+    return;
+  }
+  $('tideRow').style.display = 'grid';
+  const tbl = tideData.tideTable;
+  // Find morning and evening high tides (H type)
+  const highs = tbl.filter(t => t.type === 'H').map(t => ({
+    time: t.fxTime.substring(11, 16),
+    height: t.height + 'm'
+  }));
+  const lows = tbl.filter(t => t.type === 'L').map(t => ({
+    time: t.fxTime.substring(11, 16),
+    height: t.height + 'm'
+  }));
+
+  if (highs.length >= 1) {
+    $('tideHigh1').textContent = highs[0].time;
+    $('tideHigh1M').textContent = '满潮 ' + highs[0].height;
+  } else { $('tideHigh1').textContent = '--'; $('tideHigh1M').textContent = '--'; }
+
+  if (highs.length >= 2) {
+    $('tideHigh2').textContent = highs[1].time;
+    $('tideHigh2M').textContent = '满潮 ' + highs[1].height;
+  } else if (lows.length >= 2) {
+    // Show second low tide if only one high
+    $('tideHigh2').textContent = lows[1].time;
+    $('tideHigh2M').textContent = '干潮 ' + lows[1].height;
+  } else { $('tideHigh2').textContent = '--'; $('tideHigh2M').textContent = '--'; }
+
+  // Update window timeline to align with tide
+  if (highs.length >= 1 && lows.length >= 1) {
+    // Use the morning rising tide as window reference
+    const firstLow = lows[0];
+    const firstHigh = highs[0];
+    const lowH = parseInt(firstLow.time.split(':')[0]);
+    const lowM = parseInt(firstLow.time.split(':')[1]);
+    const highH = parseInt(firstHigh.time.split(':')[0]);
+    const highM = parseInt(firstHigh.time.split(':')[1]);
+    const midMin = (lowH * 60 + lowM + highH * 60 + highM) / 2;
+    const midH = Math.floor(midMin / 60);
+    const midM = Math.floor(midMin % 60);
+    const midStr = String(midH).padStart(2,'0') + ':' + String(midM).padStart(2,'0');
+    $('windowLabel').textContent += ' · 涨潮窗口 ' + firstLow.time + '→' + firstHigh.time;
+  }
+}
+
+function showTideDetail() {
+  const dateStr = APP.selectedDate || new Date().toISOString().split('T')[0];
+  const cache = APP.weatherCache[dateStr];
+  const tideData = cache ? cache.tideData : null;
+  if (!tideData || !tideData.tideHourly || tideData.tideHourly.length === 0) {
+    showToast('暂无潮汐数据'); return;
+  }
+
+  const d = new Date(dateStr);
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  $('tideDetailDate').textContent = '📅 ' + formatDate(dateStr) + ' ' + weekDays[d.getDay()];
+
+  // Tide type cards
+  const tbl = tideData.tideTable || [];
+  $('tideTypes').innerHTML = tbl.map(t => `
+    <div class="tide-type-item ${t.type === 'H' ? 'high' : 'low'}">
+      <div class="tide-type-time">${t.fxTime.substring(11, 16)}</div>
+      <div class="tide-type-height">${t.height}m</div>
+      <div class="tide-type-label">${t.type === 'H' ? '满潮' : '干潮'}</div>
+    </div>
+  `).join('');
+
+  // Hourly smooth curve with interactivity
+  const hourly = tideData.tideHourly;
+  const heights = hourly.map(h => parseFloat(h.height) || 0);
+  const maxH = Math.max(...heights);
+  const minH = Math.min(...heights);
+  const range = maxH - minH || 1;
+  const count = hourly.length;
+
+  const pad = 14, W = 340, H = 130;
+  const points = hourly.map((_, i) => ({
+    x: pad + (i / (count - 1)) * (W - pad * 2),
+    y: H - ((heights[i] - minH) / range) * (H - 20) - 8,
+    h: heights[i],
+    time: hourly[i].fxTime.substring(11, 16)
+  }));
+
+  // Catmull-Rom to cubic Bezier for smooth curve
+  function crToBezier(p0, p1, p2, p3, tension) {
+    tension = tension || 0.5;
+    const t = tension;
+    const d01 = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+    const d12 = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const d23 = Math.hypot(p3.x - p2.x, p3.y - p2.y);
+    const fa = t * d01 / (d01 + d12);
+    const fb = t * d12 / (d12 + d23);
+    const c1x = p1.x + fa * (p2.x - p0.x);
+    const c1y = p1.y + fa * (p2.y - p0.y);
+    const c2x = p2.x - fb * (p3.x - p1.x);
+    const c2y = p2.y - fb * (p3.y - p1.y);
+    return { c1x, c1y, c2x, c2y };
+  }
+
+  let pathD = `M${points[0].x},${points[0].y}`;
+  let fillD = `M${points[0].x},${H} L${points[0].x},${points[0].y}`;
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[Math.max(0, i - 1)];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[Math.min(points.length - 1, i + 2)];
+    const b = crToBezier(p0, p1, p2, p3, 0.5);
+    pathD += ` C${b.c1x},${b.c1y} ${b.c2x},${b.c2y} ${p2.x},${p2.y}`;
+    fillD += ` C${b.c1x},${b.c1y} ${b.c2x},${b.c2y} ${p2.x},${p2.y}`;
+  }
+  fillD += ` L${points[points.length - 1].x},${H} L${points[0].x},${H} Z`;
+
+  // Tooltip dots (hidden by default, shown on tap/hover)
+  const dots = points.map((p, i) =>
+    `<circle cx="${p.x}" cy="${p.y}" r="7" fill="transparent" class="tide-dot" data-idx="${i}" data-time="${p.time}" data-h="${p.h}"/>`
+  ).join('');
+
+  // Key point markers
+  const markers = tbl.map(t => {
+    const i = hourly.findIndex(hh => Math.abs(parseInt(hh.fxTime.substring(11,13)) - parseInt(t.fxTime.substring(11,13))) <= 1);
+    if (i < 0) return '';
+    const p = points[i];
+    const isHigh = t.type === 'H';
+    return `<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="${isHigh ? '#3B82F6' : '#F59E0B'}" stroke="white" stroke-width="2"/>`;
+  }).join('');
+
+  // Time labels every 3h
+  const timeLabels = points.filter((p, i) => i % 3 === 0).map(p =>
+    `<text x="${p.x}" y="${H + 14}" text-anchor="middle" font-size="10" fill="#9CA3AF">${p.time}</text>`
+  ).join('');
+
+  // Tooltip element
+  const tooltipHTML = `<g id="tideTooltip" style="display:none;pointer-events:none;">
+    <rect x="0" y="0" width="70" height="28" rx="6" fill="#1F2937" opacity="0.9"/>
+    <text x="35" y="12" text-anchor="middle" font-size="10" fill="white" id="ttTime">--</text>
+    <text x="35" y="24" text-anchor="middle" font-size="11" fill="#93C5FD" font-weight="600" id="ttHeight">--m</text>
+  </g>`;
+
+  const chartEl = $('tideChart');
+  chartEl.style.cssText = 'height:auto;display:block;position:relative;';
+  chartEl.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H + 18}" style="width:100%;height:auto;" id="tideSvg">
+      <defs>
+        <linearGradient id="tideGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <path d="${fillD}" fill="url(#tideGrad)"/>
+      <path d="${pathD}" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${markers}
+      ${timeLabels}
+      ${dots}
+      ${tooltipHTML}
+    </svg>`;
+
+  // Add touch/move interaction
+  setTimeout(() => {
+    const svg = document.getElementById('tideSvg');
+    if (!svg) return;
+    const tooltip = document.getElementById('tideTooltip');
+    const ttTime = document.getElementById('ttTime');
+    const ttHeight = document.getElementById('ttHeight');
+
+    svg.addEventListener('touchmove', function(e) { handleMove(e.touches[0], svg, points, tooltip, ttTime, ttHeight, W, H); });
+    svg.addEventListener('touchstart', function(e) { handleMove(e.touches[0], svg, points, tooltip, ttTime, ttHeight, W, H); });
+    svg.addEventListener('mousemove', function(e) { handleMove(e, svg, points, tooltip, ttTime, ttHeight, W, H); });
+    svg.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
+  }, 100);
+  $('tideDetailModal').classList.remove('hidden');
+}
+
+function handleMove(e, svg, points, tooltip, ttTime, ttHeight, W, H) {
+  const rect = svg.getBoundingClientRect();
+  const mx = ((e.clientX - rect.left) / rect.width) * W;
+  const my = ((e.clientY - rect.top) / rect.height) * H;
+
+  let closest = points[0], minDist = Infinity;
+  points.forEach(p => {
+    const dx = p.x - mx, dy = p.y - my;
+    const dist = Math.hypot(dx, dy);
+    if (dist < minDist) { minDist = dist; closest = p; }
+  });
+
+  tooltip.style.display = 'block';
+  let tx = closest.x - 35, ty = closest.y - 38;
+  if (tx < 4) tx = 4;
+  if (tx > W - 74) tx = W - 74;
+  if (ty < 0) ty = closest.y + 10;
+  tooltip.setAttribute('transform', `translate(${tx},${ty})`);
+  ttTime.textContent = closest.time;
+  ttHeight.textContent = closest.h + 'm';
 }
 
 function renderWindowTimeline(dayData, adviceLevel) {
@@ -1995,8 +3272,11 @@ function getRecIcon(score) {
 function switchView(view, el) {
   APP.currentView = view;
   saveData(APP);
-  $('viewList').classList.toggle('active', view === 'list');
-  $('viewRank').classList.toggle('active', view === 'rank');
+  // Update group page view toggle buttons
+  document.querySelectorAll('#groupCaptains .view-toggle-btn').forEach(b => {
+    b.style.background = 'white'; b.style.color = 'var(--text-secondary)';
+  });
+  if (el) { el.style.background = 'var(--primary)'; el.style.color = 'white'; }
   $('captainList').style.display = view === 'list' ? 'flex' : 'none';
   $('rankList').style.display = view === 'rank' ? 'flex' : 'none';
   $('filterRow').style.display = view === 'list' && APP.currentSubMode === 'boat' ? 'flex' : 'none';
@@ -2026,11 +3306,11 @@ function renderRankList() {
   const container = $('rankList');
   if (captains.length === 0) {
     container.innerHTML = '<div class="empty"><div class="empty-icon">🏆</div><div class="empty-text">暂无船长数据</div></div>';
-    $('resultCount').textContent = '';
+    // resultCount removed
     return;
   }
 
-  $('resultCount').textContent = `${captains.length}位船长`;
+  // resultCount removed
 
   container.innerHTML = captains.map((c, i) => {
     const rank = i + 1;
@@ -2079,12 +3359,12 @@ function getPendingReviewCount() {
 
 function updateNavBadge() {
   const pending = getPendingReviewCount();
-  const nav = $('navGroup');
+  const nav = $('navMine');
   if (!nav) return;
   if (pending > 0) {
-    nav.innerHTML = '<span class="nav-icon">✋</span>拼船<span class="pending-badge">' + pending + '</span>';
+    nav.innerHTML = '<span class="nav-icon">👤</span>我的<span class="pending-badge">' + pending + '</span>';
   } else {
-    nav.innerHTML = '<span class="nav-icon">✋</span>拼船';
+    nav.innerHTML = '<span class="nav-icon">👤</span>我的';
   }
 }
 
@@ -2107,19 +3387,20 @@ function getChipValues(containerId) {
 
 // ==================== FISHERMAN TABS ====================
 function switchFishermanTab(tab) {
-  ['home', 'record', 'group'].forEach(t => {
+  ['home', 'trip', 'record', 'mine'].forEach(t => {
     const page = document.getElementById(`fisherman-${t}`);
     if (page) page.classList.toggle('active', t === tab);
   });
   document.querySelectorAll('#fishermanNav .nav-item').forEach(n => n.classList.remove('active'));
-  const navMap = { home: 'navHome', record: 'navRecord', group: 'navGroup' };
+  const navMap = { home: 'navHome', trip: 'navTrip', record: 'navRecord', mine: 'navMine' };
   const nav = document.getElementById(navMap[tab]);
   if (nav) nav.classList.add('active');
 
   updateNavBadge();
-  if (tab === 'home') { renderDatePicker(); renderHomePage(); }
-  if (tab === 'record') renderCatchTimeline();
-  if (tab === 'group') { renderChainList(); renderCaptainList(); renderMyBookings(); }
+  if (tab === 'home') { renderDatePicker(); renderDailyTip(); renderHomePage(); }
+  if (tab === 'trip') { renderChainList(); renderCaptainList(); renderMyBookings(); }
+  if (tab === 'record') switchRecordTab(APP._recordTab || 'my');
+  if (tab === 'mine') renderMinePage();
 }
 
 function filterCaptains(port, el) {
@@ -2223,7 +3504,6 @@ function renderCaptainList() {
       ${hasSchedule ? schedulesOnDate.map(s => `<div class="schedule-preview">⏰ ${formatDate(s.date)} · ${s.slot} · ¥${s.price}/人 · 余${s.remaining}位</div>`).join('') : `<div class="no-schedule-badge">📅 ${APP.selectedDate ? formatDate(APP.selectedDate) : ''}暂无排期</div>`}
     </div>`;
   }).join('');
-  $('resultCount').textContent = `${captains.length}位船长`;
   // Also update rank list in background
   renderRankList();
 }
@@ -2408,6 +3688,8 @@ function renderMyBookings() {
       if (!alreadyReviewed) {
         actionBtn = `<button class="btn btn-sm btn-outline" onclick="showReviewForm('${b.id}', '${b.captainId}')" style="margin-top:8px;">去评价</button>`;
       }
+      // Always show complaint button for completed orders
+      actionBtn += `<button class="btn btn-sm btn-ghost" onclick="showComplaintForm('${b.id}')" style="margin-top:4px;font-size:11px;color:var(--text-light);">⚠️ 投诉</button>`;
     }
     return `
     <div class="booking-item">
@@ -2764,12 +4046,14 @@ if (APP.currentMode === 'fisherman') {
   $('captainPages').style.display = 'none';
   $('captainNav').style.display = 'none';
   renderDatePicker();
+  renderDailyTip();
   renderHomePage();
 } else {
   $('fishermanPages').style.display = 'none';
   $('fishermanNav').style.display = 'none';
 }
 // Set today for schedule date
+console.log('JS loaded OK');
 $('schedDate').value = new Date().toISOString().split('T')[0];
 updateNavBadge();
 </script>

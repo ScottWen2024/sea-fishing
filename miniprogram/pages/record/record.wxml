@@ -1,0 +1,48 @@
+<view class="page" style="padding:0 20rpx;">
+  <view class="card" style="text-align:center;">
+    <button style="width:120rpx;height:120rpx;border-radius:50%;background:linear-gradient(135deg,#0066CC,#0052A3);border:none;color:white;font-size:56rpx;margin-bottom:16rpx;" bindtap="simFishID">📷</button>
+    <view style="font-size:30rpx;font-weight:500;">拍照识鱼</view>
+    <view style="font-size:24rpx;color:var(--text-light);">拍一张鱼的照片，识别鱼种信息</view>
+
+    <view wx:if="{{showFishResult}}" style="margin-top:24rpx;padding-top:24rpx;border-top:2rpx solid var(--border);">
+      <view style="font-size:40rpx;font-weight:700;color:var(--ocean);">{{fishResult.name}}</view>
+      <view style="font-size:24rpx;color:var(--text-light);margin-bottom:16rpx;">别名：{{fishResult.alias}}</view>
+      <view style="display:grid;grid-template-columns:1fr 1fr;gap:12rpx;text-align:left;margin-bottom:16rpx;">
+        <view style="background:var(--bg);padding:16rpx;border-radius:8rpx;"><text style="font-size:20rpx;color:var(--text-light);">适宜水温</text><view style="font-size:26rpx;">{{fishResult.temp}}</view></view>
+        <view style="background:var(--bg);padding:16rpx;border-radius:8rpx;"><text style="font-size:20rpx;color:var(--text-light);">栖息水深</text><view style="font-size:26rpx;">{{fishResult.depth}}</view></view>
+        <view style="background:var(--bg);padding:16rpx;border-radius:8rpx;"><text style="font-size:20rpx;color:var(--text-light);">活跃时段</text><view style="font-size:26rpx;">{{fishResult.time}}</view></view>
+        <view style="background:var(--bg);padding:16rpx;border-radius:8rpx;"><text style="font-size:20rpx;color:var(--text-light);">最佳季节</text><view style="font-size:26rpx;">{{fishResult.season}}</view></view>
+      </view>
+      <button class="btn btn-primary btn-sm" bindtap="saveFromID" style="width:auto;">✅ 记录这条渔获</button>
+    </view>
+  </view>
+
+  <view style="display:flex;margin:24rpx 0;background:white;border-radius:12rpx;overflow:hidden;box-shadow:0 2rpx 8rpx rgba(0,0,0,0.06);">
+    <view style="flex:1;text-align:center;padding:20rpx;{{tab==='my'?'background:var(--primary);color:white;':'color:var(--text-secondary);'}}" bindtap="switchTab" data-tab="my">🎣 我的渔获</view>
+    <view style="flex:1;text-align:center;padding:20rpx;{{tab==='rank'?'background:var(--primary);color:white;':'color:var(--text-secondary);'}}" bindtap="switchTab" data-tab="rank">🏆 大鱼排行</view>
+  </view>
+
+  <view class="stats-grid" style="margin-bottom:24rpx;" wx:if="{{tab==='my'}}">
+    <view class="stat-card"><view class="stat-val">{{stats.total}}</view><view class="stat-lbl">渔获总数</view></view>
+    <view class="stat-card"><view class="stat-val">{{stats.species}}</view><view class="stat-lbl">鱼种数</view></view>
+    <view class="stat-card"><view class="stat-val">{{stats.maxWeight}}</view><view class="stat-lbl">最大单尾</view></view>
+  </view>
+
+  <block wx:for="{{displayList}}" wx:key="id">
+    <view class="card" style="margin-bottom:12rpx;position:relative;">
+      <view style="position:absolute;left:-4rpx;top:20rpx;bottom:20rpx;width:6rpx;background:var(--primary);border-radius:3rpx;"></view>
+      <view style="margin-left:16rpx;">
+        <view style="display:flex;justify-content:space-between;">
+          <text style="font-weight:600;">🐟 {{item.fishName}}</text>
+          <text style="font-size:22rpx;color:var(--text-light);">📅 {{item.date}}</text>
+        </view>
+        <view style="font-size:24rpx;color:var(--text-secondary);margin-top:4rpx;">{{item.weight}} · {{item.length}} · 📍{{item.port}}</view>
+        <view style="font-size:22rpx;color:var(--text-light);margin-top:4rpx;" wx:if="{{item.bait}}">🪱 {{item.bait}}</view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{tab==='my'}}" style="text-align:center;margin-top:16rpx;">
+    <button class="btn btn-outline btn-sm" bindtap="addCatch" style="width:auto;">+ 手动添加</button>
+  </view>
+</view>

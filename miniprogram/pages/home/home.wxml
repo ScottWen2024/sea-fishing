@@ -1,0 +1,68 @@
+<!-- 首页 -->
+<view class="page">
+  <!-- 天气卡片 -->
+  <view class="weather-card" wx:if="{{weather}}">
+    <view class="weather-main">
+      <view class="weather-metric">
+        <view class="w-icon">💨</view>
+        <view class="w-value">{{weather.wind}}</view>
+        <view class="w-label">风力风向</view>
+      </view>
+      <view class="weather-metric">
+        <view class="w-icon">🌊</view>
+        <view class="w-value">{{weather.wave}}</view>
+        <view class="w-label">浪高</view>
+      </view>
+      <view class="weather-metric">
+        <view class="w-icon">🌡️</view>
+        <view class="w-value">{{weather.temp}}°C</view>
+        <view class="w-label">温度</view>
+      </view>
+    </view>
+    <view class="weather-advice {{weather.level}}">{{weather.advice}}</view>
+    <view class="weather-hint">{{weather.hint}}</view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="feature-grid">
+    <view class="feature-item" bindtap="goRecord">
+      <view class="feature-icon blue">📸</view><text>拍照识鱼</text>
+    </view>
+    <view class="feature-item" bindtap="goRecordCatches">
+      <view class="feature-icon green">🎣</view><text>渔获记录</text>
+    </view>
+    <view class="feature-item" bindtap="goChainCreate">
+      <view class="feature-icon purple">✋</view><text>发起拼船</text>
+    </view>
+    <view class="feature-item" bindtap="showTide">
+      <view class="feature-icon teal">🌊</view><text>潮汐曲线</text>
+    </view>
+    <view class="feature-item" bindtap="goFindCaptain">
+      <view class="feature-icon orange">🔍</view><text>找船长</text>
+    </view>
+    <view class="feature-item" bindtap="goGuide">
+      <view class="feature-icon pink">🎓</view><text>新手导钓</text>
+    </view>
+    <view class="feature-item" bindtap="showEquip">
+      <view class="feature-icon amber">🎒</view><text>出海装备</text>
+    </view>
+    <view class="feature-item" bindtap="showWiki">
+      <view class="feature-icon amber">🐠</view><text>鱼种百科</text>
+    </view>
+    <view class="feature-item" bindtap="showMarket">
+      <view class="feature-icon indigo">🐟</view><text>渔获市场</text>
+    </view>
+  </view>
+
+  <!-- 热门拼船 -->
+  <view class="card" wx:if="{{chains.length > 0}}">
+    <view class="card-title">✋ 热门拼船</view>
+    <view wx:for="{{chains}}" wx:key="id" class="chain-item" bindtap="goTrip">
+      <view style="display:flex;justify-content:space-between;">
+        <text style="font-weight:600;">{{item.creatorName}} 发起的拼船</text>
+        <text style="font-size:24rpx;color:var(--success);">{{item.joined}}/{{item.maxPeople}}人</text>
+      </view>
+      <view style="font-size:24rpx;color:var(--text-secondary);margin-top:8rpx;">📍 {{item.port}} · 📅 {{item.date}}</view>
+    </view>
+  </view>
+</view>
