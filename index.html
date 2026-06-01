@@ -3411,7 +3411,7 @@ function filterCaptains(port, el) {
 }
 
 function renderCaptainList() {
-  const search = ($('searchPort').value || '').toLowerCase();
+  const search = ($('searchPort')?.value || '').toLowerCase();
   const isGuide = APP.currentSubMode === 'guide';
   let captains = APP.captains;
 
