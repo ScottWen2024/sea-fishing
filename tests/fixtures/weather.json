@@ -1,0 +1,6 @@
+{
+  "goodDay": { "windScaleDay": "2", "windSpeedDay": "8", "tempMax": "25", "pressure": "1015", "textDay": "多云", "vis": "20", "uvIndex": "5", "moonPhaseIcon": "803", "sunrise": "05:28", "sunset": "18:55" },
+  "okDay": { "windScaleDay": "4", "windSpeedDay": "25", "tempMax": "30", "pressure": "1003", "textDay": "小雨", "vis": "10", "uvIndex": "3", "moonPhaseIcon": "804", "sunrise": "05:28", "sunset": "18:55" },
+  "badDay": { "windScaleDay": "7", "windSpeedDay": "45", "tempMax": "35", "pressure": "998", "textDay": "雷阵雨", "vis": "3", "uvIndex": "1", "moonPhaseIcon": "803", "sunrise": "05:28", "sunset": "18:55" },
+  "perfectDay": { "windScaleDay": "1", "windSpeedDay": "5", "tempMax": "24", "pressure": "1013", "textDay": "多云", "vis": "25", "uvIndex": "6", "moonPhaseIcon": "801", "sunrise": "05:28", "sunset": "18:55" }
+}
