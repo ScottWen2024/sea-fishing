@@ -44,3 +44,9 @@ H5: WX_CONFIG 变量
 [导航/页面结构]
 H5: switchFishermanTab 函数 + 底部导航 HTML
 小程序: app.json tabBar + 各页面 switch 逻辑
+
+
+[测试]
+改 H5 核心函数（estimateWave/getWeatherAdvice/haversine/getMoonPhase/calcFishingIndex）→ 必须同步更新 tests/utils/ 下对应文件
+加了新计算函数 → 在 tests/utils.test.js 加测试用例
+改了钓鱼指数权重 → 跑 npm test 确认 22 条全部通过
