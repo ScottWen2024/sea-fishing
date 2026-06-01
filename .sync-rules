@@ -1,0 +1,46 @@
+# 改动同步规则
+# 每次改代码后，AI 应该自动检查此文件，确保相关文件同步更新
+
+[配色]
+H5: index.html 中 :root CSS 变量
+小程序: fishingMNew/app.wxss 中 page CSS 变量
+
+[首页布局]
+H5: index.html 中 #fisherman-home 区域
+小程序: fishingMNew/pages/home/home.wxml + home.js
+
+[约钓页]
+H5: index.html 中 #fisherman-trip 区域
+小程序: fishingMNew/pages/trip/trip.wxml + trip.js
+
+[渔获页]
+H5: index.html 中 #fisherman-record 区域
+小程序: fishingMNew/pages/record/record.wxml + record.js
+
+[我的页]
+H5: index.html 中 #fisherman-mine 区域
+小程序: fishingMNew/pages/mine/mine.wxml + mine.js
+
+[鱼种数据]
+H5: FISH_WIKI 变量（在 index.html 的 JS 中）
+小程序: fishingMNew/pages/wiki/wiki.js
+
+[装备数据]
+H5: EQUIP_DATA 变量（在 index.html 的 JS 中）
+小程序: fishingMNew/pages/equip/equip.js
+
+[港口数据]
+H5: PORT_DATA 数组（在 index.html 的 JS 中）
+小程序: 暂未独立迁移，散落在各页面
+
+[船长端]
+H5: #captain-* 页面
+小程序: fishingMNew/pages/captain/captain.wxml + captain.js
+
+[API 密钥]
+H5: WX_CONFIG 变量
+小程序: 云函数的环境变量（暂未配置）
+
+[导航/页面结构]
+H5: switchFishermanTab 函数 + 底部导航 HTML
+小程序: app.json tabBar + 各页面 switch 逻辑
