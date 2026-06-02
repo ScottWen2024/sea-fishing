@@ -108,11 +108,11 @@ scp index.html user@server:/var/www/haiyutong/
 
 ## 四、环境对照表
 
-| 配置项 | H5 | UAT | 生产 |
-|------|:---:|:---:|:---:|
-| 访问方式 | localhost:3000 | DevTools 扫码 | 微信搜索 |
-| 数据库 | localStorage | cloud1 | cloud-prod |
-| 用户 | 只有你 | 你 + 测试用户 | 所有用户 |
-| API Key | 直接调用 | 云函数代理 | 云函数代理 |
-| 更新方式 | 改文件刷新 | 上传代码 | 审核后发布 |
-| 回滚 | git checkout | 回退版本 | 选旧版本 |
+| 配置项     |       H5       |     UAT     |     生产     |
+| ------- | :------------: | :---------: | :--------: |
+| 访问方式    | localhost:3000 | DevTools 扫码 |    微信搜索    |
+| 数据库     |  localStorage  |   cloud1    | cloud-prod |
+| 用户      |      只有你       |  你 + 测试用户   |    所有用户    |
+| API Key |      直接调用      |    云函数代理    |   云函数代理    |
+| 更新方式    |     改文件刷新      |    上传代码     |   审核后发布    |
+| 回滚      |  git checkout  |    回退版本     |    选旧版本    |

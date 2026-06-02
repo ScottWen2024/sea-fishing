@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tests/e2e/reports/2026-06-01.md",
+                "file": "TESTING_GUIDE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-06-01"
+              "title": "TESTING_GUIDE"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "tests/e2e/reports/2026-06-01.md",
+                "file": "TESTING_GUIDE.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "2026-06-01 的反向链接列表"
+              "title": "TESTING_GUIDE 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "tests/e2e/reports/2026-06-01.md",
+                "file": "TESTING_GUIDE.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "2026-06-01 的出链列表"
+              "title": "TESTING_GUIDE 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "tests/e2e/reports/2026-06-01.md",
+                "file": "TESTING_GUIDE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2026-06-01 的大纲"
+              "title": "TESTING_GUIDE 的大纲"
             }
           }
         ]
@@ -185,27 +185,28 @@
   },
   "active": "1dcd621c2c1c0802",
   "lastOpenFiles": [
-    "DEPLOY.md",
-    "DEPLOY.md.tmp.2108.1780400993337",
-    "DEV_GUIDE.md",
-    "DEV_GUIDE.md.tmp.2108.1780400972775",
-    "ARCHITECTURE.md",
-    "ARCHITECTURE.md.tmp.2108.1780400952493",
-    "README.md",
-    "README.md.tmp.2108.1780400928958",
     "TESTING.md",
+    "TEST_PLAN.md",
+    "ARCHITECTURE.md",
+    "CLAUDE.md",
+    "DEPLOY.md",
+    "DEV_GUIDE.md",
+    "ENVIRONMENTS.md",
+    "README.md",
+    "PRD.md",
+    "tests/e2e/reports/2026-06-01.md",
+    "DEPLOY.md.tmp.2108.1780400993337",
+    "DEV_GUIDE.md.tmp.2108.1780400972775",
+    "ARCHITECTURE.md.tmp.2108.1780400952493",
+    "README.md.tmp.2108.1780400928958",
     "MODULAR.md",
     "index.html.tmp.2108.1780326576116",
-    "tests/e2e/reports/2026-06-01.md",
     "test-runner",
     "CLAUDE.md.tmp.2108.1780326422875",
     "tests/e2e/home-flow.md",
     "tests/e2e/reports",
     "tests/e2e/screenshots",
     "tests/e2e",
-    "CLAUDE.md",
-    "MAINTENANCE.md",
-    "ENVIRONMENTS.md",
-    "PRD.md"
+    "MAINTENANCE.md"
   ]
 }

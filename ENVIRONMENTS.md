@@ -110,11 +110,11 @@ wx.cloud.init({ env: 'cloud-prod' });
 
 ## 七、环境配置速查
 
-| 配置项 | H5 原型 | UAT | 生产 |
-|------|:---:|:---:|:---:|
-| AppID | 无 | wx830d50bbce223a51 | 同 UAT |
-| 云环境 | 无 | cloud1 | cloud-prod（待建） |
-| 和风 Key | c3cb514f98e5491d81cbd4a685298151 | 同 H5 | 同 H5 |
-| 高德 Key | bb088961ee21fabcfd1fce9a3258fb27 | 同 H5 | 同 H5 |
-| 数据库 | localStorage | 云数据库 | 云数据库 |
-| 访问方式 | localhost:3000 | DevTools 预览/扫码 | 微信搜索/扫码 |
+| 配置项    |              H5 原型               |        UAT         |       生产       |
+| ------ | :------------------------------: | :----------------: | :------------: |
+| AppID  |                无                 | wx830d50bbce223a51 |     同 UAT      |
+| 云环境    |                无                 |       cloud1       | cloud-prod（待建） |
+| 和风 Key | c3cb514f98e5491d81cbd4a685298151 |        同 H5        |      同 H5      |
+| 高德 Key | bb088961ee21fabcfd1fce9a3258fb27 |        同 H5        |      同 H5      |
+| 数据库    |           localStorage           |        云数据库        |      云数据库      |
+| 访问方式   |          localhost:3000          |   DevTools 预览/扫码   |    微信搜索/扫码     |
