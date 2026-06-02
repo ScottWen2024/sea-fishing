@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "MODULAR.md",
+                "file": "tests/e2e/reports/2026-06-01.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "MODULAR"
+              "title": "2026-06-01"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MODULAR.md",
+                "file": "tests/e2e/reports/2026-06-01.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "MODULAR 的反向链接列表"
+              "title": "2026-06-01 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MODULAR.md",
+                "file": "tests/e2e/reports/2026-06-01.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "MODULAR 的出链列表"
+              "title": "2026-06-01 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MODULAR.md",
+                "file": "tests/e2e/reports/2026-06-01.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "MODULAR 的大纲"
+              "title": "2026-06-01 的大纲"
             }
           }
         ]
@@ -185,6 +185,16 @@
   },
   "active": "1dcd621c2c1c0802",
   "lastOpenFiles": [
+    "DEPLOY.md",
+    "DEPLOY.md.tmp.2108.1780400993337",
+    "DEV_GUIDE.md",
+    "DEV_GUIDE.md.tmp.2108.1780400972775",
+    "ARCHITECTURE.md",
+    "ARCHITECTURE.md.tmp.2108.1780400952493",
+    "README.md",
+    "README.md.tmp.2108.1780400928958",
+    "TESTING.md",
+    "MODULAR.md",
     "index.html.tmp.2108.1780326576116",
     "tests/e2e/reports/2026-06-01.md",
     "test-runner",
@@ -194,7 +204,6 @@
     "tests/e2e/screenshots",
     "tests/e2e",
     "CLAUDE.md",
-    "CLAUDE.md.tmp.2108.1780326006070",
     "MAINTENANCE.md",
     "ENVIRONMENTS.md",
     "PRD.md"
