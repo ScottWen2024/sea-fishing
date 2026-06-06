@@ -1,0 +1,41 @@
+﻿# 密钥
+ci-key/
+ci/node_modules/
+ci/_cacache/
+ci/_logs/
+ci/_update-notifier-last-checked
+ci/package-lock.json
+*.key
+*.pem
+*.p12
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# CI 测试
+tests/node_modules/
+tests/reports/
+tests/_logs/
+tests/_cacache/
+tests/_update-notifier-last-checked
+tests/package-lock.json
+coverage/
+
+# ESLint
+.eslintcache
+
+# Prettier
+.prettierignore
+
+# npm
+package-lock.json
