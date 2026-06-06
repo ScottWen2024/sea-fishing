@@ -6,10 +6,12 @@
     "lint-staged": "lint-staged"
   },
   "devDependencies": {
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.2",
     "eslint": "^8.57.1",
     "husky": "^9.0.0",
     "lint-staged": "^15.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "secretlint": "^13.0.2"
   },
   "lint-staged": {
     "*.js": [
@@ -28,5 +30,8 @@
     "*.md": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "sentry-miniapp": "^1.9.0"
   }
 }
