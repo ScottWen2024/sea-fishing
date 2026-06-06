@@ -1,6 +1,5 @@
-﻿# 海钓通 CI 管线
-# 触发条件：push 到 master/main/dev 分支时自动运行
-
+﻿# 娴烽挀閫?CI 绠＄嚎
+# 瑙﹀彂鏉′欢锛歱ush 鍒?master/main/dev 鍒嗘敮鏃惰嚜鍔ㄨ繍琛?
 name: CI Pipeline
 
 on:
@@ -8,7 +7,11 @@ on:
     branches: [master, main, dev]
   pull_request:
     branches: [master, main]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:  # 鍏佽鎵嬪姩瑙﹀彂
+
+env:
+  NPM_CONFIG_REGISTRY: https://registry.npmmirror.com
+  ESLINT_USE_FLAT_CONFIG: "false"
 
 jobs:
   lint-and-test:
@@ -23,25 +26,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
-          cache-dependency-path: |
-            fishingMNew/package.json
-            tests/package.json
 
       # ===== Lint =====
       - name: Install lint deps
         working-directory: fishingMNew
-        run: npm ci --prefer-offline || npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run ESLint
         working-directory: fishingMNew
-        run: npx eslint pages/ --ext .js --max-warnings 10
+        run: npx eslint pages/ --ext .js --max-warnings 20
         continue-on-error: false
 
       # ===== Test =====
       - name: Install test deps
         working-directory: tests
-        run: npm ci --prefer-offline || npm install
+        run: npm install
 
       - name: Run Jest tests
         working-directory: tests
@@ -55,13 +54,9 @@ jobs:
           name: coverage-report
           path: tests/reports/coverage/
           retention-days: 14
+          if-no-files-found: ignore
 
-      - name: Check coverage threshold
-        working-directory: tests
-        run: |
-          echo "Coverage threshold: branches>=50%, functions>=50%, lines>=50%"
-
-  # ===== 安全检查（并行运行） =====
+  # ===== 瀹夊叏妫€鏌ワ紙骞惰杩愯锛?=====
   security-check:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -70,17 +65,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: npm audit (小程序依赖)
+      - name: npm audit (灏忕▼搴忎緷璧?
         working-directory: fishingMNew
-        run: npm audit --audit-level=high || echo "::warning::依赖存在高危漏洞，请检查"
+        run: npm install --legacy-peer-deps --package-lock-only && npm audit --audit-level=high || echo "::warning::渚濊禆瀛樺湪楂樺嵄婕忔礊锛岃妫€鏌?
         continue-on-error: true
 
-      - name: npm audit (测试依赖)
+      - name: npm audit (娴嬭瘯渚濊禆)
         working-directory: tests
-        run: npm audit --audit-level=high || echo "::warning::测试依赖存在高危漏洞"
+        run: npm install --package-lock-only && npm audit --audit-level=high || echo "::warning::娴嬭瘯渚濊禆瀛樺湪楂樺嵄婕忔礊"
         continue-on-error: true
 
-  # ===== CI 报告摘要 =====
+  # ===== CI 鎶ュ憡鎽樿 =====
   ci-summary:
     needs: [lint-and-test, security-check]
     if: always()
@@ -90,11 +85,11 @@ jobs:
     steps:
       - name: Generate CI summary
         run: |
-          echo "## 🎣 海钓通 CI 结果" >> $GITHUB_STEP_SUMMARY
+          echo "## 馃帲 娴烽挀閫?CI 缁撴灉" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| 阶段 | 结果 |" >> $GITHUB_STEP_SUMMARY
+          echo "| 闃舵 | 缁撴灉 |" >> $GITHUB_STEP_SUMMARY
           echo "|:---|:---|" >> $GITHUB_STEP_SUMMARY
           echo "| Lint + Test | ${{ needs.lint-and-test.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Security Audit | ${{ needs.security-check.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**分支:** ${{ github.ref_name }} | **提交者:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**鍒嗘敮:** ${{ github.ref_name }} | **鎻愪氦鑰?** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY

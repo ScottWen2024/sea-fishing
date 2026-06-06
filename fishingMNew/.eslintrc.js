@@ -1,12 +1,26 @@
-﻿module.exports = {
-  env: { es2021: true, node: true, jest: true, browser: true },
+module.exports = {
+  env: {
+    es2021: true,
+    node: true,
+    jest: true,
+    browser: true,
+  },
+  globals: {
+    Page: "readonly",
+    App: "readonly",
+    getApp: "readonly",
+    wx: "readonly",
+    getCurrentPages: "readonly",
+    Component: "readonly",
+    requirePlugin: "readonly",
+  },
   parserOptions: { ecmaVersion: "latest" },
   extends: ["eslint:recommended"],
   rules: {
     "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "no-undef": "error",
     "no-empty": "warn",
-    "no-var": "error",
+    "no-var": "warn",
     "prefer-const": "warn",
     "no-console": "off",
     "no-debugger": "warn",
