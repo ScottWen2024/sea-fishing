@@ -1,0 +1,33 @@
+﻿# Prettier 忽略清单
+# 构建产物和缓存
+ci-key/
+node_modules/
+_cacache/
+_logs/
+miniprogram_npm/
+
+# CI 依赖
+ci/node_modules/
+ci/package-lock.json
+
+# 测试
+tests/node_modules/
+tests/reports/
+tests/_cacache/
+tests/_logs/
+coverage/
+
+# 密钥
+*.key
+*.pem
+*.p12
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# 系统文件
+.DS_Store
+Thumbs.db
+.eslintcache
