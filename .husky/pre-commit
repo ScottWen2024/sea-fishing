@@ -1,0 +1,2 @@
+cd fishingMNew
+npx lint-staged

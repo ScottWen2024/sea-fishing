@@ -1,0 +1,7 @@
+{
+  "name": "sea-fishing",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  }
+}
