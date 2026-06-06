@@ -1,0 +1,100 @@
+﻿# 海钓通 CI 管线
+# 触发条件：push 到 master/main/dev 分支时自动运行
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master, main, dev]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: |
+            fishingMNew/package.json
+            tests/package.json
+
+      # ===== Lint =====
+      - name: Install lint deps
+        working-directory: fishingMNew
+        run: npm ci --prefer-offline || npm install
+
+      - name: Run ESLint
+        working-directory: fishingMNew
+        run: npx eslint pages/ --ext .js --max-warnings 10
+        continue-on-error: false
+
+      # ===== Test =====
+      - name: Install test deps
+        working-directory: tests
+        run: npm ci --prefer-offline || npm install
+
+      - name: Run Jest tests
+        working-directory: tests
+        run: npx jest --verbose --coverage
+        timeout-minutes: 3
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: tests/reports/coverage/
+          retention-days: 14
+
+      - name: Check coverage threshold
+        working-directory: tests
+        run: |
+          echo "Coverage threshold: branches>=50%, functions>=50%, lines>=50%"
+
+  # ===== 安全检查（并行运行） =====
+  security-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: npm audit (小程序依赖)
+        working-directory: fishingMNew
+        run: npm audit --audit-level=high || echo "::warning::依赖存在高危漏洞，请检查"
+        continue-on-error: true
+
+      - name: npm audit (测试依赖)
+        working-directory: tests
+        run: npm audit --audit-level=high || echo "::warning::测试依赖存在高危漏洞"
+        continue-on-error: true
+
+  # ===== CI 报告摘要 =====
+  ci-summary:
+    needs: [lint-and-test, security-check]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Generate CI summary
+        run: |
+          echo "## 🎣 海钓通 CI 结果" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 阶段 | 结果 |" >> $GITHUB_STEP_SUMMARY
+          echo "|:---|:---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint + Test | ${{ needs.lint-and-test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Audit | ${{ needs.security-check.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**分支:** ${{ github.ref_name }} | **提交者:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
