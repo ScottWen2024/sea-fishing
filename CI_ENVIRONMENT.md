@@ -346,3 +346,25 @@ ls -la /mnt/nas/Projects/openproject/backups/
 # === OpenProject 快速查询 ===
 ssh -p 4444 scottwen@127.0.0.1 "/usr/local/bin/op-query.sh full 20"
 ```
+
+---
+
+## 附录：CI 搭建 Skill
+
+本项目的 CI 环境可通过 `ci-setup` Skill 自动搭建和恢复。
+
+**Skill 位置**: `~/.codex/skills/ci-setup/`
+
+**使用方法**：对 Codex 说以下任一关键词即可触发：
+- "搭建CI" / "恢复CI" / "重建环境" / "CI标准" / "补齐CI"
+
+**Skill 内容**：
+| 文件 | 内容 |
+|------|------|
+| `SKILL.md` | 主入口，12 阶段概览，触发规则 |
+| `references/checklist.md` | 12 阶段执行清单（核心） |
+| `references/project-template.md` | 项目变量表 |
+| `references/templates-ci.yml.md` | GitHub Actions workflow 模板 |
+| `references/tool-catalog.md` | 行业标准工具选型 |
+| `references/disaster-recovery.md` | 灾难恢复流程 |
+| `scripts/collect-ci-info.py` | CI 环境信息自动采集脚本 |
