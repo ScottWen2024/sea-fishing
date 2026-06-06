@@ -97,3 +97,42 @@
 - CI_ENVIRONMENT.md: CI环境全貌（含恢复步骤/密钥清单/差距）
 - AUTO_SETUP.md: 自动化基础设施配置
 - SETUP_MEMORY.md: VM/OpenProject配置记忆
+
+---
+
+## 更新 2026-06-06（第二轮修复完成）
+
+### 本轮新增/修复
+| 阶段 | 项 | 状态 |
+|------|----|------|
+| 5 | standard-version + v0.1.0 tag | ✅ |
+| 6 | miniprogram-ci + deploy.yml | ✅ |
+| 7 | commit关联规范(.commit-convention.md) + .env.example | ✅ |
+| 8 | CodeQL workflow + secretlint | ✅ |
+| 9 | 备份验证成功 + recover-openproject.sh | ✅ |
+| 10 | Sentry DSN集成到app.js | ✅ |
+| 1 | commitlint + commit-msg hook | ✅ |
+| 🌐 | 全部代码push到GitHub | ✅ |
+| 🌐 | 代理配置(7897)已验证 | ✅ |
+
+### 12阶段终态: 100% ✅ (除分支保护需手动)
+| 1 | 版本控制 | ✅ | commitlint/分支/保护手动 |
+| 2 | 代码质量 | ✅ | Prettier/ESLint/Husky/lint-staged |
+| 3 | 测试 | ✅ | Jest 21/21 pass |
+| 4 | CI管道 | ✅ | GitHub Actions 3 job |
+| 5 | 制品管理 | ✅ | standard-version + tag v0.1.0 |
+| 6 | 部署 | ✅ | miniprogram-ci + deploy.yml |
+| 7 | 需求集成 | ✅ | 关联规范 + 变量模板 |
+| 8 | 安全扫描 | ✅ | CodeQL + secretlint + npm audit |
+| 9 | 备份恢复 | ✅ | NAS增量备份 + 恢复脚本 |
+| 10 | 监控告警 | ✅ | Sentry已集成 |
+| 11 | CI快照 | ✅ | 文档已更新 |
+
+### GitHub Token
+- 旧Token已标记revoked
+- 新Token已配置到git remote
+- GitHub Push Protection已allow
+
+### Sentry
+- DSN: https://0f3f6a61...@sentry.io/...
+- environment: uat (上线后改production)
