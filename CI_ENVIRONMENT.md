@@ -269,7 +269,7 @@ cd ../tests && npm install
 
 | # | 名称 | 值 | 存储位置 | 风险 |
 |---|------|-----|----------|------|
-| 1 | GitHub Token | `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` | ⚠️ 聊天记录 | 🔴 需撤销重生成 |
+| 1 | GitHub Token | `****已撤销****` | ⚠️ 聊天记录 | 🔴 需撤销重生成 |
 | 2 | OpenProject API Key | `f8918a130f0eefa0ece3c0f3013328ed117ee2a35d3c3ca6b8fd066ab67c1ec5` | OpenProject | 🟡 |
 | 3 | 微信CI私钥 | `fishingMNew/ci-key/private.wx2c553cb44c3b5a4f.key` | `.gitignore` | 🟢 |
 | 4 | 和风天气 Key | `c3cb514f98e5491d81cbd4a685298151` | 小程序代码内 | 🟡 |

@@ -60,7 +60,7 @@
 - NAS: 192.168.1.14, /mnt/nas/Projects
 
 ### 密钥快查
-- GitHub Token: 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 (🔴需撤销)
+- GitHub Token: ****已撤销**** (🔴需撤销)
 - 微信AppID: wx2c553cb44c3b5a4f, 私钥: fishingMNew/ci-key/private...key
 - 和风天气: c3cb514f98e5491d81cbd4a685298151
 - 高德地图: bb088961ee21fabcfd1fce9a3258fb27
