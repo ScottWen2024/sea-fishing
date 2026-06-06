@@ -1,0 +1,55 @@
+﻿name: Deploy to WeChat Miniprogram
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  NPM_CONFIG_REGISTRY: https://registry.npmmirror.com
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        working-directory: fishingMNew
+        run: npm install --legacy-peer-deps
+
+      - name: Upload to WeChat
+        working-directory: fishingMNew
+        run: |
+          npx miniprogram-ci upload \
+            --pp ./ \
+            --pkp ci-key/private.wx2c553cb44c3b5a4f.key \
+            --appid wx2c553cb44c3b5a4f \
+            --uv ${{ github.run_number }} \
+            --ud "CI auto upload #${{ github.run_number }}" \
+            --enable-es6 true \
+            --enable-autoprefixwxss true
+
+      - name: Generate preview QR
+        working-directory: fishingMNew
+        run: |
+          npx miniprogram-ci preview \
+            --pp ./ \
+            --pkp ci-key/private.wx2c553cb44c3b5a4f.key \
+            --appid wx2c553cb44c3b5a4f \
+            --uv ${{ github.run_number }} \
+            --ud "CI preview #${{ github.run_number }}" \
+            --qr-format image \
+            --qr-output preview-${{ github.run_number }}.png
+
+      - name: Upload preview QR
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-qr
+          path: fishingMNew/preview-*.png
+          retention-days: 7
